@@ -1,0 +1,7 @@
+AlIve/CustomBaseModels/*
+AlIve/Data/*
+AlIve/TrainedModels/*
+Alive/AlIve/*
+!AlIve/CustomBaseModels/.gitkeep
+!AlIve/Data/.gitkeep
+!AlIve/TrainedModels/.gitkeep

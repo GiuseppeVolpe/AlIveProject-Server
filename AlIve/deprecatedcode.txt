@@ -1,0 +1,245 @@
+
+from transformers import BertTokenizerFast, BertForTokenClassification, logging
+import torch
+from torch.optim import SGD
+from torch.utils.data import DataLoader
+
+LABEL_ALL_TOKENS = True
+TOKENIZER = BertTokenizerFast.from_pretrained('bert-base-cased')
+
+class TorchTokenLevelClassificationData(torch.utils.data.Dataset):
+
+    def __init__(self, df, text_column_name="text", label_column_name="labels"):
+
+        if(text_column_name not in df or label_column_name not in df):
+            raise Exception("Dataframe malformed!")
+        
+        self.__unique_labels = set()
+
+        for labels_string in df[label_column_name]:
+            labels_list = labels_string.split()
+            for label in labels_list:
+                self.__unique_labels.add(label)
+        
+        self.__unique_labels = sorted(self.__unique_labels)
+
+        self.__labels_to_ids = {label: index for index, label in enumerate(self.__unique_labels)}
+        self.__ids_to_labels = {index: label for index, label in enumerate(self.__unique_labels)}
+
+        texts = df[text_column_name].values.tolist()
+        labels_lists = [labels_string.split() for labels_string in df[label_column_name].values.tolist()]
+
+        self.__texts = [TOKENIZER(str(i), padding='max_length', max_length = 512, truncation=True, return_tensors="pt") for i in texts]
+        self.__labels = [self.__align_labels(i,j) for i,j in zip(texts, labels_lists)]
+
+    def __align_labels(self, text, labels):
+        
+        labels_to_ids = self.__labels_to_ids
+        
+        tokenized_inputs = TOKENIZER(text, padding='max_length', max_length=512, truncation=True)
+        
+        word_ids = tokenized_inputs.word_ids()
+
+        previous_word_idx = None
+        labels_ids = []
+
+        for word_idx in word_ids:
+            
+            if word_idx is None:
+                labels_ids.append(-100)
+
+            elif word_idx != previous_word_idx:
+                try:
+                    labels_ids.append(labels_to_ids[labels[word_idx]])
+                except:
+                    labels_ids.append(-100)
+            else:
+                try:
+                    labels_ids.append(labels_to_ids[labels[word_idx]] if LABEL_ALL_TOKENS else -100)
+                except:
+                    labels_ids.append(-100)
+            previous_word_idx = word_idx
+
+        return labels_ids
+
+    def __len__(self):
+        return len(self.__labels)
+
+    def get_batch_data(self, idx):
+        return self.__texts[idx]
+
+    def get_batch_labels(self, idx):
+        return torch.LongTensor(self.__labels[idx])
+
+    def __getitem__(self, idx):
+
+        batch_data = self.get_batch_data(idx)
+        batch_labels = self.get_batch_labels(idx)
+
+        return batch_data, batch_labels
+
+    def getitem(self, idx):
+
+        batch_data = self.get_batch_data(idx)
+        batch_labels = self.get_batch_labels(idx)
+
+        return batch_data, batch_labels
+
+    def get_unique_labels(self):
+        return self.__unique_labels
+
+    def get_ids_to_labels(self):
+        return self.__ids_to_labels
+
+class TorchTokenLevelClassificationModel(torch.nn.Module):
+
+    def __init__(self, unique_labels):
+        super(TorchTokenLevelClassificationModel, self).__init__()
+        self.bert = BertForTokenClassification.from_pretrained('bert-base-cased', num_labels=len(unique_labels))
+        self.__ids_to_labels = None
+
+    def forward(self, input_ids, mask, labels):
+        output = self.bert(input_ids=input_ids, attention_mask=mask, labels=labels, return_dict=False)
+        return output
+    
+    def train_loop(self, df_train, df_val, epochs=5, batch_size=2, learning_rate=5e-3):
+        
+        train_dataset = TorchTokenLevelClassificationData(df_train)
+        val_dataset = TorchTokenLevelClassificationData(df_val)
+            
+        train_dataloader = DataLoader(train_dataset, num_workers=4, batch_size=batch_size, shuffle=True)
+        val_dataloader = DataLoader(val_dataset, num_workers=4, batch_size=batch_size)
+
+        if (self.__ids_to_labels == None):
+            self.__ids_to_labels = train_dataset.get_ids_to_labels()
+        
+        use_cuda = torch.cuda.is_available()
+        device = torch.device("cuda" if use_cuda else "cpu")
+
+        optimizer = SGD(self.parameters(), lr=learning_rate)
+
+        if use_cuda:
+            self = self.cuda()
+        
+        for epoch_num in range(epochs):
+
+            print("EPOCH {}".format(epoch_num + 1))
+
+            total_acc_train = 0
+            total_loss_train = 0
+
+            try:
+                print("A")
+                self.train()
+                print("B")
+            except:
+                print("Beccato!")
+            
+            for train_data, train_label in tqdm(train_dataloader):
+
+                train_label = train_label.to(device)
+                mask = train_data['attention_mask'].squeeze(1).to(device)
+                input_id = train_data['input_ids'].squeeze(1).to(device)
+
+                optimizer.zero_grad()
+                loss, logits = self(input_id, mask, train_label)
+
+                for i in range(logits.shape[0]):
+
+                    logits_clean = logits[i][train_label[i] != -100]
+                    label_clean = train_label[i][train_label[i] != -100]
+
+                    predictions = logits_clean.argmax(dim=1)
+                    acc = (predictions == label_clean).float().mean()
+                    total_acc_train += acc
+                    total_loss_train += loss.item()
+
+                loss.backward()
+                optimizer.step()
+    
+    def evaluate(self, df_test):
+
+        test_dataset = TorchTokenLevelClassificationData(df_test)
+
+        test_dataloader = DataLoader(test_dataset, num_workers=4, batch_size=1)
+
+        use_cuda = torch.cuda.is_available()
+        device = torch.device("cuda" if use_cuda else "cpu")
+
+        if use_cuda:
+            self = self.cuda()
+
+        total_acc_test = 0.0
+
+        for test_data, test_label in test_dataloader:
+
+                test_label = test_label.to(device)
+                mask = test_data['attention_mask'].squeeze(1).to(device)
+
+                input_id = test_data['input_ids'].squeeze(1).to(device)
+
+                loss, logits = self(input_id, mask, test_label)
+
+                for i in range(logits.shape[0]):
+
+                    logits_clean = logits[i][test_label[i] != -100]
+                    label_clean = test_label[i][test_label[i] != -100]
+
+                    predictions = logits_clean.argmax(dim=1)
+                    acc = (predictions == label_clean).float().mean()
+                    total_acc_test += acc
+
+        val_accuracy = total_acc_test / len(df_test)
+        print(f'Test Accuracy: {total_acc_test / len(df_test): .3f}')
+    
+    def align_word_ids(self, texts):
+    
+        tokenized_inputs = TOKENIZER(texts, padding='max_length', max_length=512, truncation=True)
+
+        word_ids = tokenized_inputs.word_ids()
+
+        previous_word_idx = None
+        label_ids = []
+
+        for word_idx in word_ids:
+
+            if word_idx is None:
+                label_ids.append(-100)
+
+            elif word_idx != previous_word_idx:
+                try:
+                    label_ids.append(1)
+                except:
+                    label_ids.append(-100)
+            else:
+                try:
+                    label_ids.append(1 if LABEL_ALL_TOKENS else -100)
+                except:
+                    label_ids.append(-100)
+            previous_word_idx = word_idx
+
+        return label_ids
+    
+    def evaluate_one_text(self, sentence):
+
+        print(self.__ids_to_labels)
+
+        use_cuda = torch.cuda.is_available()
+        device = torch.device("cuda" if use_cuda else "cpu")
+
+        if use_cuda:
+            self = self.cuda()
+
+        text = TOKENIZER(sentence, padding='max_length', max_length = 512, truncation=True, return_tensors="pt")
+
+        mask = text['attention_mask'].to(device)
+        input_id = text['input_ids'].to(device)
+        label_ids = torch.Tensor(self.align_word_ids(sentence)).unsqueeze(0).to(device)
+
+        logits = self(input_id, mask, None)
+        logits_clean = logits[0][label_ids != -100]
+
+        predictions = logits_clean.argmax(dim=1).tolist()
+        prediction_label = [self.__ids_to_labels[i] for i in predictions]
+        print(sentence)
+        print(prediction_label)

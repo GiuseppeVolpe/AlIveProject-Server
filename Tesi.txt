@@ -1,0 +1,48 @@
+CAPITOLO 1 - Introduzione
+
+I recenti progressi conseguiti nell'ambito del Natural Language Processing (NLP), ramo dell'Intelligenza Artificiale che 
+si occupa di consentire agli elaboratori di comprendere l'ambiguo linguaggio umano, sono strabilianti. Si pensi alla 
+recente introduzione di ChatGPT, modello di linguaggio in grado di conversare in maniera incredibilmente fluida e verosimile 
+con gli utenti, risolvendo svariati problemi di NLP, come Question Answering, Machine Translation, Code Generation, ... .
+Nonostante i modelli di NLP siano diventati estremamente potenti, alcuni campi ad oggi non ne hanno giovato in 
+maniera soddisfacente; uno di questi è quello dei videogiochi, che ho deciso di trattare per passione di lunga data. 
+L'intento di questo progetto è quello di disporre di un tool che consenta anche ai meno esperti del settore del NLP di 
+poter creare NPC (Non-Playable-Character) in grado di dialogare in maniera fluida con i giocatori di un videogioco, senza 
+l'ausilio di rigidi dialoghi predefiniti. Qui entra in gioco uno dei più significativi problemi; i videogiochi, infatti, per 
+quanto possa sembrare controintuitivo, sono artefatti costituiti da regole che garantiscono l'integrità del prodotto. Come è 
+possibile creare personaggi di un videogioco che siano in grado di conversare in maniera libera senza rischiare inesorabilmente 
+di uscire al di fuori delle regole che caratterizzano il mondo di gioco? Questo verrà approfondito nei capitoli seguenti. 
+Nel Capitolo 2, invece si porrà l'attenzione su una ricerca dello stato dell'arte che evidenzia come al momento il problema 
+non sia ancora stato affrontato in maniera esaustiva.
+
+CAPITOLO 2 - Stato dell'arte
+
+2.1 Videogames come fonti di dati
+Un frequente modo di correlare NLP a videogiochi è quello di utilizzare l'enorme fonte di contenuti testuali associati ai 
+prodotti videoludici per costruire un dataset volto all'addestramento di modelli di linguaggio. 
+Nel lavoro "Multilingual Persuasion Detection: Video Games as an Invaluable Data Source for NLP" 
+[Teemu Pöyhönen, Mika Hämäläinen e Khalid Alnajjar, Università di Helsinki, 10/07/2022], si tratta l'incredibile potenziale 
+testuale associato ai dialoghi contenuti nei videogiochi, spesso annotati dagli stessi sviluppatori e quindi 
+decisamente predisposti all'elaborazione per l'addestramento di modelli di NLP. 
+Nella ricerca "Natural Language Processing in Game Studies Research: An Overview" 
+[José P. Zagal, Noriko Tomuro, Andriy Shepitsen] si parla di come il Natural Language Processing applicato alle recensioni 
+sui videogames possa dare un ingente contributo alla ricerca nell'ambito dei "Game Studies".
+Nell'articolo "The Wisdom of the Gaming Crowd" [Robert Jeffrey, Pengze Bian, Fan Ji, Penny Sweetser] si utilizzano ancora una 
+volta le recensioni a tema videoludico, in particolare quelle pubblicate sulla nota piattaforma "Steam", 
+con il fine di assistere i giocatori negli acquisti futuri e aiutare gli sviluppatori a migliorare i loro prodotti.
+
+2.2 Usare il NLP per migliorare i contenuti dei videogames
+L'approccio che si adotterà in questo progetto è opposto, consiste nell'utilizzo di dati esterni, reali o sintetici che siano, 
+per la creazione di dialoghi convincenti all'interno dei videogiochi. Questa direzione è quella presa in alcuni lavori, come 
+in "Generative Agents: Interactive Simulacra of Human Behavior" 
+[Joon Sung Park, Joseph C. O’Brien, Carrie J. Cai, Meredith Ringel Morris, Percy Liang, Michael S. Bernstein, 07/04/2023], in 
+cui si utilizzano Large Language Models per creare agenti che si comportino in maniera verosimile all'interno del mondo di 
+gioco, che si configura come un vero e proprio ecosistema. Un altro lavoro interessante è 
+"Generating Role-Playing Game Quest Descriptions With the GPT-2 Language Model" 
+[Susanna Värtinen, Università di Aalto, 10/12/2021], in cui viene usato il modello di linguaggio GPT-2, ulteriormente addestrato 
+su su un dataset composto da quest di vari videogiochi RPG per generare missioni. 
+Questi studi, seppur interessanti, non forniscono un supporto agli sviluppatori di videogiochi di ogni sorta nella 
+creazione semplificata e generica di NPC dialoganti. 
+Nel capitolo seguente si parlerà del modo in cui si intende affrontare questo problema.
+
+CAPITOLO 3 - Metodologia

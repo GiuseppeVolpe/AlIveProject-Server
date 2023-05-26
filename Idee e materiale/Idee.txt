@@ -1,0 +1,21 @@
+-NLP ibrido 1
+
+Ogni AI deve essere caratterizzata da due moduli (NLP Models), uno che riconosce intent specifici del 
+dominio e uno pre-addestrato capace di comprendere e generare dialoghi generici.
+
+Qualora il primo modello non dovesse riconoscere l'input, la si passerebbe al secondo.
+
+-Dataset sintetico
+
+Generare un dataset sintetico di dialoghi da usare per il fine tuning dei modelli dei personaggi, usando 
+ChatGPT.
+
+-Cosa deve fare un NPC?
+
+Un NPC deve poter:
+-Sottoporre al giocatore richieste da soddisfare 
+ e verificarne la riuscita
+-Dare informazioni al giocatore
+-Collaborare con il giocatore
+-Scontrarsi con il giocatore
+-Essere neutrale

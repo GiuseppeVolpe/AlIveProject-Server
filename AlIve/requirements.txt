@@ -2,7 +2,7 @@ tqdm
 numpy==1.22
 pandas
 scikit-learn
-tensorflow
-tensorflow_text
-tensorflow-hub
+tensorflow==2.12.0
+tensorflow_text==2.12.1
+tensorflow-hub==0.13.0
 matplotlib

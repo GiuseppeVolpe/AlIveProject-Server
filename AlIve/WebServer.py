@@ -10,9 +10,9 @@ db_connection = mysqlconn.connect(user='GiuseppeVolpe', password='password', dat
 @app.route('/')
 def home():
   if not session.get('logged_in'):
-    return render_template('login.html')
+    return render_template('Templates/login.html')
   else:
-    return render_template('index.html')
+    return render_template('Templates/index.html')
 
 @app.route('/signup', methods=['POST'])
 def add_user():
@@ -55,7 +55,7 @@ def do_admin_login():
     flash('wrong password!')
   return home()
 
-@app.route('logout')
+@app.route('/logout')
 def logout():
   session['logged_in'] = False
   return home()

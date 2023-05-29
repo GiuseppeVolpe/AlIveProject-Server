@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS users_environments (
     user_id INT(11) NOT NULL,
     env_id INT(11) NOT NULL, 
     env_name VARCHAR(100) NOT NULL,
+    public BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (user_id, env_id),
     UNIQUE (user_id, env_name)
 );
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS environments_models (
     model_name VARCHAR(100) NOT NULL,
     model_path VARCHAR(1000) NOT NULL,
     model_type ENUM("SLCM", "TLCM") NOT NULL,
+    public BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (user_id, env_id, model_id),
     UNIQUE (user_id, env_id, model_name)
 );
@@ -50,6 +52,7 @@ CREATE TABLE IF NOT EXISTS environments_datasets (
     dataset_name VARCHAR(100) NOT NULL,
     dataset_path VARCHAR(1000) NOT NULL,
     dataset_type ENUM("SLCM", "TLCM") NOT NULL,
+    public BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (user_id, env_id, dataset_id),
     UNIQUE (user_id, env_id, dataset_name)
 );

@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS alive_users (
     email VARCHAR(200)
 );
 
+ALTER TABLE alive_users DROP CONSTRAINT IF EXISTS email_validation;
 ALTER TABLE alive_users
-ADD CONSTRAINT IF NOT EXISTS email_validation
+ADD CONSTRAINT email_validation
 CHECK ((email IS NULL) 
        OR 
        (email REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$") 
@@ -26,8 +27,9 @@ CREATE TABLE IF NOT EXISTS users_environments (
     UNIQUE KEY unique_env_name (user_id, env_name)
 );
 
+ALTER TABLE users_environments DROP CONSTRAINT IF EXISTS environments_to_users;
 ALTER TABLE users_environments
-ADD CONSTRAINT IF NOT EXISTS environments_to_users
+ADD CONSTRAINT environments_to_users
 FOREIGN KEY (user_id) REFERENCES alive_users(user_id);
 
 CREATE TABLE IF NOT EXISTS environments_models ( 
@@ -41,8 +43,9 @@ CREATE TABLE IF NOT EXISTS environments_models (
     UNIQUE KEY unique_model_name (user_id, env_id, model_name)
 );
 
+ALTER TABLE environments_models DROP CONSTRAINT IF EXISTS models_to_environments;
 ALTER TABLE environments_models
-ADD CONSTRAINT IF NOT EXISTS models_to_environments
+ADD CONSTRAINT models_to_environments
 FOREIGN KEY (user_id, env_id) REFERENCES users_environments(user_id, env_id);
 
 CREATE TABLE IF NOT EXISTS environments_datasets ( 
@@ -56,6 +59,7 @@ CREATE TABLE IF NOT EXISTS environments_datasets (
     UNIQUE KEY unique_dataset_name (user_id, env_id, dataset_name)
 );
 
+ALTER TABLE environments_datasets DROP CONSTRAINT IF EXISTS datasets_to_environments;
 ALTER TABLE environments_datasets
-ADD CONSTRAINT IF NOT EXISTS datasets_to_environments
+ADD CONSTRAINT datasets_to_environments
 FOREIGN KEY (user_id, env_id) REFERENCES users_environments(user_id, env_id);

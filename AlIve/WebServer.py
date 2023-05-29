@@ -4,18 +4,30 @@ import mysql.connector as mysqlconn
 import os
 import operator
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='Templates')
 db_connection = mysqlconn.connect(user='GiuseppeVolpe', password='password', database='alive_db')
 
 @app.route('/')
 def home():
-  if not session.get('logged_in'):
-    return render_template('Templates/login.html')
-  else:
-    return render_template('Templates/index.html')
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        return render_template('index.html')
+
+@app.route('/signup_form', methods=['POST'])
+def signup_form():
+    return render_template('signup.html')
+
+@app.route('/login_form')
+def login_form():
+    return render_template('login.html')
+
+@app.route('/user_space', methods=['POST'])
+def user_space():
+    return render_template('index.html')
 
 @app.route('/signup', methods=['POST'])
-def add_user():
+def signup():
 
     form = request.form
 
@@ -23,7 +35,33 @@ def add_user():
     password = form['password']
     email = form['email']
 
+    if len(username) < 2:
+        flash("This username is too short")
+        return signup_form()
+    
+    if len(password) < 8:
+        flash("The length of the password should be at least 8")
+        return signup_form()
+    
     cur = db_connection.cursor()
+    
+    cur.execute('SELECT username FROM alive_users WHERE username="{}"'.format(username))
+    usernames = cur.fetchall()
+
+    print(len(usernames))
+
+    if len(usernames) > 0:
+        flash("This username is already taken!")
+        return signup_form()
+    
+    cur.execute('SELECT email FROM alive_users WHERE email="{}"'.format(email))
+    email_addresses = cur.fetchall()
+
+    print(len(email_addresses))
+
+    if len(email_addresses) > 0:
+        flash("This email address is already taken!")
+        return signup_form()
     
     try:
         cur.execute('INSERT INTO alive_users (username, user_password, email) VALUES (%s, %s, %s)', (username, password, email))
@@ -31,35 +69,45 @@ def add_user():
         cur.close()
     except Exception as ex:
         print(ex)
-        return("Couldn't add user...")
+        flash("Couldn't add user...")
+        return signup_form()
 
     return "New user added"
 
 @app.route('/login', methods=['POST'])
-def do_admin_login():
-  login = request.form
+def login():
 
-  userName = login['username']
-  password = login['password']
+    login = request.form
 
-  cur = db_connection.cursor(buffered=True)
-  data = cur.execute('SELECT * FROM alive_users WHERE username=%s', (userName))
-  data = cur.fetchone()[2]
+    username = login['username']
+    inserted_password = login['password']
 
-  if password == data:
-    account = True
+    cur = db_connection.cursor(buffered=True)
+    cur.execute('SELECT * FROM alive_users WHERE username = "{}"'.format(username))
 
-  if account:
-    session['logged_in'] = True
-  else:
-    flash('wrong password!')
-  return home()
+    if cur.rowcount == 0:
+        flash("This user doesn't exist!")
+        return home()
+    
+    correct_password = cur.fetchone()[2]
+
+    if inserted_password == correct_password:
+        logged = True
+    else:
+        logged = False
+
+    if logged:
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    
+    return home()
 
 @app.route('/logout')
 def logout():
-  session['logged_in'] = False
-  return home()
+    session['logged_in'] = False
+    return home()
 
 if __name__ == "__main__":
-  app.secret_key = os.urandom(12)
-  app.run(debug=False,host='0.0.0.0', port=5000)
+    app.secret_key = os.urandom(12)
+    app.run(debug=False,host='0.0.0.0', port=5000)

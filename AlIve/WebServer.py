@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 import mysql.connector as mysqlconn
 import os
 import operator
+from ModelsAndDatasets import *
 
 app = Flask(__name__, template_folder='Templates')
 db_connection = mysqlconn.connect(user='GiuseppeVolpe', password='password', database='alive_db')
@@ -178,13 +179,13 @@ def select_environment():
     if env_id == None and env_name == None:
         print("No env identifier given!")
         return home()
-
+    
     cur = db_connection.cursor()
     
     if env_id != None:
-        query = "SELECT env_id FROM users_environments WHERE user_id = {} AND env_id = {}".format(session["userid"], env_id)
+        query = "SELECT env_id, env_name FROM users_environments WHERE user_id = {} AND env_id = {}".format(session["userid"], env_id)
     elif env_name != None:
-        query = "SELECT env_id FROM users_environments WHERE user_id = {} AND env_name = '{}'".format(session["userid"], env_name)
+        query = "SELECT env_id, env_name FROM users_environments WHERE user_id = {} AND env_name = '{}'".format(session["userid"], env_name)
     
     cur.execute(query)
     environments = cur.fetchall()
@@ -193,6 +194,7 @@ def select_environment():
         print("Inexisting environment!")
     else:
         session["envid"] = environments[0][0]
+        session["envname"] = environments[0][1]
     
     return home()
 
@@ -205,8 +207,65 @@ def create_model():
         print("No environment selected!")
         return home()
     
+    if "model_name" not in form:
+        print("No name given!")
+    
     userid = session["userid"]
     envid = session["envid"]
+    envname = session["envname"]
+    model_name = "NewModel"
+    model_type = "SLCM"
+    finetunable = False
+    base_model = ""
+    num_of_classes = 7
+    encoder_trainable = False
+    encoder_output_key = ""
+    dropout_rate = 0.1
+    final_output_activation = ""
+    optimizer_lr = ""
+    additional_metrics = []
+
+    encoder_link, preprocess_link = get_handle_preprocess_link(base_model)
+    
+    query = "SELECT * FROM environments_models WHERE user_id = {} AND env_id = {}".format(userid, envid)
+    
+    cur = db_connection.cursor()
+    
+    cur.execute(query)
+    models = cur.fetchall()
+
+    max_id = 0
+
+    for model in models:
+
+        if model[2] > max_id:
+            max_id = model[2]
+        
+        if model[3] == model_name:
+            print("A model with this name already exists!")
+            return home()
+    
+    new_id = max_id + 1
+
+    path_to_env = "AlIve/UsersData/" + session["username"] + "/Environments/" + envname + "/"
+    path_to_model = path_to_env + model_name + "/"
+
+    if not os.path.exists(path_to_model):
+        os.makedirs(path_to_model)
+    
+    if model_type == "SLCM":
+        new_model = SentenceLevelClassificationModel(model_name, finetunable)
+        new_model.build(encoder_link, num_of_classes, preprocess_link, encoder_trainable, 
+                        encoder_output_key, dropout_rate, final_output_activation, optimizer_lr, 
+                        additional_metrics, True)
+        new_model.save(path_to_model, True)
+    elif model_type == "TLCM":
+        new_model = TokenLevelClassificationModel(model_name, finetunable)
+        new_model.build(preprocess_link, encoder_link, num_of_classes, encoder_trainable, 
+                        dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, additional_metrics=[])
+        new_model.save(path_to_model, True)
+    
+    return home()
 
 def initialize_server():
 
@@ -221,6 +280,7 @@ def reset_session():
     session.pop("username")
     session.pop("useremail")
     session.pop("envid")
+    session.pop("envname")
 
 if __name__ == "__main__":
     initialize_server()

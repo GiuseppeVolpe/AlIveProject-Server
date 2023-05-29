@@ -71,6 +71,12 @@ def signup():
         print(ex)
         flash("Couldn't add user...")
         return signup_form()
+    
+    user_space_path = "AlIve/UsersData/" + username + "/"
+    user_environments_path = user_space_path + "/Environments/"
+
+    if not os.path.exists(user_environments_path):
+        os.makedirs(user_environments_path)
 
     return "New user added"
 
@@ -108,6 +114,14 @@ def logout():
     session['logged_in'] = False
     return home()
 
+def initialize_server():
+
+    path_to_users_data = "AlIve/UsersData/"
+
+    if not os.path.exists(path_to_users_data):
+        os.makedirs(path_to_users_data)
+    
 if __name__ == "__main__":
+    initialize_server()
     app.secret_key = os.urandom(12)
     app.run(debug=False,host='0.0.0.0', port=5000)

@@ -78,7 +78,7 @@ def signup():
     if not os.path.exists(user_environments_path):
         os.makedirs(user_environments_path)
 
-    return "New user added"
+    return login_form()
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -95,24 +95,118 @@ def login():
         flash("This user doesn't exist!")
         return home()
     
-    correct_password = cur.fetchone()[2]
+    user_tuple = cur.fetchone()
+    
+    id = user_tuple[0]
+    correct_password = user_tuple[2]
+    email = user_tuple[3]
 
-    if inserted_password == correct_password:
-        logged = True
-    else:
-        logged = False
-
+    logged = (inserted_password == correct_password)
+    
     if logged:
         session['logged_in'] = True
     else:
         flash('wrong password!')
     
+    if request.method == 'POST':
+        session["userid"] = id
+        session['username'] = username
+        session['useremail'] = email
     return home()
 
 @app.route('/logout')
 def logout():
-    session['logged_in'] = False
+    reset_session()
     return home()
+
+@app.route('/create_env', methods=['POST'])
+def create_environment():
+
+    form = request.form
+    
+    env_name = form['env_name']
+    
+    cur = db_connection.cursor()
+    
+    cur.execute('SELECT env_id, env_name FROM users_environments WHERE user_id = {}'.format(session["userid"]))
+    environments = cur.fetchall()
+
+    max_id = 0
+
+    for environment in environments:
+        
+        if environment[0] > max_id:
+            max_id = environment[0]
+
+        if environment[1] == env_name:
+            print("An environment with this name already exists!")
+            return home()
+    
+    new_id = max_id + 1
+        
+    path_to_env = "AlIve/UsersData/" + session["username"] + "/Environments/" + env_name + "/"
+
+    try:
+        if not os.path.exists(path_to_env):
+            os.makedirs(path_to_env)
+    except:
+        print("Couldn't create environment!")
+        return home()
+
+    try:
+        cur.execute("INSERT INTO users_environments (user_id, env_id, env_name) VALUES ({}, {}, '{}')"
+                    .format(session['userid'], new_id, env_name) )
+    except Exception as ex:
+        print("Couldn't create environment! " + str(ex))
+    finally:
+        return home()
+
+@app.route('/select_env', methods=['POST'])
+def select_environment():
+
+    form = request.form
+
+    env_id = None
+    env_name = None
+    
+    if "envid" in form:
+        env_id = form['envid']
+    
+    if "envname" in form:
+        env_name = form['envname']
+    
+    if env_id == None and env_name == None:
+        print("No env identifier given!")
+        return home()
+
+    cur = db_connection.cursor()
+    
+    if env_id != None:
+        query = "SELECT env_id FROM users_environments WHERE user_id = {} AND env_id = {}".format(session["userid"], env_id)
+    elif env_name != None:
+        query = "SELECT env_id FROM users_environments WHERE user_id = {} AND env_name = '{}'".format(session["userid"], env_name)
+    
+    cur.execute(query)
+    environments = cur.fetchall()
+
+    if len(environments) == 0:
+        print("Inexisting environment!")
+    else:
+        session["envid"] = environments[0][0]
+    
+    return home()
+
+@app.route('/select_env', methods=['POST'])
+def create_model():
+
+    form = request.form
+
+    if "envid" not in session:
+        print("No environment selected!")
+        return home()
+    
+    userid = session["userid"]
+    envid = session["envid"]
 
 def initialize_server():
 
@@ -121,6 +215,13 @@ def initialize_server():
     if not os.path.exists(path_to_users_data):
         os.makedirs(path_to_users_data)
     
+def reset_session():
+    session['logged_in'] = False
+    session.pop("userid")
+    session.pop("username")
+    session.pop("useremail")
+    session.pop("envid")
+
 if __name__ == "__main__":
     initialize_server()
     app.secret_key = os.urandom(12)

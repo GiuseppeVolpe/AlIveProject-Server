@@ -6,14 +6,14 @@ CREATE TABLE IF NOT EXISTS alive_users (
     user_id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, 
     username VARCHAR(100) NOT NULL UNIQUE, 
     user_password VARCHAR(500) NOT NULL, 
-    email VARCHAR(200)
+    user_email VARCHAR(200)
 );
 
 ALTER TABLE alive_users
-ADD CONSTRAINT email_validation
-CHECK ((email IS NULL) 
+ADD CONSTRAINT user_email_validation
+CHECK ((user_email IS NULL) 
        OR 
-       (email REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$") 
+       (user_email REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$") 
       );
 
 CREATE TABLE IF NOT EXISTS users_environments ( 

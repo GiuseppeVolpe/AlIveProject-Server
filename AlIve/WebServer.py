@@ -1,8 +1,13 @@
+import os
+import re
+
+import mysql.connector as mysqlconn
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort
-import mysql.connector as mysqlconn
-import os
+
 from ModelsAndDatasets import *
+
+#region CONSTS
 
 LOGGED_IN_FIELD_NAME = "logged_in"
 USER_ID_FIELD_NAME = "user_id"
@@ -45,8 +50,12 @@ TLCM_MODEL_TYPE = "TLCM"
 
 SENTENCE_TO_PREDICT_FIELD_NAME = "sent"
 
+#endregion
+
 app = Flask(__name__, template_folder='Templates')
 db_connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
+
+#region FORMS GETTERS
 
 @app.route('/')
 def home():
@@ -67,45 +76,67 @@ def login_form():
 def user_space():
     return render_template('index.html')
 
+#endregion
+
 @app.route('/signup', methods=['POST'])
 def signup():
 
     form = request.form
 
+    needed_fields = [USERNAME_FIELD_NAME, USER_PASSWORD_FIELD_NAME, USER_EMAIL_FIELD_NAME]
+
+    for needed_field in needed_fields:
+        if needed_field not in form:
+            return home()
+    
     username = form[USERNAME_FIELD_NAME]
-    password = form[USER_PASSWORD_FIELD_NAME]
-    email = form[USER_EMAIL_FIELD_NAME]
+    user_email = form[USER_EMAIL_FIELD_NAME]
+    user_password = form[USER_PASSWORD_FIELD_NAME]
+
+    error_found = False
 
     if len(username) < 2:
-        flash("This username is too short")
+        flash("This username is too short!")
+        error_found = True
+    
+    email_regex = "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$"
+    
+    if not bool( re.match(email_regex, user_email) ):
+        flash("This is not a valid email!")
+        error_found = True
+    
+    if len(user_password) < 8:
+        flash("The length of the password should be at least 8!")
+        error_found = True
+    
+    if error_found:
         return signup_form()
     
-    if len(password) < 8:
-        flash("The length of the password should be at least 8")
-        return signup_form()
-    
-    usernames = fetch_from_db(ALIVE_DB_USERS_TABLE_NAME, 
+    usernames = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
                               [USERNAME_FIELD_NAME], 
                               [USERNAME_FIELD_NAME], 
                               [username])
     
     if len(usernames) > 0:
         flash("This username is already taken!")
-        return signup_form()
+        error_found = True
     
-    email_addresses = fetch_from_db(ALIVE_DB_USERS_TABLE_NAME, 
+    email_addresses = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
                                     [USER_EMAIL_FIELD_NAME], 
                                     [USER_EMAIL_FIELD_NAME], 
-                                    [email])
+                                    [user_email])
     
     if len(email_addresses) > 0:
         flash("This email address is already taken!")
+        error_found = True
+    
+    if error_found:
         return signup_form()
     
     try:
         insert_into_db(ALIVE_DB_USERS_TABLE_NAME, 
                        [USERNAME_FIELD_NAME, USER_PASSWORD_FIELD_NAME, USER_EMAIL_FIELD_NAME],
-                       [username, password, email])
+                       [username, user_password, user_email])
     except Exception as ex:
         print(ex)
         flash("Couldn't add user...")
@@ -127,7 +158,7 @@ def login():
     username = login[USERNAME_FIELD_NAME]
     inserted_password = login[USER_PASSWORD_FIELD_NAME]
 
-    users = fetch_from_db(ALIVE_DB_USERS_TABLE_NAME, 
+    users = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
                           ["*"],
                           [USERNAME_FIELD_NAME], 
                           [username])
@@ -173,7 +204,7 @@ def create_environment():
         print("Invaild name")
         return home()
     
-    environments = fetch_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
                                  [USER_ID_FIELD_NAME], 
                                  [userid])
@@ -228,12 +259,12 @@ def select_environment():
         return home()
     
     if env_id != None:
-        environments = fetch_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+        environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
                                     [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
                                     [ENV_ID_FIELD_NAME], 
                                     [env_id])
     elif env_name != None:
-        environments = fetch_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+        environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
                                     [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
                                     [ENV_NAME_FIELD_NAME], 
                                     [env_name])
@@ -274,7 +305,7 @@ def create_model():
 
     encoder_link, preprocess_link = get_handle_preprocess_link(base_model)
     
-    models = fetch_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                            ["*"], 
                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
                            [userid, envid])
@@ -333,7 +364,7 @@ def predict():
 
     sent_to_predict = form[SENTENCE_TO_PREDICT_FIELD_NAME]
 
-    model_tuples = fetch_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+    model_tuples = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                                  [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                                  [userid, envid, model_name])
@@ -364,7 +395,7 @@ def reset_session():
     session.pop(ENV_ID_FIELD_NAME)
     session.pop(ENV_NAME_FIELD_NAME)
 
-def fetch_from_db(table_name:str, needed_fields:list=None, given_fields:list=None, given_values:list=None):
+def select_from_db(table_name:str, needed_fields:list=None, given_fields:list=None, given_values:list=None):
 
     if needed_fields == None:
         needed_fields = ["*"]
@@ -419,7 +450,7 @@ def fetch_from_db(table_name:str, needed_fields:list=None, given_fields:list=Non
 
 def insert_into_db(table_name:str, given_fields:list, given_values:list):
 
-    if len(given_fields) != len(given_values.keys()):
+    if len(given_fields) != len(given_values):
         raise Exception("The number of fields given is different from the number of values!")
     
     query = "INSERT INTO " + table_name + " ("

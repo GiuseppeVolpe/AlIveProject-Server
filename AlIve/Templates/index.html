@@ -23,6 +23,36 @@
     </form>
   </div>
 
+  <div>
+    <form action="/select_env", method="POST">
+      <input type="text" value="" placeholder="env_name" name="env_name">
+      <input type="submit" value="Select Environment" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
+  <div>
+    <form action="/create_model", method="POST">
+      <input type="text" value="" placeholder="Model Name" name="model_name">
+      <input type="text" value="SLCM" placeholder="Model Type" name="model_type">
+      <input type="checkbox" label="Finetunable" value="finetunable" name="finetunable">
+      <input type="text" value="small_bert/bert_en_uncased_L-2_H-128_A-2" placeholder="Base Model" name="base_model">
+      <input type="number" min="2" value="2" placeholder="Number of classes" name="num_of_classes">
+      <input type="checkbox" label="Encoder Trainable" value="encoder_trainable" name="encoder_trainable">
+      <input type="number" min="0.1" step="0.1" value="0.3" placeholder="dropout_rate" name="dropout_rate">
+      <input type="number" min="0.0000001" step="0.0000001" value="0.00001" placeholder="optimizer_lr" name="optimizer_lr">
+      <input type="submit" value="Create Model" class="btn btn-primary btn-large btn-block">
+      <input type="checkbox" label="Public" value="public" name="public">
+    </form>
+  </div>
+
+  <div>
+    <form action="/predict", method="POST">
+      <input type="text" value="" placeholder="model name" name="model_name">
+      <input type="text" value="I want to eat something" placeholder="sent" name="sent">
+      <input type="submit" value="Predict" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
   <center>
     <hr>
   </center>

@@ -75,8 +75,8 @@ def Main():
 
 		# Start a new thread and return its identifier
 		start_new_thread(threaded, (c,))
+	
 	s.close()
-
 
 if __name__ == '__main__':
 	Main()

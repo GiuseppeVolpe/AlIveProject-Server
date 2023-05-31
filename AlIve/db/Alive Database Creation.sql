@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS environments_models (
     model_name VARCHAR(100) NOT NULL,
     model_path VARCHAR(1000) NOT NULL,
     model_type ENUM("SLCM", "TLCM") NOT NULL,
+    finetunable BOOLEAN NOT NULL DEFAULT FALSE,
     public BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (user_id, env_id, model_id),
     UNIQUE (user_id, env_id, model_name)
@@ -60,3 +61,23 @@ CREATE TABLE IF NOT EXISTS environments_datasets (
 ALTER TABLE environments_datasets
 ADD CONSTRAINT datasets_to_environments
 FOREIGN KEY (user_id, env_id) REFERENCES users_environments(user_id, env_id);
+
+CREATE TABLE IF NOT EXISTS training_sessions (
+    user_id INT(11) NOT NULL,
+    env_id INT(11) NOT NULL,
+    queue_index INT(11) NOT NULL,
+    model_id INT(11) NOT NULL,
+    dataset_id INT(11) NOT NULL,
+    checkpoint_path VARCHAR(1000) NOT NULL,
+    epochs_left INT(11) NOT NULL,
+    PRIMARY KEY (user_id, env_id, queue_index),
+    UNIQUE (user_id, env_id, model_id)
+);
+
+ALTER TABLE training_sessions
+ADD CONSTRAINT sessions_to_models
+FOREIGN KEY (user_id, env_id, model_id) REFERENCES users_environments(user_id, env_id, model_id);
+
+ALTER TABLE training_sessions
+ADD CONSTRAINT sessions_to_datasets
+FOREIGN KEY (user_id, env_id, dataset_id) REFERENCES users_environments(user_id, env_id, dataset_id);

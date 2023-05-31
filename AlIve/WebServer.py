@@ -25,6 +25,7 @@ DATASET_ID_FIELD_NAME = "dataset_id"
 DATASET_NAME_FIELD_NAME = "dataset_name"
 DATASET_PATH_FIELD_NAME = "dataset_path"
 DATASET_TYPE_FIELD_NAME = "dataset_type"
+QUEUE_INDEX_FIELD_NAME = "queue_index"
 
 ALIVE_DB_NAME = "alive_db"
 ALIVE_DB_ADMIN_USERNAME = "GiuseppeVolpe"
@@ -33,6 +34,7 @@ ALIVE_DB_USERS_TABLE_NAME = "alive_users"
 ALIVE_DB_ENVIRONMENTS_TABLE_NAME = "users_environments"
 ALIVE_DB_MODELS_TABLE_NAME = "environments_models"
 ALIVE_DB_DATASETS_TABLE_NAME = "environments_datasets"
+ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME = "training_sessions"
 
 STR_TYPE_NAME = "str"
 INT_TYPE_NAME = "int"
@@ -44,14 +46,25 @@ NUM_OF_CLASSES_FIELD_NAME = "num_of_classes"
 ENCODER_TRAINABLE_FIELD_NAME = "encoder_trainable"
 DROPOUT_RATE_FIELD_NAME = "dropout_rate"
 OPTIMIZER_LR_FIELD_NAME = "optimizer_lr"
+DATASET_CSV_FIELD_NAME = "dataset_csv"
 
-SLCM_MODEL_TYPE = "SLCM"
-TLCM_MODEL_TYPE = "TLCM"
+NUM_OF_EPOCHS_FIELD_NAME = "num_of_epochs"
+CHECKPOINT_PATH_FIELD_NAME = "checkpoint_path"
+EPOCHS_LEFT_FIELD_NAME = "epochs_left"
 
-TEXT_COLUMN_NAME = "text"
-SENTENCE_IDX_COLUMN_NAME = "sentence_idx"
-WORD_COLUMN_NAME = "word"
-EXAMPLE_CATEGORY_COLUMN_NAME = "example_category"
+SLC_MODEL_TYPE = "SLCM"
+TLC_MODEL_TYPE = "TLCM"
+
+EMPTY_TARGET_VALUE = "None"
+
+TEXT_FIELD_NAME = "text"
+SENTENCE_IDX_FIELD_NAME = "sentence_idx"
+WORD_FIELD_NAME = "word"
+EXAMPLE_CATEGORY_FIELD_NAME = "example_category"
+
+EXAMPLE_TRAIN_CATEGORY = "train"
+EXAMPLE_VALIDATION_CATEGORY = "valid"
+EXAMPLE_TEST_CATEGORY = "test"
 
 SENTENCE_TO_PREDICT_FIELD_NAME = "sent"
 
@@ -60,6 +73,7 @@ USERS_DATA_FOLDER_NAME = "UsersData"
 ENVIRONMENTS_FOLDER_NAME = "Environments"
 MODELS_FOLDER_NAME = "Models"
 DATASETS_FOLDER_NAME = "Datasets"
+TRAINING_SESSIONS_FOLDER_NAME = "TrainingSessions"
 
 USERS_DATA_FOLDER = ROOT_FOLDER + "/" + USERS_DATA_FOLDER_NAME + "/"
 
@@ -407,13 +421,13 @@ def create_model():
     if not os.path.exists(path_to_model):
         os.makedirs(path_to_model)
     
-    if model_type == SLCM_MODEL_TYPE:
+    if model_type == SLC_MODEL_TYPE:
         new_model = SentenceLevelClassificationModel(model_name, finetunable)
         new_model.build(encoder_link, num_of_classes, preprocess_link, encoder_trainable, "pooled_output", 
                         dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, 
                         additional_metrics=additional_metrics)
         new_model.save(path_to_model, True)
-    elif model_type == TLCM_MODEL_TYPE:
+    elif model_type == TLC_MODEL_TYPE:
         new_model = TokenLevelClassificationModel(model_name, finetunable)
         new_model.build(preprocess_link, encoder_link, num_of_classes, encoder_trainable, 
                         dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, additional_metrics=additional_metrics)
@@ -578,10 +592,10 @@ def create_dataset():
     dataset_folder = path_to_env + "/" + DATASETS_FOLDER_NAME + "/"
     path_to_dataset = dataset_folder + dataset_name + ".pickle"
 
-    if DATASET_TYPE_FIELD_NAME == SLCM_MODEL_TYPE:
-        dataframe = pd.DataFrame({TEXT_COLUMN_NAME:[]})
-    elif DATASET_TYPE_FIELD_NAME == TLCM_MODEL_TYPE:
-        dataframe = pd.DataFrame({SENTENCE_IDX_COLUMN_NAME:[], WORD_COLUMN_NAME:[]})
+    if DATASET_TYPE_FIELD_NAME == SLC_MODEL_TYPE:
+        dataframe = pd.DataFrame({TEXT_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
+    elif DATASET_TYPE_FIELD_NAME == TLC_MODEL_TYPE:
+        dataframe = pd.DataFrame({SENTENCE_IDX_FIELD_NAME:[], WORD_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
     else:
         print("Invalid dataset type!")
         return home()
@@ -604,6 +618,217 @@ def create_dataset():
         print("Couldn't create dataset! " + str(ex))
     finally:
         return home()
+
+@app.route('/import_csv_to_dataset', methods=['POST'])
+def import_examples_to_dataset(text_column_name:str=TEXT_FIELD_NAME, 
+                               sentence_idx_column_name:str=SENTENCE_IDX_FIELD_NAME, 
+                               word_column_name:str=WORD_FIELD_NAME):
+
+    form = request.form
+    
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    category = form[EXAMPLE_CATEGORY_FIELD_NAME]
+    
+    imported_dataset = request.files[DATASET_CSV_FIELD_NAME]
+
+    if(dataset_name not in self.__datasets.keys()):
+        raise Exception("The dataset called : '" + dataset_name + "' doesn't exist!")
+    
+    existing_dataset_path = self.__datasets[dataset_name].get_path()
+    existing_dataset_type = self.__datasets[dataset_name].get_type()
+
+    try:
+        with open(existing_dataset_path, "rb") as infile:
+            existing_dataset = pickle.load(infile)
+    except:
+        raise Exception("Couldn't load the '" + dataset_name + "' dataset!")
+
+    if not isinstance(imported_dataset, pd.DataFrame):
+        try:
+            imported_dataset = pd.read_csv(str(imported_dataset))
+        except:
+            raise Exception("Cannot import examples!")
+
+    needed_fields = []
+
+    if text_column_name in imported_dataset.columns:
+        imported_dataset.rename(columns={text_column_name: TEXT_FIELD_NAME})
+
+    if sentence_idx_column_name in imported_dataset.columns:
+        imported_dataset.rename(columns={sentence_idx_column_name: SENTENCE_IDX_FIELD_NAME})
+
+    if word_column_name in imported_dataset.columns:
+        imported_dataset.rename(columns={word_column_name: WORD_FIELD_NAME})
+
+    if existing_dataset_type == SLC_MODEL_TYPE:
+        needed_fields += [TEXT_FIELD_NAME]
+    elif existing_dataset_type == TLC_MODEL_TYPE:
+        needed_fields += [SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME]
+
+    for needed_field in needed_fields:
+        if needed_field not in imported_dataset.columns:
+            print("Trying to import from an invalid dataframe!")
+            return home()
+
+    for column in imported_dataset.columns:
+        if column not in existing_dataset:
+            existing_dataset[column] = EMPTY_TARGET_VALUE
+
+    for i, new_row in imported_dataset.iterrows():
+
+        for column in existing_dataset:
+            if column not in imported_dataset:
+                new_row[column] = EMPTY_TARGET_VALUE
+
+        existing_dataset.append(new_row, ignore_index=True)
+
+    try:
+        if os.path.exists(existing_dataset_path):
+            os.remove(existing_dataset_path)
+        
+        existing_dataset_path.to_pickle(existing_dataset_path)
+    except Exception as ex:
+        print("Couldn't save the updated dataset!")
+    
+    return home()
+
+@app.route('/add_to_train_queue', methods=['POST'])
+def add_model_to_train_queue():
+
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
+                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    env_name = session[ENV_NAME_FIELD_NAME]
+    model_name = form[MODEL_NAME_FIELD_NAME]
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
+    
+    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                            [MODEL_ID_FIELD_NAME], 
+                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                            [user_id, env_id, model_name])
+    
+    if len(models) == 0:
+        print("A model with this name doesn't exist!")
+        return home()
+    
+    model_id = models[0][0]
+    
+    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                              [DATASET_ID_FIELD_NAME], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                              [user_id, env_id, dataset_name])
+    
+    if len(datasets) == 0:
+        print("A dataset with this name doesn't exist!")
+        return home()
+    
+    dataset_id = models[0][0]
+    
+    queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                                       [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME, FINETUNABLE_FIELD_NAME], 
+                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                       [user_id, env_id])
+    
+    max_id = 0
+
+    for queue in queue_in_this_env:
+        
+        if queue[0] > max_id:
+            max_id = queue[0]
+        
+        if model_id == queue[1] and not queue[2]:
+            print("Can't add this model to the queue, is already trained and not finetunable!")
+            return home()
+        
+    new_id = max_id + 1
+
+    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/"
+    path_to_training_sessions = path_to_env + "/" + TRAINING_SESSIONS_FOLDER_NAME + "/"
+    checkpoint_name = str(model_id) + str(dataset_id) + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+    checkpoint_path = path_to_training_sessions + "/" + checkpoint_name + "/"
+
+    insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
+                   [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME, 
+                    MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME, 
+                    NUM_OF_EPOCHS_FIELD_NAME], 
+                    [user_id, env_id, new_id, model_id, dataset_id, checkpoint_path, num_of_epochs])
+
+#This should be execute on a parallel process
+@app.route('/start_train', methods=['POST'])
+def start_train():
+
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
+                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    env_name = session[ENV_NAME_FIELD_NAME]
+    model_name = form[MODEL_NAME_FIELD_NAME]
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
+    
+    queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                                       [MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
+                                        CHECKPOINT_PATH_FIELD_NAME, EPOCHS_LEFT_FIELD_NAME], 
+                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                                       [user_id, env_id, 1])
+    
+    if len(queue_in_this_env) == 0:
+        print("Nothing on train queue!")
+        return home()
+    
+    loaded_model = NLPClassificationModel.load_model("")
+
+    epochs_updating_callback = "" #Function that updates epochs left on db
+
+    loaded_model.train()
+
+    loaded_model.save(model_path, True)
+
+    shutil.rmtree(checkpoint_path)
+
+    #update the train queue
+
+@app.route('/stop_train', methods=['POST'])
+def stop_train():
+    pass
 
 def initialize_server():
 

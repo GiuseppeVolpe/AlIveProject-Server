@@ -50,6 +50,14 @@ TLCM_MODEL_TYPE = "TLCM"
 
 SENTENCE_TO_PREDICT_FIELD_NAME = "sent"
 
+ROOT_FOLDER = "AlIve"
+USERS_DATA_FOLDER_NAME = "UsersData"
+ENVIRONMENTS_FOLDER_NAME = "Environments"
+MODELS_FOLDER_NAME = "Models"
+DATASETS_FOLDER_NAME = "Datasets"
+
+USERS_DATA_FOLDER = ROOT_FOLDER + "/" + USERS_DATA_FOLDER_NAME + "/"
+
 #endregion
 
 app = Flask(__name__, template_folder='Templates')
@@ -113,18 +121,18 @@ def signup():
         return signup_form()
     
     usernames = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
-                              [USERNAME_FIELD_NAME], 
-                              [USERNAME_FIELD_NAME], 
-                              [username])
+                               [USERNAME_FIELD_NAME], 
+                               [USERNAME_FIELD_NAME], 
+                               [username])
     
     if len(usernames) > 0:
         flash("This username is already taken!")
         error_found = True
     
     email_addresses = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
-                                    [USER_EMAIL_FIELD_NAME], 
-                                    [USER_EMAIL_FIELD_NAME], 
-                                    [user_email])
+                                     [USER_EMAIL_FIELD_NAME], 
+                                     [USER_EMAIL_FIELD_NAME], 
+                                     [user_email])
     
     if len(email_addresses) > 0:
         flash("This email address is already taken!")
@@ -142,8 +150,8 @@ def signup():
         flash("Couldn't add user...")
         return signup_form()
     
-    user_space_path = "AlIve/UsersData/" + username + "/"
-    user_environments_path = user_space_path + "/Environments/"
+    user_space_path = USERS_DATA_FOLDER + username + "/"
+    user_environments_path = user_space_path + "/" + ENVIRONMENTS_FOLDER_NAME + "/"
 
     if not os.path.exists(user_environments_path):
         os.makedirs(user_environments_path)
@@ -153,25 +161,31 @@ def signup():
 @app.route('/login', methods=['POST'])
 def login():
 
-    login = request.form
+    form = request.form
+    
+    needed_fields = [USERNAME_FIELD_NAME, USER_PASSWORD_FIELD_NAME]
 
-    username = login[USERNAME_FIELD_NAME]
-    inserted_password = login[USER_PASSWORD_FIELD_NAME]
+    for needed_field in needed_fields:
+        if needed_field not in form:
+            return login_form()
+    
+    username = form[USERNAME_FIELD_NAME]
+    inserted_password = form[USER_PASSWORD_FIELD_NAME]
 
     users = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
-                          ["*"],
-                          [USERNAME_FIELD_NAME], 
-                          [username])
+                           ["*"], 
+                           [USERNAME_FIELD_NAME], 
+                           [username])
     
     if len(users) == 0:
         flash("This user doesn't exist!")
-        return home()
+        return login_form()
     
     user_tuple = users[0]
     
-    id = user_tuple[0]
+    user_id = user_tuple[0]
     correct_password = user_tuple[2]
-    email = user_tuple[3]
+    user_email = user_tuple[3]
 
     logged = (inserted_password == correct_password)
     
@@ -180,10 +194,9 @@ def login():
     else:
         flash('wrong password!')
     
-    if request.method == 'POST':
-        session[USER_ID_FIELD_NAME] = id
-        session[USERNAME_FIELD_NAME] = username
-        session[USER_EMAIL_FIELD_NAME] = email
+    session[USER_ID_FIELD_NAME] = user_id
+    session[USERNAME_FIELD_NAME] = username
+    session[USER_EMAIL_FIELD_NAME] = user_email
     
     return home()
 
@@ -194,20 +207,37 @@ def logout():
 
 @app.route('/create_env', methods=['POST'])
 def create_environment():
-
-    form = request.form
     
-    userid = session[USER_ID_FIELD_NAME]
-    env_name = form[ENV_NAME_FIELD_NAME]
+    form = request.form
 
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME]
+    needed_form_fields = [ENV_NAME_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_name = form[ENV_NAME_FIELD_NAME]
+    
     if len(env_name) <= 1:
-        print("Invaild name")
+        print("Invaild name!")
         return home()
     
     environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                 [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                 [USER_ID_FIELD_NAME], 
-                                 [userid])
+                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME], 
+                                  [user_id])
     
     max_env_id = 0
 
@@ -222,23 +252,55 @@ def create_environment():
     
     new_env_id = max_env_id + 1
 
-    path_to_env = "AlIve/UsersData/" + session["username"] + "/Environments/" + env_name + "/"
+    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
 
     try:
         if not os.path.exists(path_to_env):
             os.makedirs(path_to_env)
     except:
-        print("Couldn't create environment!")
+        print("Couldn't create the environment!")
         return home()
-
+    
     try:
         insert_into_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                       [userid, new_env_id, env_name])
+                       [user_id, new_env_id, env_name])
     except Exception as ex:
         print("Couldn't create environment! " + str(ex))
     finally:
         return home()
+
+@app.route('/delete_env', methods=['POST'])
+def delete_environment():
+    
+    form = request.form
+
+    if USER_ID_FIELD_NAME not in session or ENV_NAME_FIELD_NAME not in form:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_name = form[ENV_NAME_FIELD_NAME]
+    
+    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                  [user_id, env_name])
+    
+    if len(environments) == 0:
+        print("An environment with this name doesn't exist!")
+        return home()
+    
+    try:
+        delete_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                       [USER_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                       [user_id, env_name])
+        
+        shutil.rmtree(USERS_DATA_FOLDER + "/" + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/")
+    except:
+        print("Couldn't delete the environment!")
+    
+    return home()
 
 @app.route('/select_env', methods=['POST'])
 def select_environment():
@@ -260,14 +322,14 @@ def select_environment():
     
     if env_id != None:
         environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                    [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                    [ENV_ID_FIELD_NAME], 
-                                    [env_id])
+                                      [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                      [ENV_ID_FIELD_NAME], 
+                                      [env_id])
     elif env_name != None:
         environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                    [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                    [ENV_NAME_FIELD_NAME], 
-                                    [env_name])
+                                      [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                      [ENV_NAME_FIELD_NAME], 
+                                      [env_name])
     
     if len(environments) == 0:
         print("Inexisting environment!")
@@ -282,16 +344,27 @@ def create_model():
     
     form = request.form
 
-    if ENV_ID_FIELD_NAME not in session:
-        print("No environment selected!")
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_form_fields = [MODEL_NAME_FIELD_NAME, MODEL_TYPE_FIELD_NAME, BASEMODEL_FIELD_NAME, 
+                          NUM_OF_CLASSES_FIELD_NAME, DROPOUT_RATE_FIELD_NAME, OPTIMIZER_LR_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
         return home()
     
-    if MODEL_NAME_FIELD_NAME not in form:
-        print("No model name given!")
-    
-    userid = session[USER_ID_FIELD_NAME]
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
     envid = session[ENV_ID_FIELD_NAME]
-    envname = session[ENV_NAME_FIELD_NAME]
+    env_name = session[ENV_NAME_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
     model_type = form[MODEL_TYPE_FIELD_NAME]
     finetunable = FINETUNABLE_FIELD_NAME in form
@@ -302,13 +375,13 @@ def create_model():
     optimizer_lr = float(form[OPTIMIZER_LR_FIELD_NAME])
     additional_metrics = []
     public = PUBLIC_FIELD_NAME in form
-
+    
     encoder_link, preprocess_link = get_handle_preprocess_link(base_model)
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                            ["*"], 
                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                           [userid, envid])
+                           [user_id, envid])
     
     max_id = 0
 
@@ -323,9 +396,9 @@ def create_model():
     
     new_id = max_id + 1
 
-    path_to_env = "AlIve/UsersData/" + session["username"] + "/Environments/" + envname + "/"
-    path_to_model = path_to_env + model_name + "/"
-
+    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+    path_to_model = path_to_env + "/" + MODELS_FOLDER_NAME + "/" + model_name + "/"
+    
     if not os.path.exists(path_to_model):
         os.makedirs(path_to_model)
     
@@ -337,48 +410,119 @@ def create_model():
         new_model.save(path_to_model, True)
     elif model_type == TLCM_MODEL_TYPE:
         new_model = TokenLevelClassificationModel(model_name, finetunable)
-        new_model.build(preprocess_link, encoder_link, num_of_classes, encoder_trainable, "sequence_output", 
-                        dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, additional_metrics=[])
+        new_model.build(preprocess_link, encoder_link, num_of_classes, encoder_trainable, 
+                        dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, additional_metrics=additional_metrics)
         new_model.save(path_to_model, True)
     
     insert_into_db(ALIVE_DB_MODELS_TABLE_NAME, 
                    [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME, 
                     MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, PUBLIC_FIELD_NAME], 
-                   [userid, envid, new_id, model_name, path_to_model, model_type, public])
+                   [user_id, envid, new_id, model_name, path_to_model, model_type, public])
     
     return home()
 
-@app.route('/create_dataset', methods=['POST'])
-def create_dataset():
-    pass
+@app.route('/delete_model', methods=['POST'])
+def delete_model():
+    
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_form_fields = [MODEL_NAME_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    env_name = session[ENV_NAME_FIELD_NAME]
+    model_name = form[MODEL_NAME_FIELD_NAME]
+    
+    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                            ["*"], 
+                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                            [user_id, env_id, model_name])
+    
+    if len(models) == 0:
+        print("A model with this name doesn't exist!")
+        return home()
+    
+    try:
+        delete_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                       [user_id, env_id, model_name])
+        
+        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+        path_to_model = path_to_env + "/" + MODELS_FOLDER_NAME + "/" + model_name + "/"
+        
+        shutil.rmtree(path_to_model)
+    except:
+        print("Couldn't delete the model!")
+    
+    return home()
 
 @app.route('/predict', methods=['POST'])
 def predict():
 
     form = request.form
 
-    userid = session[USER_ID_FIELD_NAME]
+    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
+    needed_form_fields = [MODEL_NAME_FIELD_NAME, SENTENCE_TO_PREDICT_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
     envid = session[ENV_ID_FIELD_NAME]
-
     model_name = form[MODEL_NAME_FIELD_NAME]
-
     sent_to_predict = form[SENTENCE_TO_PREDICT_FIELD_NAME]
 
     model_tuples = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                                  [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
-                                 [userid, envid, model_name])
+                                 [user_id, envid, model_name])
     
     if len(model_tuples) == 0:
         print("No model with this name found!")
         return home()
     
-    model_path = model_tuples[0][0]
+    path_to_model = model_tuples[0][0]
 
-    new_model = NLPClassificationModel.load_model(model_path)
+    try:
+        new_model = NLPClassificationModel.load_model(path_to_model)
+    except:
+        print("Couldn't load the model!")
+        return home()
+    try:
+        print(new_model.predict([sent_to_predict]))
+    except:
+        print("Something went wrong during the prediction...")
     
-    print(new_model.predict([sent_to_predict]))
     return home()
+
+@app.route('/create_dataset', methods=['POST'])
+def create_dataset():
+    pass
 
 def initialize_server():
 
@@ -483,6 +627,47 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list):
     
     query += ")"
 
+    cursor = db_connection.cursor()
+    cursor.execute(query)
+    db_connection.commit()
+    cursor.close()
+
+def delete_from_db(table_name:str, given_fields:list=None, given_values:list=None):
+
+    if given_fields == None:
+        given_fields = list()
+    
+    if given_values == None:
+        given_values = list()
+    
+    if len(given_fields) != len(given_values):
+        raise Exception("The number of fields given is different from the number of values!")
+    
+    query = "DELETE FROM " + table_name
+
+    if len(given_fields) > 0:
+        query += " WHERE "
+
+        for i, given_field in enumerate(given_fields):
+            if i > 0:
+                query += " AND "
+            
+            query += (given_field + " = ")
+            
+            not_quoted_types = [int, float]
+            
+            field_value = None
+
+            for not_quoted_type in not_quoted_types:
+                if isinstance(given_values[i], not_quoted_type):
+                    field_value = str(given_values[i])
+                    break
+            
+            if field_value == None:
+                field_value = "'{}'".format(given_values[i])
+            
+            query += field_value
+    
     cursor = db_connection.cursor()
     cursor.execute(query)
     db_connection.commit()

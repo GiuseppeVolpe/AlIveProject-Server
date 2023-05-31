@@ -48,6 +48,11 @@ OPTIMIZER_LR_FIELD_NAME = "optimizer_lr"
 SLCM_MODEL_TYPE = "SLCM"
 TLCM_MODEL_TYPE = "TLCM"
 
+TEXT_COLUMN_NAME = "text"
+SENTENCE_IDX_COLUMN_NAME = "sentence_idx"
+WORD_COLUMN_NAME = "word"
+EXAMPLE_CATEGORY_COLUMN_NAME = "example_category"
+
 SENTENCE_TO_PREDICT_FIELD_NAME = "sent"
 
 ROOT_FOLDER = "AlIve"
@@ -522,7 +527,83 @@ def predict():
 
 @app.route('/create_dataset', methods=['POST'])
 def create_dataset():
-    pass
+
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_form_fields = [DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_id = form[ENV_ID_FIELD_NAME]
+    env_name = form[ENV_NAME_FIELD_NAME]
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    
+    if len(dataset_name) <= 1:
+        print("Invaild name!")
+        return home()
+    
+    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                              [user_id, env_id, dataset_name])
+    
+    max_dataset_id = 0
+
+    for dataset in datasets:
+        
+        if dataset[0] > max_dataset_id:
+            max_dataset_id = dataset[0]
+
+        if dataset[1] == dataset_name:
+            print("A dataset with this name already exists!")
+            return home()
+    
+    new_env_id = max_dataset_id + 1
+
+    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+    dataset_folder = path_to_env + "/" + DATASETS_FOLDER_NAME + "/"
+    path_to_dataset = dataset_folder + dataset_name + ".pickle"
+
+    if DATASET_TYPE_FIELD_NAME == SLCM_MODEL_TYPE:
+        dataframe = pd.DataFrame({TEXT_COLUMN_NAME:[]})
+    elif DATASET_TYPE_FIELD_NAME == TLCM_MODEL_TYPE:
+        dataframe = pd.DataFrame({SENTENCE_IDX_COLUMN_NAME:[], WORD_COLUMN_NAME:[]})
+    else:
+        print("Invalid dataset type!")
+        return home()
+    
+    try:
+        if not os.path.exists(dataset_folder):
+            os.makedirs(dataset_folder)
+        
+        dataframe.to_pickle(path_to_dataset)
+        
+    except:
+        print("Couldn't create the dataset!")
+        return home()
+    
+    try:
+        insert_into_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                       [user_id, new_env_id, dataset_name])
+    except Exception as ex:
+        print("Couldn't create dataset! " + str(ex))
+    finally:
+        return home()
 
 def initialize_server():
 

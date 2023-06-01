@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS training_sessions (
     queue_index INT(11) NOT NULL,
     model_id INT(11) NOT NULL,
     dataset_id INT(11) NOT NULL,
+    targets VARCHAR(1000) NOT NULL,
     checkpoint_path VARCHAR(1000) NOT NULL,
     epochs_left INT(11) NOT NULL,
     PRIMARY KEY (user_id, env_id, queue_index),

@@ -598,7 +598,8 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
                             metrics=metrics,
                             run_eagerly=run_eagerly)
     
-    def train(self, data:SentenceLevelClassificationData, epochs:int, batch_size:int=32, checkpoint_path:str=""):
+    def train(self, data:SentenceLevelClassificationData, epochs:int, batch_size:int=32, 
+              checkpoint_path:str="", desired_callbacks:list=None):
         
         if not isinstance(self._model, tf.keras.Model):
             raise Exception("Model is not built!")
@@ -618,7 +619,8 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
         trainfeatures, traintargets = data.get_train()
         validfeatures, validtargets = data.get_valid()
 
-        desired_callbacks = []
+        if desired_callbacks == None:
+            desired_callbacks = []
 
         if checkpoint_path != "":
             cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
@@ -754,7 +756,8 @@ class TokenLevelClassificationModel(NLPClassificationModel):
                             metrics=metrics, 
                             run_eagerly=run_eagerly)
     
-    def train(self, data:TokenLevelClassificationData, epochs:int, batch_size:int=32, checkpoint_path:str=""):
+    def train(self, data:TokenLevelClassificationData, epochs:int, batch_size:int=32, 
+              checkpoint_path:str="", desired_callbacks:list=None):
         
         if not isinstance(self._model, tf.keras.Model):
             raise Exception("Model is not built!")
@@ -774,8 +777,9 @@ class TokenLevelClassificationModel(NLPClassificationModel):
         trainfeatures, traintargets = data.get_train()
         validfeatures, validtargets = data.get_valid()
 
-        desired_callbacks = []
-
+        if desired_callbacks == None:
+            desired_callbacks = []
+        
         if checkpoint_path != "":
             cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                              save_weights_only=True,
@@ -837,10 +841,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
             
             decoded_prediction = []
 
-            layer_name = 'bert_tokenizer'
-            tokenizer_model = tf.keras.Model(inputs=self._model.input, 
-                                             outputs=self._model.get_layer(layer_name).output)
-            tokenizedexample = tokenizer_model(tf.constant([example]))[0]
+            tokenizedexample = self.tokenize(example)
 
             for word in tokenizedexample:
                 num_of_tokens = word.shape[0]
@@ -853,6 +854,15 @@ class TokenLevelClassificationModel(NLPClassificationModel):
         results = np.array(results)
         
         return results
+
+    def tokenize(self, sentence):
+
+        layer_name = 'bert_tokenizer'
+        tokenizer_model = tf.keras.Model(inputs=self._model.input, 
+                                        outputs=self._model.get_layer(layer_name).output)
+        tokenized_sentence = tokenizer_model(tf.constant([sentence]))[0]
+
+        return tokenized_sentence
 
 def get_handle_preprocess_link(model_name:str):
 

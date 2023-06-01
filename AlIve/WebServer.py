@@ -1,9 +1,12 @@
 import os
 import re
+from queue import Queue
 
 import mysql.connector as mysqlconn
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort
+
+import tensorflow as tf
 
 from ModelsAndDatasets import *
 
@@ -48,9 +51,12 @@ DROPOUT_RATE_FIELD_NAME = "dropout_rate"
 OPTIMIZER_LR_FIELD_NAME = "optimizer_lr"
 DATASET_CSV_FIELD_NAME = "dataset_csv"
 
+TARGETS_FIELD_NAME = "targets"
 NUM_OF_EPOCHS_FIELD_NAME = "num_of_epochs"
-CHECKPOINT_PATH_FIELD_NAME = "checkpoint_path"
 EPOCHS_LEFT_FIELD_NAME = "epochs_left"
+BATCH_SIZE_FIELD_NAME = "batch_size"
+CHECKPOINT_PATH_FIELD_NAME = "checkpoint_path"
+TARGETS_SEPARATOR = "|"
 
 SLC_MODEL_TYPE = "SLCM"
 TLC_MODEL_TYPE = "TLCM"
@@ -699,7 +705,8 @@ def add_model_to_train_queue():
 
     needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
                              ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
-    needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME]
+    needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, 
+                          NUM_OF_EPOCHS_FIELD_NAME, TARGETS_FIELD_NAME]
     
     needed_fields_recieved = True
 
@@ -721,6 +728,7 @@ def add_model_to_train_queue():
     model_name = form[MODEL_NAME_FIELD_NAME]
     dataset_name = form[DATASET_NAME_FIELD_NAME]
     num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
+    target = form[TARGETS_FIELD_NAME]
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                             [MODEL_ID_FIELD_NAME], 
@@ -751,80 +759,132 @@ def add_model_to_train_queue():
     
     max_id = 0
 
-    for queue in queue_in_this_env:
+    for session in queue_in_this_env:
         
-        if queue[0] > max_id:
-            max_id = queue[0]
+        if session[0] > max_id:
+            max_id = session[0]
         
-        if model_id == queue[1] and not queue[2]:
+        if model_id == session[1] and not session[2]:
             print("Can't add this model to the queue, is already trained and not finetunable!")
             return home()
         
     new_id = max_id + 1
 
-    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/"
+    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
     path_to_training_sessions = path_to_env + "/" + TRAINING_SESSIONS_FOLDER_NAME + "/"
     checkpoint_name = str(model_id) + str(dataset_id) + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
     checkpoint_path = path_to_training_sessions + "/" + checkpoint_name + "/"
-
-    insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
-                   [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME, 
-                    MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME, 
-                    NUM_OF_EPOCHS_FIELD_NAME], 
-                    [user_id, env_id, new_id, model_id, dataset_id, checkpoint_path, num_of_epochs])
+    
+    try:
+        insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME, 
+                        MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME, 
+                        NUM_OF_EPOCHS_FIELD_NAME, TARGETS_FIELD_NAME], 
+                        [user_id, env_id, new_id, model_id, dataset_id, 
+                        checkpoint_path, num_of_epochs, target])
+    except:
+        print("Couldn't add this model to train queue!")
+    
+    return home()
 
 #This should be execute on a parallel process
 @app.route('/start_train', methods=['POST'])
 def start_train():
+    return home()
 
-    form = request.form
+def train_in_queue():
 
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
-                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
-    needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME]
-    
-    needed_fields_recieved = True
+    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
 
     for needed_session_field in needed_session_fields:
         if needed_session_field not in session:
-            needed_fields_recieved = False
-    
-    for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            needed_fields_recieved = False
-    
-    if not needed_fields_recieved:
-        return home()
+            return home()
     
     user_id = session[USER_ID_FIELD_NAME]
-    username = session[USERNAME_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
-    env_name = session[ENV_NAME_FIELD_NAME]
-    model_name = form[MODEL_NAME_FIELD_NAME]
-    dataset_name = form[DATASET_NAME_FIELD_NAME]
-    num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
-                                       [MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
-                                        CHECKPOINT_PATH_FIELD_NAME, EPOCHS_LEFT_FIELD_NAME], 
-                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
-                                       [user_id, env_id, 1])
+                                       [QUEUE_INDEX_FIELD_NAME, 
+                                        MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
+                                        TARGETS_FIELD_NAME, EPOCHS_LEFT_FIELD_NAME,
+                                        BATCH_SIZE_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME], 
+                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                       [user_id, env_id])
     
     if len(queue_in_this_env) == 0:
         print("Nothing on train queue!")
         return home()
     
-    loaded_model = NLPClassificationModel.load_model("")
+    queue_in_this_env.sort(key=(lambda session:session[0]))
 
-    epochs_updating_callback = "" #Function that updates epochs left on db
+    sessions = Queue()
 
-    loaded_model.train()
+    for session in queue_in_this_env:
+        sessions.put(session)
+    
+    while sessions.empty:
 
-    loaded_model.save(model_path, True)
+        session = sessions.get()
 
-    shutil.rmtree(checkpoint_path)
+        current_queue_index = session[0]
+        model_id = session[1]
+        dataset_id = session[2]
+        targets = session[3].split(TARGETS_SEPARATOR)
+        epochs_left = sessions[4]
+        batch_size = session[5]
+        checkpoint_path = session[6]
 
-    #update the train queue
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME], 
+                                [user_id, env_id, model_id])
+        
+        if len(models) == 0:
+            print("Couldn't find the model specified in this train session!")
+            return home()
+        
+        model = models[0]
+
+        path_to_model = model[0]
+        model_type = model[1]
+        
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_PATH_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
+                                  [user_id, env_id, dataset_id])
+        
+        if len(datasets) == 0:
+            print("Couldn't find the model specified in this train session!")
+            return home()
+        
+        dataset = datasets[0]
+
+        path_to_dataset = dataset[0]
+
+        loaded_model = NLPClassificationModel.load_model(path_to_model)
+        loaded_dataset = pd.read_pickle(path_to_dataset)
+
+        train = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TRAIN_CATEGORY]
+        valid = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_VALIDATION_CATEGORY]
+        test = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TEST_CATEGORY]
+        
+        if model_type == SLC_MODEL_TYPE:
+            data = SentenceLevelClassificationData(train, valid, test, TEXT_FIELD_NAME, targets[0])
+        elif model_type == TLC_MODEL_TYPE:
+            data = TokenLevelClassificationData(train, valid, test, loaded_model.tokenize, 
+                                                SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME, 
+                                                targets[0])
+        
+        epochs_updating_callback = UpdateDBCallback(user_id, env_id, current_queue_index)
+        additional_callbacks = [epochs_updating_callback]
+        
+        loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
+        loaded_model.save(path_to_model, True)
+        shutil.rmtree(checkpoint_path)
+
+        delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                       [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                       [env_id, current_queue_index])
 
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
@@ -938,6 +998,77 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list):
     db_connection.commit()
     cursor.close()
 
+def update_db(table_name:str, 
+              fields_to_update:list=None, updated_values:list=None,
+              given_fields:list=None, given_values:list=None):
+
+    if fields_to_update == None:
+        fields_to_update = list()
+    
+    if updated_values == None:
+        updated_values = list()
+    
+    if len(fields_to_update) == 0:
+        raise Exception("Nothing to update!")
+
+    if given_fields == None:
+        given_fields = list()
+    
+    if given_values == None:
+        given_values = list()
+    
+    if len(fields_to_update) != len(updated_values):
+        raise Exception("The number of fields to update is different from the number of values!")
+    
+    if len(given_fields) != len(given_values):
+        raise Exception("The number of fields given is different from the number of values!")
+    
+    query = "UPDATE " + table_name + " SET "
+
+    for i, field_to_update in enumerate(fields_to_update):
+
+        updated_value = updated_values[i]
+
+        not_quoted_types = [int, float]
+        
+        if updated_value in not_quoted_type:
+            updated_value = str(updated_value)
+        else:
+            updated_value = "'{}'".format(updated_value)
+
+        if i != 0:
+            query += ", "
+
+        query += field_to_update + " = " + updated_value
+
+    if len(given_fields) > 0:
+        query += " WHERE "
+
+        for i, given_field in enumerate(given_fields):
+            if i > 0:
+                query += " AND "
+            
+            query += (given_field + " = ")
+            
+            not_quoted_types = [int, float]
+            
+            field_value = None
+
+            for not_quoted_type in not_quoted_types:
+                if isinstance(given_values[i], not_quoted_type):
+                    field_value = str(given_values[i])
+                    break
+            
+            if field_value == None:
+                field_value = "'{}'".format(given_values[i])
+            
+            query += field_value
+    
+    cursor = db_connection.cursor()
+    cursor.execute(query)
+    db_connection.commit()
+    cursor.close()
+
 def delete_from_db(table_name:str, given_fields:list=None, given_values:list=None):
 
     if given_fields == None:
@@ -978,6 +1109,33 @@ def delete_from_db(table_name:str, given_fields:list=None, given_values:list=Non
     cursor.execute(query)
     db_connection.commit()
     cursor.close()
+
+def execute_custom_update_query(query):
+    cursor = db_connection.cursor()
+    cursor.execute(query)
+    db_connection.commit()
+    cursor.close()
+
+class UpdateDBCallback(tf.keras.callbacks.Callback):
+
+    def __init__(self, user_id, env_id, current_queue_index):
+        super().__init__()
+        self.__user_id = user_id
+        self.__env_id = env_id
+        self.__current_queue_index = current_queue_index
+    
+    def on_epoch_end(self, epoch, logs=None):
+
+        user_id = self.__user_id
+        env_id = self.__env_id
+        current_queue_index = self.__current_queue_index
+
+        update_epochs_left_query = "UPDATE " + ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME + " SET "
+        update_epochs_left_query += EPOCHS_LEFT_FIELD_NAME + " = " + EPOCHS_LEFT_FIELD_NAME + " - 1 "
+        update_epochs_left_query += " WHERE " + USER_ID_FIELD_NAME + " = " + user_id + " AND "
+        update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + env_id + " AND "
+        update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + current_queue_index
+        execute_custom_update_query(update_epochs_left_query)
 
 if __name__ == "__main__":
     initialize_server()

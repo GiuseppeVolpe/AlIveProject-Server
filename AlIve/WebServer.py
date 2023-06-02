@@ -564,7 +564,6 @@ def predict():
 def create_dataset():
 
     form = request.form
-
     needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
                              ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
     needed_form_fields = [DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME]
@@ -580,6 +579,7 @@ def create_dataset():
             needed_fields_recieved = False
     
     if not needed_fields_recieved:
+        print("Missing fields in the form!")
         return home()
     
     user_id = session[USER_ID_FIELD_NAME]
@@ -688,7 +688,7 @@ def delete_dataset():
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
                        [user_id, env_id, dataset_name])
         
-        shutil.rmtree(path_to_dataset)
+        os.remove(path_to_dataset)
     except:
         print("Couldn't delete the dataset!")
     

@@ -1,6 +1,7 @@
 import os
 import re
 from queue import Queue
+from threading import Thread, Event
 
 import mysql.connector as mysqlconn
 from flask import Flask
@@ -29,6 +30,8 @@ DATASET_NAME_FIELD_NAME = "dataset_name"
 DATASET_PATH_FIELD_NAME = "dataset_path"
 DATASET_TYPE_FIELD_NAME = "dataset_type"
 QUEUE_INDEX_FIELD_NAME = "queue_index"
+TRAINING_THREAD_FIELD_NAME = "training_thread"
+TRAINING_THREAD_STOP_EVENT_FIELD_NAME = "training_thread_stop_event"
 
 ALIVE_DB_NAME = "alive_db"
 ALIVE_DB_ADMIN_USERNAME = "GiuseppeVolpe"
@@ -110,6 +113,8 @@ def user_space():
     return render_template('index.html')
 
 #endregion
+
+#region USERS HANDLING
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -229,6 +234,10 @@ def login():
 def logout():
     reset_session()
     return home()
+
+#endregion
+
+#region ENVIRONMENTS HANDLING
 
 @app.route('/create_env', methods=['POST'])
 def create_environment():
@@ -364,6 +373,10 @@ def select_environment():
     
     return home()
 
+#endregion
+
+#region MODELS HANDLING
+
 @app.route('/create_model', methods=['POST'])
 def create_model():
     
@@ -451,7 +464,8 @@ def delete_model():
     
     form = request.form
 
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
+                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
     needed_form_fields = [MODEL_NAME_FIELD_NAME]
     
     needed_fields_recieved = True
@@ -545,6 +559,10 @@ def predict():
     
     return home()
 
+#endregion
+
+#region DATASET HANDLING
+
 @app.route('/create_dataset', methods=['POST'])
 def create_dataset():
 
@@ -625,36 +643,109 @@ def create_dataset():
     finally:
         return home()
 
-@app.route('/import_csv_to_dataset', methods=['POST'])
-def import_examples_to_dataset(text_column_name:str=TEXT_FIELD_NAME, 
-                               sentence_idx_column_name:str=SENTENCE_IDX_FIELD_NAME, 
-                               word_column_name:str=WORD_FIELD_NAME):
-
-    form = request.form
+@app.route('/delete_dataset', methods=['POST'])
+def delete_dataset():
     
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
+                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_form_fields = [DATASET_NAME_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    env_name = session[ENV_NAME_FIELD_NAME]
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    
+    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                              ["*"], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                              [user_id, env_id, dataset_name])
+    
+    if len(datasets) == 0:
+        print("A dataset with this name doesn't exist!")
+        return home()
+    
+    try:
+        delete_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                       [user_id, env_id, dataset_name])
+        
+        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+        path_to_dataset = path_to_env + "/" + DATASETS_FOLDER_NAME + "/" + dataset_name + "/"
+        
+        shutil.rmtree(path_to_dataset)
+    except:
+        print("Couldn't delete the dataset!")
+    
+    return home()
+
+@app.route('/import_csv_to_dataset', methods=['POST'])
+def import_examples_to_dataset():
+    
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
+    needed_form_fields = [DATASET_NAME_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+
     dataset_name = form[DATASET_NAME_FIELD_NAME]
     category = form[EXAMPLE_CATEGORY_FIELD_NAME]
+    text_column_name = form["text_column_name"]
+    sentence_idx_column_name = form["sentence_idx_column_name"]
+    word_column_name = form["word_column_name"]
     
+    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME, 
+                               DATASET_TYPE_FIELD_NAME, DATASET_PATH_FIELD_NAME], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                              [user_id, env_id, dataset_name])
+    
+    if len(datasets) == 0:
+        print("A dataset with this name doesn't exist!")
+        return home()
+    
+    existing_dataset = datasets[0]
+    existing_dataset_id = existing_dataset[0]
+    existing_dataset_type = existing_dataset[2]
+    existing_dataset_path = existing_dataset[3]
+
+    existing_dataset = pd.read_pickle(existing_dataset_path)
     imported_dataset = request.files[DATASET_CSV_FIELD_NAME]
 
-    if(dataset_name not in self.__datasets.keys()):
-        raise Exception("The dataset called : '" + dataset_name + "' doesn't exist!")
+    if imported_dataset == None:
+        print("No dataset imported!")
+        return home()
     
-    existing_dataset_path = self.__datasets[dataset_name].get_path()
-    existing_dataset_type = self.__datasets[dataset_name].get_type()
-
-    try:
-        with open(existing_dataset_path, "rb") as infile:
-            existing_dataset = pickle.load(infile)
-    except:
-        raise Exception("Couldn't load the '" + dataset_name + "' dataset!")
-
-    if not isinstance(imported_dataset, pd.DataFrame):
-        try:
-            imported_dataset = pd.read_csv(str(imported_dataset))
-        except:
-            raise Exception("Cannot import examples!")
-
     needed_fields = []
 
     if text_column_name in imported_dataset.columns:
@@ -697,6 +788,10 @@ def import_examples_to_dataset(text_column_name:str=TEXT_FIELD_NAME,
         print("Couldn't save the updated dataset!")
     
     return home()
+
+#endregion
+
+#region TRAINING QUEUE HANDLING
 
 @app.route('/add_to_train_queue', methods=['POST'])
 def add_model_to_train_queue():
@@ -789,12 +884,16 @@ def add_model_to_train_queue():
     
     return home()
 
-#This should be execute on a parallel process
 @app.route('/start_train', methods=['POST'])
 def start_train():
-    return home()
 
-def train_in_queue():
+    if TRAINING_THREAD_FIELD_NAME in session:
+        if session[TRAINING_THREAD_FIELD_NAME].is_alive():
+            print("The training has already started!")
+            return home()
+        else:
+            session.pop(TRAINING_THREAD_FIELD_NAME)
+            session.pop(TRAINING_THREAD_STOP_EVENT_FIELD_NAME)
 
     needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
 
@@ -804,6 +903,19 @@ def train_in_queue():
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
+    
+    stop_event = Event()
+
+    lambda_training_function = lambda : train_queue(user_id, env_id, stop_event)
+    training_thread = Thread(target=lambda_training_function, daemon=True, name='Monitor')
+    training_thread.start()
+
+    session[TRAINING_THREAD_FIELD_NAME] = training_thread
+    session[TRAINING_THREAD_STOP_EVENT_FIELD_NAME] = stop_event
+
+    return home()
+
+def train_queue(user_id:int, env_id:int, event:Event=None):
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                        [QUEUE_INDEX_FIELD_NAME, 
@@ -819,22 +931,27 @@ def train_in_queue():
     
     queue_in_this_env.sort(key=(lambda session:session[0]))
 
-    sessions = Queue()
+    training_sessions = Queue()
 
-    for session in queue_in_this_env:
-        sessions.put(session)
+    for training_session in queue_in_this_env:
+        training_sessions.put(training_session)
     
-    while sessions.empty:
+    while training_sessions.empty:
 
-        session = sessions.get()
+        if event != None:
+            if event.is_set():
+                print('The training thread was stopped prematurely.')
+                break
 
-        current_queue_index = session[0]
-        model_id = session[1]
-        dataset_id = session[2]
-        targets = session[3].split(TARGETS_SEPARATOR)
-        epochs_left = sessions[4]
-        batch_size = session[5]
-        checkpoint_path = session[6]
+        training_session = training_sessions.get()
+
+        current_queue_index = training_session[0]
+        model_id = training_session[1]
+        dataset_id = training_session[2]
+        targets = training_session[3].split(TARGETS_SEPARATOR)
+        epochs_left = training_sessions[4]
+        batch_size = training_session[5]
+        checkpoint_path = training_session[6]
 
         models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                                 [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
@@ -890,11 +1007,23 @@ def train_in_queue():
 
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
-    pass
+
+    needed_session_fields = [TRAINING_THREAD_FIELD_NAME, TRAINING_THREAD_STOP_EVENT_FIELD_NAME]
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            return home()
+    
+    training_thread = session[TRAINING_THREAD_FIELD_NAME]
+    stop_event = session[TRAINING_THREAD_STOP_EVENT_FIELD_NAME]
+    
+    stop_event.set()
+
+#endregion
 
 def initialize_server():
 
-    path_to_users_data = "AlIve/UsersData/"
+    path_to_users_data = USERS_DATA_FOLDER
 
     if not os.path.exists(path_to_users_data):
         os.makedirs(path_to_users_data)
@@ -906,6 +1035,10 @@ def reset_session():
     session.pop(USER_EMAIL_FIELD_NAME)
     session.pop(ENV_ID_FIELD_NAME)
     session.pop(ENV_NAME_FIELD_NAME)
+    session.pop(TRAINING_THREAD_FIELD_NAME)
+    session.pop(TRAINING_THREAD_STOP_EVENT_FIELD_NAME)
+
+#region DB UTILITIES
 
 def select_from_db(table_name:str, needed_fields:list=None, given_fields:list=None, given_values:list=None):
 
@@ -1118,9 +1251,11 @@ def execute_custom_update_query(query):
     db_connection.commit()
     cursor.close()
 
+#endregion
+
 class UpdateDBCallback(tf.keras.callbacks.Callback):
 
-    def __init__(self, user_id, env_id, current_queue_index):
+    def __init__(self, user_id:int, env_id:int, current_queue_index:int):
         super().__init__()
         self.__user_id = user_id
         self.__env_id = env_id

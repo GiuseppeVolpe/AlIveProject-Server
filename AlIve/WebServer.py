@@ -727,8 +727,9 @@ def add_model_to_train_queue():
     env_name = session[ENV_NAME_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
     dataset_name = form[DATASET_NAME_FIELD_NAME]
-    num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
     target = form[TARGETS_FIELD_NAME]
+    num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
+    batch_size = form[BATCH_SIZE_FIELD_NAME]
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                             [MODEL_ID_FIELD_NAME], 
@@ -778,10 +779,11 @@ def add_model_to_train_queue():
     try:
         insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME, 
-                        MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME, 
-                        NUM_OF_EPOCHS_FIELD_NAME, TARGETS_FIELD_NAME], 
-                        [user_id, env_id, new_id, model_id, dataset_id, 
-                        checkpoint_path, num_of_epochs, target])
+                        MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, TARGETS_FIELD_NAME, 
+                        NUM_OF_EPOCHS_FIELD_NAME, BATCH_SIZE_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME], 
+                        [user_id, env_id, new_id, 
+                         model_id, dataset_id, target,
+                         num_of_epochs, batch_size, checkpoint_path])
     except:
         print("Couldn't add this model to train queue!")
     
@@ -813,7 +815,7 @@ def train_in_queue():
     
     if len(queue_in_this_env) == 0:
         print("Nothing on train queue!")
-        return home()
+        return
     
     queue_in_this_env.sort(key=(lambda session:session[0]))
 
@@ -841,7 +843,7 @@ def train_in_queue():
         
         if len(models) == 0:
             print("Couldn't find the model specified in this train session!")
-            return home()
+            return
         
         model = models[0]
 
@@ -855,7 +857,7 @@ def train_in_queue():
         
         if len(datasets) == 0:
             print("Couldn't find the model specified in this train session!")
-            return home()
+            return
         
         dataset = datasets[0]
 

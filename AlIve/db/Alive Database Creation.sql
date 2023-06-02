@@ -72,14 +72,15 @@ CREATE TABLE IF NOT EXISTS training_sessions (
     epochs_left INT(11) NOT NULL,
     batch_size INT(11) NOT NULL,
     checkpoint_path VARCHAR(1000) NOT NULL,
-    PRIMARY KEY (user_id, env_id, queue_index),
-    UNIQUE (user_id, env_id, model_id)
+    PRIMARY KEY (user_id, env_id, queue_index)
 );
 
 ALTER TABLE training_sessions
 ADD CONSTRAINT sessions_to_models
-FOREIGN KEY (user_id, env_id, model_id) REFERENCES users_environments(user_id, env_id, model_id);
+FOREIGN KEY (user_id, env_id, model_id) REFERENCES environments_models(user_id, env_id, model_id)
+ON DELETE CASCADE;
 
 ALTER TABLE training_sessions
 ADD CONSTRAINT sessions_to_datasets
-FOREIGN KEY (user_id, env_id, dataset_id) REFERENCES users_environments(user_id, env_id, dataset_id);
+FOREIGN KEY (user_id, env_id, dataset_id) REFERENCES environments_datasets(user_id, env_id, dataset_id)
+ON DELETE CASCADE;

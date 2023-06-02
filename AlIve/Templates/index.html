@@ -83,13 +83,13 @@
   </div>
 
   <div>
-    <form action="/import_csv_to_dataset", method="POST">
+    <form action="/import_csv_to_dataset", method="POST" enctype="multipart/form-data">
       <input type="text" value="" placeholder="Dataset Name" name="dataset_name">
       <input type="text" value="text" placeholder="Text Column Name" name="text_column_name">
       <input type="text" value="sentence_idx" placeholder="Sentence Index Column Name" name="sentence_idx_column_name">
       <input type="text" value="word" placeholder="Word Column Name" name="word_column_name">
       <input type="file" name="dataset_csv">
-      <input type="text" value="train" placeholder="Category" name="category">
+      <input type="text" value="train" placeholder="Category" name="example_category">
       <input type="submit" value="Import examples to Dataset" class="btn btn-primary btn-large btn-block">
     </form>
   </div>

@@ -71,6 +71,10 @@ SENTENCE_IDX_FIELD_NAME = "sentence_idx"
 WORD_FIELD_NAME = "word"
 EXAMPLE_CATEGORY_FIELD_NAME = "example_category"
 
+TEXT_COLUMN_NAME_FIELD_NAME = "text_column_name"
+SENTENCE_IDX_COLUMN_NAME_FIELD_NAME = "sentence_idx_column_name"
+WORD_COLUMN_NAME_FIELD_NAME = "word_column_name"
+
 EXAMPLE_TRAIN_CATEGORY = "train"
 EXAMPLE_VALIDATION_CATEGORY = "valid"
 EXAMPLE_TEST_CATEGORY = "test"
@@ -89,6 +93,10 @@ USERS_DATA_FOLDER = ROOT_FOLDER + "/" + USERS_DATA_FOLDER_NAME + "/"
 #endregion
 
 app = Flask(__name__, template_folder='Templates')
+
+app.config['UPLOAD_FOLDER'] = "UPLOAD_FOLDER"
+app.config['MAX_CONTENT-PATH'] = 1000000
+
 db_connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
 
 #region FORMS GETTERS
@@ -700,7 +708,9 @@ def import_examples_to_dataset():
     form = request.form
 
     needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
-    needed_form_fields = [DATASET_NAME_FIELD_NAME]
+    needed_form_fields = [DATASET_NAME_FIELD_NAME, EXAMPLE_CATEGORY_FIELD_NAME, 
+                          TEXT_COLUMN_NAME_FIELD_NAME, SENTENCE_IDX_COLUMN_NAME_FIELD_NAME, 
+                          WORD_COLUMN_NAME_FIELD_NAME]
     
     needed_fields_recieved = True
 
@@ -713,6 +723,7 @@ def import_examples_to_dataset():
             needed_fields_recieved = False
     
     if not needed_fields_recieved:
+        print("Missing fields in the form!")
         return home()
     
     user_id = session[USER_ID_FIELD_NAME]
@@ -720,9 +731,9 @@ def import_examples_to_dataset():
 
     dataset_name = form[DATASET_NAME_FIELD_NAME]
     category = form[EXAMPLE_CATEGORY_FIELD_NAME]
-    text_column_name = form["text_column_name"]
-    sentence_idx_column_name = form["sentence_idx_column_name"]
-    word_column_name = form["word_column_name"]
+    text_column_name = form[TEXT_COLUMN_NAME_FIELD_NAME]
+    sentence_idx_column_name = form[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
+    word_column_name = form[WORD_COLUMN_NAME_FIELD_NAME]
     
     datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
                               [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME, 
@@ -735,15 +746,18 @@ def import_examples_to_dataset():
         return home()
     
     existing_dataset = datasets[0]
+
     existing_dataset_id = existing_dataset[0]
     existing_dataset_type = existing_dataset[2]
     existing_dataset_path = existing_dataset[3]
 
-    existing_dataset = pd.read_pickle(existing_dataset_path)
-    imported_dataset = request.files[DATASET_CSV_FIELD_NAME]
-
-    if imported_dataset == None:
-        print("No dataset imported!")
+    try:
+        existing_dataset = pd.read_pickle(existing_dataset_path)
+        
+        infile = request.files[DATASET_CSV_FIELD_NAME]
+        imported_dataset = pd.read_csv(infile)
+    except Exception as ex:
+        print("Something went wrong when loading the dataset..." + str(ex))
         return home()
     
     needed_fields = []
@@ -768,7 +782,7 @@ def import_examples_to_dataset():
             return home()
 
     for column in imported_dataset.columns:
-        if column not in existing_dataset:
+        if column not in existing_dataset.columns:
             existing_dataset[column] = EMPTY_TARGET_VALUE
 
     for i, new_row in imported_dataset.iterrows():
@@ -776,17 +790,21 @@ def import_examples_to_dataset():
         for column in existing_dataset:
             if column not in imported_dataset:
                 new_row[column] = EMPTY_TARGET_VALUE
-
-        existing_dataset.append(new_row, ignore_index=True)
-
+        
+        new_row[EXAMPLE_CATEGORY_FIELD_NAME] = category
+        
+        existing_dataset.loc[len(existing_dataset)] = new_row
+    
     try:
         if os.path.exists(existing_dataset_path):
             os.remove(existing_dataset_path)
         
-        existing_dataset_path.to_pickle(existing_dataset_path)
-    except Exception as ex:
+        existing_dataset.to_pickle(existing_dataset_path)
+    except:
         print("Couldn't save the updated dataset!")
     
+    print(existing_dataset)
+
     return home()
 
 #endregion

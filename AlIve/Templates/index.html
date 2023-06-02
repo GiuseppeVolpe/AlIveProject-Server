@@ -94,6 +94,29 @@
     </form>
   </div>
 
+  <div>
+    <form action="/add_to_train_queue", method="POST">
+      <input type="text" value="" placeholder="Model Name" name="model_name">
+      <input type="text" value="" placeholder="Dataset Name" name="dataset_name">
+      <input type="text" value="" placeholder="Target" name="targets">
+      <input type="number" value="50" placeholder="Number of epochs" name="num_of_epochs">
+      <input type="number" value="32" placeholder="Batch size" name="batch_size">
+      <input type="submit" value="Add model to train queue" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
+  <div>
+    <form action="/start_train", method="POST">
+      <input type="submit" value="Start train" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
+  <div>
+    <form action="/stop_train", method="POST">
+      <input type="submit" value="Stop train" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
   <center>
     <hr>
   </center>

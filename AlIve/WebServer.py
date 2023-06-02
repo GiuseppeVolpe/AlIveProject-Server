@@ -56,7 +56,6 @@ DATASET_CSV_FIELD_NAME = "dataset_csv"
 
 TARGETS_FIELD_NAME = "targets"
 NUM_OF_EPOCHS_FIELD_NAME = "num_of_epochs"
-EPOCHS_LEFT_FIELD_NAME = "epochs_left"
 BATCH_SIZE_FIELD_NAME = "batch_size"
 CHECKPOINT_PATH_FIELD_NAME = "checkpoint_path"
 TARGETS_SEPARATOR = "|"
@@ -819,7 +818,8 @@ def add_model_to_train_queue():
     needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
                              ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
     needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, 
-                          NUM_OF_EPOCHS_FIELD_NAME, TARGETS_FIELD_NAME]
+                          TARGETS_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME, 
+                          BATCH_SIZE_FIELD_NAME]
     
     needed_fields_recieved = True
 
@@ -832,6 +832,7 @@ def add_model_to_train_queue():
             needed_fields_recieved = False
     
     if not needed_fields_recieved:
+        print("Missing fields!")
         return home()
     
     user_id = session[USER_ID_FIELD_NAME]
@@ -845,7 +846,7 @@ def add_model_to_train_queue():
     batch_size = form[BATCH_SIZE_FIELD_NAME]
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                            [MODEL_ID_FIELD_NAME], 
+                            [MODEL_ID_FIELD_NAME, FINETUNABLE_FIELD_NAME], 
                             [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                             [user_id, env_id, model_name])
     
@@ -854,6 +855,7 @@ def add_model_to_train_queue():
         return home()
     
     model_id = models[0][0]
+    model_finetunable = models[0][1]
     
     datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
                               [DATASET_ID_FIELD_NAME], 
@@ -867,18 +869,18 @@ def add_model_to_train_queue():
     dataset_id = models[0][0]
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
-                                       [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME, FINETUNABLE_FIELD_NAME], 
+                                       [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME], 
                                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
                                        [user_id, env_id])
     
     max_id = 0
 
-    for session in queue_in_this_env:
+    for training_session in queue_in_this_env:
         
-        if session[0] > max_id:
-            max_id = session[0]
+        if training_session[0] > max_id:
+            max_id = training_session[0]
         
-        if model_id == session[1] and not session[2]:
+        if model_id == training_session[1] and not model_finetunable:
             print("Can't add this model to the queue, is already trained and not finetunable!")
             return home()
         
@@ -897,8 +899,8 @@ def add_model_to_train_queue():
                         [user_id, env_id, new_id, 
                          model_id, dataset_id, target,
                          num_of_epochs, batch_size, checkpoint_path])
-    except:
-        print("Couldn't add this model to train queue!")
+    except Exception as ex:
+        print("Couldn't add this model to train queue! " + str(ex))
     
     return home()
 
@@ -927,9 +929,9 @@ def start_train():
     lambda_training_function = lambda : train_queue(user_id, env_id, stop_event)
     training_thread = Thread(target=lambda_training_function, daemon=True, name='Monitor')
     training_thread.start()
-
-    session[TRAINING_THREAD_FIELD_NAME] = training_thread
-    session[TRAINING_THREAD_STOP_EVENT_FIELD_NAME] = stop_event
+    
+    #session[TRAINING_THREAD_FIELD_NAME] = training_thread
+    #session[TRAINING_THREAD_STOP_EVENT_FIELD_NAME] = stop_event
 
     return home()
 
@@ -938,7 +940,7 @@ def train_queue(user_id:int, env_id:int, event:Event=None):
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                        [QUEUE_INDEX_FIELD_NAME, 
                                         MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
-                                        TARGETS_FIELD_NAME, EPOCHS_LEFT_FIELD_NAME,
+                                        TARGETS_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME,
                                         BATCH_SIZE_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME], 
                                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
                                        [user_id, env_id])
@@ -954,7 +956,11 @@ def train_queue(user_id:int, env_id:int, event:Event=None):
     for training_session in queue_in_this_env:
         training_sessions.put(training_session)
     
+    print("NOW TRAINING")
+
     while training_sessions.empty:
+        
+        print("STARTING TRAINING!")
 
         if event != None:
             if event.is_set():
@@ -967,7 +973,7 @@ def train_queue(user_id:int, env_id:int, event:Event=None):
         model_id = training_session[1]
         dataset_id = training_session[2]
         targets = training_session[3].split(TARGETS_SEPARATOR)
-        epochs_left = training_sessions[4]
+        epochs_left = training_session[4]
         batch_size = training_session[5]
         checkpoint_path = training_session[6]
 
@@ -1286,7 +1292,7 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
         current_queue_index = self.__current_queue_index
 
         update_epochs_left_query = "UPDATE " + ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME + " SET "
-        update_epochs_left_query += EPOCHS_LEFT_FIELD_NAME + " = " + EPOCHS_LEFT_FIELD_NAME + " - 1 "
+        update_epochs_left_query += NUM_OF_EPOCHS_FIELD_NAME + " = " + NUM_OF_EPOCHS_FIELD_NAME + " - 1 "
         update_epochs_left_query += " WHERE " + USER_ID_FIELD_NAME + " = " + user_id + " AND "
         update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + env_id + " AND "
         update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + current_queue_index

@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS training_sessions (
     model_id INT(11) NOT NULL,
     dataset_id INT(11) NOT NULL,
     targets VARCHAR(1000) NOT NULL,
-    epochs_left INT(11) NOT NULL,
+    num_of_epochs INT(11) NOT NULL,
     batch_size INT(11) NOT NULL,
     checkpoint_path VARCHAR(1000) NOT NULL,
     PRIMARY KEY (user_id, env_id, queue_index)

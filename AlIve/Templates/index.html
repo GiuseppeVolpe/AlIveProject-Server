@@ -60,6 +60,20 @@
   </div>
 
   <div>
+    <form action="/create_dataset", method="POST">
+      <input type="text" value="" placeholder="Dataset Name" name="dataset_name">
+      <input type="submit" value="Create Dataset" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
+  <div>
+    <form action="/delete_dataset", method="POST">
+      <input type="text" value="" placeholder="Dataset Name" name="dataset_name">
+      <input type="submit" value="Delete Dataset" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
+  <div>
     <form action="/predict", method="POST">
       <input type="text" value="" placeholder="Model Name" name="model_name">
       <input type="text" value="I want to eat something" placeholder="Sentence" name="sent">

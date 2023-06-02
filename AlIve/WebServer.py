@@ -417,22 +417,22 @@ def create_model():
     encoder_link, preprocess_link = get_handle_preprocess_link(base_model)
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                           ["*"], 
-                           [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                           [user_id, envid])
+                            [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                            [user_id, envid])
     
     max_id = 0
 
     for model in models:
 
-        if model[2] > max_id:
-            max_id = model[2]
+        if model[0] > max_id:
+            max_id = model[0]
         
-        if model[3] == model_name:
+        if model[1] == model_name:
             print("A model with this name already exists!")
             return home()
     
-    new_id = max_id + 1
+    new_model_id = max_id + 1
 
     path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
     path_to_model = path_to_env + "/" + MODELS_FOLDER_NAME + "/" + model_name + "/"
@@ -455,7 +455,7 @@ def create_model():
     insert_into_db(ALIVE_DB_MODELS_TABLE_NAME, 
                    [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME, 
                     MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, PUBLIC_FIELD_NAME], 
-                   [user_id, envid, new_id, model_name, path_to_model, model_type, public])
+                   [user_id, envid, new_model_id, model_name, path_to_model, model_type, public])
     
     return home()
 
@@ -464,8 +464,7 @@ def delete_model():
     
     form = request.form
 
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
-                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
     needed_form_fields = [MODEL_NAME_FIELD_NAME]
     
     needed_fields_recieved = True
@@ -482,13 +481,11 @@ def delete_model():
         return home()
     
     user_id = session[USER_ID_FIELD_NAME]
-    username = session[USERNAME_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
-    env_name = session[ENV_NAME_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                            ["*"], 
+                            [MODEL_PATH_FIELD_NAME], 
                             [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                             [user_id, env_id, model_name])
     
@@ -496,13 +493,13 @@ def delete_model():
         print("A model with this name doesn't exist!")
         return home()
     
+    model = models[0]
+    path_to_model = model[0]
+    
     try:
         delete_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                        [user_id, env_id, model_name])
-        
-        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-        path_to_model = path_to_env + "/" + MODELS_FOLDER_NAME + "/" + model_name + "/"
         
         shutil.rmtree(path_to_model)
     except:
@@ -568,89 +565,9 @@ def create_dataset():
 
     form = request.form
 
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
-    needed_form_fields = [DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME]
-    
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
-    
-    for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            needed_fields_recieved = False
-    
-    if not needed_fields_recieved:
-        return home()
-    
-    user_id = session[USER_ID_FIELD_NAME]
-    username = session[USERNAME_FIELD_NAME]
-    env_id = form[ENV_ID_FIELD_NAME]
-    env_name = form[ENV_NAME_FIELD_NAME]
-    dataset_name = form[DATASET_NAME_FIELD_NAME]
-    
-    if len(dataset_name) <= 1:
-        print("Invaild name!")
-        return home()
-    
-    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
-                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
-                              [user_id, env_id, dataset_name])
-    
-    max_dataset_id = 0
-
-    for dataset in datasets:
-        
-        if dataset[0] > max_dataset_id:
-            max_dataset_id = dataset[0]
-
-        if dataset[1] == dataset_name:
-            print("A dataset with this name already exists!")
-            return home()
-    
-    new_env_id = max_dataset_id + 1
-
-    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-    dataset_folder = path_to_env + "/" + DATASETS_FOLDER_NAME + "/"
-    path_to_dataset = dataset_folder + dataset_name + ".pickle"
-
-    if DATASET_TYPE_FIELD_NAME == SLC_MODEL_TYPE:
-        dataframe = pd.DataFrame({TEXT_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
-    elif DATASET_TYPE_FIELD_NAME == TLC_MODEL_TYPE:
-        dataframe = pd.DataFrame({SENTENCE_IDX_FIELD_NAME:[], WORD_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
-    else:
-        print("Invalid dataset type!")
-        return home()
-    
-    try:
-        if not os.path.exists(dataset_folder):
-            os.makedirs(dataset_folder)
-        
-        dataframe.to_pickle(path_to_dataset)
-        
-    except:
-        print("Couldn't create the dataset!")
-        return home()
-    
-    try:
-        insert_into_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                       [user_id, new_env_id, dataset_name])
-    except Exception as ex:
-        print("Couldn't create dataset! " + str(ex))
-    finally:
-        return home()
-
-@app.route('/delete_dataset', methods=['POST'])
-def delete_dataset():
-    
-    form = request.form
-
     needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
                              ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
-    needed_form_fields = [DATASET_NAME_FIELD_NAME]
+    needed_form_fields = [DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME]
     
     needed_fields_recieved = True
 
@@ -670,9 +587,92 @@ def delete_dataset():
     env_id = session[ENV_ID_FIELD_NAME]
     env_name = session[ENV_NAME_FIELD_NAME]
     dataset_name = form[DATASET_NAME_FIELD_NAME]
+    dataset_type = form[DATASET_TYPE_FIELD_NAME]
+    public = PUBLIC_FIELD_NAME in form
+    
+    if len(dataset_name) <= 1:
+        print("Invaild name!")
+        return home()
     
     datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                              ["*"], 
+                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                              [user_id, env_id])
+    
+    max_dataset_id = 0
+
+    for dataset in datasets:
+        
+        if dataset[0] > max_dataset_id:
+            max_dataset_id = dataset[0]
+
+        if dataset[1] == dataset_name:
+            print("A dataset with this name already exists!")
+            return home()
+    
+    new_dataset_id = max_dataset_id + 1
+
+    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+    dataset_folder = path_to_env + "/" + DATASETS_FOLDER_NAME + "/"
+    path_to_dataset = dataset_folder + dataset_name + ".pickle"
+
+    if dataset_type == SLC_MODEL_TYPE:
+        dataframe = pd.DataFrame({TEXT_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
+    elif dataset_type == TLC_MODEL_TYPE:
+        dataframe = pd.DataFrame({SENTENCE_IDX_FIELD_NAME:[], WORD_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
+    else:
+        print("Invalid dataset type!")
+        return home()
+    
+    try:
+        if not os.path.exists(dataset_folder):
+            os.makedirs(dataset_folder)
+        
+        dataframe.to_pickle(path_to_dataset)
+    except:
+        print("Couldn't create the dataset!")
+        return home()
+    
+    try:
+        insert_into_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
+                        DATASET_NAME_FIELD_NAME, DATASET_PATH_FIELD_NAME, DATASET_TYPE_FIELD_NAME, 
+                        PUBLIC_FIELD_NAME], 
+                       [user_id, env_id, new_dataset_id, 
+                        dataset_name, path_to_dataset, dataset_type, 
+                        public])
+    except Exception as ex:
+        print("Couldn't insert dataset to database! " + str(ex))
+    finally:
+        return home()
+
+@app.route('/delete_dataset', methods=['POST'])
+def delete_dataset():
+    
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
+    needed_form_fields = [DATASET_NAME_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    
+    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                              [DATASET_PATH_FIELD_NAME], 
                               [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
                               [user_id, env_id, dataset_name])
     
@@ -680,13 +680,13 @@ def delete_dataset():
         print("A dataset with this name doesn't exist!")
         return home()
     
+    dataset = datasets[0]
+    path_to_dataset = dataset[0]
+    
     try:
         delete_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
                        [user_id, env_id, dataset_name])
-        
-        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-        path_to_dataset = path_to_env + "/" + DATASETS_FOLDER_NAME + "/" + dataset_name + "/"
         
         shutil.rmtree(path_to_dataset)
     except:

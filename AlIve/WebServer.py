@@ -930,7 +930,7 @@ def remove_session_from_train_queue():
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
-    queue_index = session[QUEUE_INDEX_FIELD_NAME]
+    queue_index = form[QUEUE_INDEX_FIELD_NAME]
 
     try:
         training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
@@ -953,7 +953,8 @@ def remove_session_from_train_queue():
         
     except:
         print("Couldn't delete training session!")
-        return home()
+    
+    return home()
 
 @app.route('/start_train', methods=['POST'])
 def start_train():

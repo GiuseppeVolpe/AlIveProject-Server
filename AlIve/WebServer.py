@@ -871,7 +871,7 @@ def add_model_to_train_queue():
         print("A dataset with this name doesn't exist!")
         return home()
     
-    dataset_id = models[0][0]
+    dataset_id = datasets[0][0]
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                        [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME], 
@@ -952,7 +952,8 @@ def remove_session_from_train_queue():
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
                        [user_id, env_id, queue_index])
         
-        shutil.rmtree(checkpoint_path)
+        if os.path.exists(checkpoint_path):
+            shutil.rmtree(checkpoint_path)
         
     except:
         print("Couldn't delete training session!")
@@ -1042,9 +1043,9 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
             model_type = model[1]
             
             datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                                    [DATASET_PATH_FIELD_NAME], 
-                                    [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
-                                    [user_id, env_id, dataset_id])
+                                      [DATASET_PATH_FIELD_NAME], 
+                                      [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
+                                      [user_id, env_id, dataset_id])
             
             if len(datasets) == 0:
                 print("Couldn't find the model specified in this train session!")
@@ -1056,6 +1057,8 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
 
             loaded_model = NLPClassificationModel.load_model(path_to_model)
             loaded_dataset = pd.read_pickle(path_to_dataset)
+
+            input(loaded_dataset.head())
 
             train = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TRAIN_CATEGORY]
             valid = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_VALIDATION_CATEGORY]
@@ -1079,7 +1082,8 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
             delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                         [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
                         [env_id, current_queue_index])
-        except:
+        except Exception as ex:
+            print(ex)
             continue
     
     training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = False
@@ -1166,7 +1170,7 @@ def select_from_db(table_name:str, needed_fields:list=None, given_fields:list=No
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
-
+    
     return results
 
 def insert_into_db(table_name:str, given_fields:list, given_values:list):

@@ -40,7 +40,12 @@
   <div>
     <form action="/create_model", method="POST">
       <input type="text" value="" placeholder="Model Name" name="model_name">
-      <input type="text" value="SLCM" placeholder="Model Type" name="model_type">
+      <select name="model_type">
+        <option value="{{model_types[0]}}" selected>{{model_types[0]}}</option>
+        {% for model_type in model_types[1:] %}
+          <option value="{{model_type}}">{{model_type}}</option>
+        {% endfor %}
+      </select>
       <input type="checkbox" label="Finetunable" value="finetunable" name="finetunable">
       <select name="base_model">
         <option value="{{available_models[0]}}" selected>{{available_models[0]}}</option>
@@ -75,7 +80,12 @@
   <div>
     <form action="/create_dataset", method="POST">
       <input type="text" value="" placeholder="Dataset Name" name="dataset_name">
-      <input type="text" value="SLCM" placeholder="Dataset Type" name="dataset_type">
+      <select name="model_type">
+        <option value="{{model_types[0]}}" selected>{{model_types[0]}}</option>
+        {% for model_type in model_types[1:] %}
+          <option value="{{model_type}}">{{model_type}}</option>
+        {% endfor %}
+      </select>
       <input type="submit" value="Create Dataset" class="btn btn-primary btn-large btn-block">
     </form>
   </div>
@@ -94,10 +104,11 @@
       <input type="text" value="sentence_idx" placeholder="Sentence Index Column Name" name="sentence_idx_column_name">
       <input type="text" value="word" placeholder="Word Column Name" name="word_column_name">
       <input type="file" name="dataset_csv">
-      <select name="example_category"> 
-        <option value="train">Train</option> 
-        <option value="valid">Validation</option> 
-        <option value="test">Test</option> 
+      <select name="example_category">
+        <option value="{{example_categories[0]}}" selected>{{example_categories[0]}}</option>
+        {% for example_category in example_categories[1:] %}
+          <option value="{{example_category}}">{{example_category}}</option>
+        {% endfor %}
       </select>
       <input type="submit" value="Import examples to Dataset" class="btn btn-primary btn-large btn-block">
     </form>

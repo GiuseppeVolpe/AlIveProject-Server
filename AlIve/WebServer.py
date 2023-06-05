@@ -91,6 +91,9 @@ TRAINING_SESSIONS_FOLDER_NAME = "TrainingSessions"
 
 USERS_DATA_FOLDER = ROOT_FOLDER + "/" + USERS_DATA_FOLDER_NAME + "/"
 
+EXAMPLE_CATEGORIES = [EXAMPLE_TRAIN_CATEGORY, EXAMPLE_VALIDATION_CATEGORY, EXAMPLE_TEST_CATEGORY]
+MODEL_TYPES = [SLC_MODEL_TYPE, TLC_MODEL_TYPE]
+
 #endregion
 
 app = Flask(__name__, template_folder='Templates')
@@ -107,7 +110,10 @@ def home():
     if not session.get(LOGGED_IN_FIELD_NAME):
         return render_template('login.html')
     else:
-        return render_template('index.html', available_models=get_available_models())
+        return render_template('index.html', 
+                               available_models=get_available_models(), 
+                               example_categories=EXAMPLE_CATEGORIES,
+                               model_types=MODEL_TYPES)
 
 @app.route('/signup_form', methods=['POST'])
 def signup_form():

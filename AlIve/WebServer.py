@@ -30,8 +30,10 @@ DATASET_NAME_FIELD_NAME = "dataset_name"
 DATASET_PATH_FIELD_NAME = "dataset_path"
 DATASET_TYPE_FIELD_NAME = "dataset_type"
 QUEUE_INDEX_FIELD_NAME = "queue_index"
-TRAINING_THREAD_FIELD_NAME = "training_thread"
-TRAINING_THREAD_STOP_EVENT_FIELD_NAME = "training_thread_stop_event"
+
+TRAINING_THREAD_INFO_FIELD_NAME = "training_thread"
+IS_ALIVE_TRAINING_THREAD_FIELD_NAME = "is_alive"
+WANT_TO_STOP_THREAD_FIELD_NAME = "want_to_stop"
 
 ALIVE_DB_NAME = "alive_db"
 ALIVE_DB_ADMIN_USERNAME = "GiuseppeVolpe"
@@ -907,13 +909,10 @@ def add_model_to_train_queue():
 @app.route('/start_train', methods=['POST'])
 def start_train():
 
-    if TRAINING_THREAD_FIELD_NAME in session:
-        if session[TRAINING_THREAD_FIELD_NAME].is_alive():
+    if TRAINING_THREAD_INFO_FIELD_NAME in session:
+        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
             print("The training has already started!")
             return home()
-        else:
-            session.pop(TRAINING_THREAD_FIELD_NAME)
-            session.pop(TRAINING_THREAD_STOP_EVENT_FIELD_NAME)
 
     needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
 
@@ -924,18 +923,17 @@ def start_train():
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     
-    stop_event = Event()
+    training_thread_info = {IS_ALIVE_TRAINING_THREAD_FIELD_NAME : False, 
+                            WANT_TO_STOP_THREAD_FIELD_NAME : False}
+    session[TRAINING_THREAD_INFO_FIELD_NAME] = training_thread_info
 
-    lambda_training_function = lambda : train_queue(user_id, env_id, stop_event)
+    lambda_training_function = lambda : train_queue(user_id, env_id, training_thread_info)
     training_thread = Thread(target=lambda_training_function, daemon=True, name='Monitor')
     training_thread.start()
-    
-    #session[TRAINING_THREAD_FIELD_NAME] = training_thread
-    #session[TRAINING_THREAD_STOP_EVENT_FIELD_NAME] = stop_event
 
     return home()
 
-def train_queue(user_id:int, env_id:int, event:Event=None):
+def train_queue(user_id:int, env_id:int, training_thread_info:dict):
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                        [QUEUE_INDEX_FIELD_NAME, 
@@ -956,92 +954,93 @@ def train_queue(user_id:int, env_id:int, event:Event=None):
     for training_session in queue_in_this_env:
         training_sessions.put(training_session)
     
-    print("NOW TRAINING")
+    training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = True
 
     while training_sessions.empty:
         
-        print("STARTING TRAINING!")
-
-        if event != None:
-            if event.is_set():
-                print('The training thread was stopped prematurely.')
-                break
-
-        training_session = training_sessions.get()
-
-        current_queue_index = training_session[0]
-        model_id = training_session[1]
-        dataset_id = training_session[2]
-        targets = training_session[3].split(TARGETS_SEPARATOR)
-        epochs_left = training_session[4]
-        batch_size = training_session[5]
-        checkpoint_path = training_session[6]
-
-        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                                [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
-                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME], 
-                                [user_id, env_id, model_id])
+        if training_thread_info[WANT_TO_STOP_THREAD_FIELD_NAME]:
+            training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = False
+            print('The training thread was stopped prematurely.')
+            break
         
-        if len(models) == 0:
-            print("Couldn't find the model specified in this train session!")
-            return
-        
-        model = models[0]
+        try:
+            training_session = training_sessions.get()
 
-        path_to_model = model[0]
-        model_type = model[1]
-        
-        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                                  [DATASET_PATH_FIELD_NAME], 
-                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
-                                  [user_id, env_id, dataset_id])
-        
-        if len(datasets) == 0:
-            print("Couldn't find the model specified in this train session!")
-            return
-        
-        dataset = datasets[0]
+            current_queue_index = training_session[0]
+            model_id = training_session[1]
+            dataset_id = training_session[2]
+            targets = training_session[3].split(TARGETS_SEPARATOR)
+            epochs_left = training_session[4]
+            batch_size = training_session[5]
+            checkpoint_path = training_session[6]
 
-        path_to_dataset = dataset[0]
+            models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                    [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
+                                    [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME], 
+                                    [user_id, env_id, model_id])
+            
+            if len(models) == 0:
+                print("Couldn't find the model specified in this train session!")
+                continue
+            
+            model = models[0]
 
-        loaded_model = NLPClassificationModel.load_model(path_to_model)
-        loaded_dataset = pd.read_pickle(path_to_dataset)
+            path_to_model = model[0]
+            model_type = model[1]
+            
+            datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                    [DATASET_PATH_FIELD_NAME], 
+                                    [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
+                                    [user_id, env_id, dataset_id])
+            
+            if len(datasets) == 0:
+                print("Couldn't find the model specified in this train session!")
+                continue
+            
+            dataset = datasets[0]
 
-        train = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TRAIN_CATEGORY]
-        valid = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_VALIDATION_CATEGORY]
-        test = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TEST_CATEGORY]
-        
-        if model_type == SLC_MODEL_TYPE:
-            data = SentenceLevelClassificationData(train, valid, test, TEXT_FIELD_NAME, targets[0])
-        elif model_type == TLC_MODEL_TYPE:
-            data = TokenLevelClassificationData(train, valid, test, loaded_model.tokenize, 
-                                                SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME, 
-                                                targets[0])
-        
-        epochs_updating_callback = UpdateDBCallback(user_id, env_id, current_queue_index)
-        additional_callbacks = [epochs_updating_callback]
-        
-        loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
-        loaded_model.save(path_to_model, True)
-        shutil.rmtree(checkpoint_path)
+            path_to_dataset = dataset[0]
 
-        delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
-                       [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
-                       [env_id, current_queue_index])
+            loaded_model = NLPClassificationModel.load_model(path_to_model)
+            loaded_dataset = pd.read_pickle(path_to_dataset)
+
+            train = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TRAIN_CATEGORY]
+            valid = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_VALIDATION_CATEGORY]
+            test = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TEST_CATEGORY]
+            
+            if model_type == SLC_MODEL_TYPE:
+                data = SentenceLevelClassificationData(train, valid, test, TEXT_FIELD_NAME, targets[0])
+            elif model_type == TLC_MODEL_TYPE:
+                data = TokenLevelClassificationData(train, valid, test, loaded_model.tokenize, 
+                                                    SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME, 
+                                                    targets[0])
+            
+            epochs_updating_callback = UpdateDBCallback(user_id, env_id, current_queue_index)
+            additional_callbacks = [epochs_updating_callback]
+            
+            loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
+            loaded_model.save(path_to_model, True)
+            shutil.rmtree(checkpoint_path)
+
+            delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                        [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                        [env_id, current_queue_index])
+        except:
+            continue
+    
+    training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = False
 
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
 
-    needed_session_fields = [TRAINING_THREAD_FIELD_NAME, TRAINING_THREAD_STOP_EVENT_FIELD_NAME]
+    needed_session_fields = [TRAINING_THREAD_INFO_FIELD_NAME]
 
     for needed_session_field in needed_session_fields:
         if needed_session_field not in session:
             return home()
     
-    training_thread = session[TRAINING_THREAD_FIELD_NAME]
-    stop_event = session[TRAINING_THREAD_STOP_EVENT_FIELD_NAME]
-    
-    stop_event.set()
+    training_thread_info = session[TRAINING_THREAD_INFO_FIELD_NAME]
+    training_thread_info[WANT_TO_STOP_THREAD_FIELD_NAME] = True
 
 #endregion
 
@@ -1059,8 +1058,7 @@ def reset_session():
     session.pop(USER_EMAIL_FIELD_NAME)
     session.pop(ENV_ID_FIELD_NAME)
     session.pop(ENV_NAME_FIELD_NAME)
-    session.pop(TRAINING_THREAD_FIELD_NAME)
-    session.pop(TRAINING_THREAD_STOP_EVENT_FIELD_NAME)
+    session.pop(TRAINING_THREAD_INFO_FIELD_NAME)
 
 #region DB UTILITIES
 

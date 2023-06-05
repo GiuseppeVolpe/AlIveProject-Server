@@ -557,13 +557,13 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
         super().__init__(name, finetunable)
     
     def build(self, encoder_model_link:str, num_of_classes:list, 
-              preprocess_model_link:str="", encoder_trainable:bool=False, encoder_output_key:str="", 
+              preprocess_model_link:str=None, encoder_trainable:bool=False, encoder_output_key:str=None, 
               dropout_rate:float=0.1, final_output_activation=None, 
               optimizer_lr:float=1e-5, additional_metrics:list=None, run_eagerly:bool=True):
         
         text_input = tf.keras.layers.Input(shape=(), dtype=tf.string, name='text')
 
-        if (preprocess_model_link != ""):
+        if (preprocess_model_link != None):
             preprocessing = hub.KerasLayer(preprocess_model_link, name='preprocessing')
             encoder_inputs = preprocessing(text_input)
         else:
@@ -572,7 +572,7 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
         encoder = hub.KerasLayer(encoder_model_link, trainable=encoder_trainable, name='encoder')
         encoder_output = encoder(encoder_inputs)
         
-        if encoder_output_key == "":
+        if encoder_output_key == None:
             net = encoder_output
         else:
             net = encoder_output[encoder_output_key]

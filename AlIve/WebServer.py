@@ -851,7 +851,7 @@ def add_model_to_train_queue():
     batch_size = form[BATCH_SIZE_FIELD_NAME]
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                            [MODEL_ID_FIELD_NAME, FINETUNABLE_FIELD_NAME], 
+                            [MODEL_ID_FIELD_NAME, MODEL_TYPE_FIELD_NAME, FINETUNABLE_FIELD_NAME], 
                             [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                             [user_id, env_id, model_name])
     
@@ -860,10 +860,11 @@ def add_model_to_train_queue():
         return home()
     
     model_id = models[0][0]
-    model_finetunable = models[0][1]
+    model_type = models[0][1]
+    model_finetunable = models[0][2]
     
     datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                              [DATASET_ID_FIELD_NAME], 
+                              [DATASET_ID_FIELD_NAME, DATASET_TYPE_FIELD_NAME], 
                               [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
                               [user_id, env_id, dataset_name])
     
@@ -872,6 +873,11 @@ def add_model_to_train_queue():
         return home()
     
     dataset_id = datasets[0][0]
+    dataset_type = datasets[0][1]
+
+    if model_type != dataset_type:
+        print("Can't add to train queue, dataset type is invalid!")
+        return home()
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                        [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME], 

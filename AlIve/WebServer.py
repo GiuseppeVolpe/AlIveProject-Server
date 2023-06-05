@@ -1057,9 +1057,7 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
 
             loaded_model = NLPClassificationModel.load_model(path_to_model)
             loaded_dataset = pd.read_pickle(path_to_dataset)
-
-            input(loaded_dataset.head())
-
+            
             train = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TRAIN_CATEGORY]
             valid = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_VALIDATION_CATEGORY]
             test = loaded_dataset[loaded_dataset[EXAMPLE_CATEGORY_FIELD_NAME] == EXAMPLE_TEST_CATEGORY]

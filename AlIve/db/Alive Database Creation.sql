@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS users_environments (
 
 ALTER TABLE users_environments
 ADD CONSTRAINT environments_to_users
-FOREIGN KEY (user_id) REFERENCES alive_users(user_id);
+FOREIGN KEY (user_id) REFERENCES alive_users(user_id)
+ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS environments_models ( 
     user_id INT(11) NOT NULL,
@@ -44,7 +45,8 @@ CREATE TABLE IF NOT EXISTS environments_models (
 
 ALTER TABLE environments_models
 ADD CONSTRAINT models_to_environments
-FOREIGN KEY (user_id, env_id) REFERENCES users_environments(user_id, env_id);
+FOREIGN KEY (user_id, env_id) REFERENCES users_environments(user_id, env_id)
+ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS environments_datasets ( 
     user_id INT(11) NOT NULL,
@@ -60,7 +62,8 @@ CREATE TABLE IF NOT EXISTS environments_datasets (
 
 ALTER TABLE environments_datasets
 ADD CONSTRAINT datasets_to_environments
-FOREIGN KEY (user_id, env_id) REFERENCES users_environments(user_id, env_id);
+FOREIGN KEY (user_id, env_id) REFERENCES users_environments(user_id, env_id)
+ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS training_sessions (
     user_id INT(11) NOT NULL,

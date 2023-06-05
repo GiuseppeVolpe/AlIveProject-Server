@@ -89,7 +89,11 @@
       <input type="text" value="sentence_idx" placeholder="Sentence Index Column Name" name="sentence_idx_column_name">
       <input type="text" value="word" placeholder="Word Column Name" name="word_column_name">
       <input type="file" name="dataset_csv">
-      <input type="text" value="train" placeholder="Category" name="example_category">
+      <select name="example_category" id="dog-names"> 
+        <option value="train">Train</option> 
+        <option value="valid">Validation</option> 
+        <option value="test">Test</option> 
+      </select>
       <input type="submit" value="Import examples to Dataset" class="btn btn-primary btn-large btn-block">
     </form>
   </div>

@@ -756,7 +756,7 @@ def import_examples_to_dataset():
         existing_dataset = pd.read_pickle(existing_dataset_path)
         
         infile = request.files[DATASET_CSV_FIELD_NAME]
-        imported_dataset = pd.read_csv(infile)
+        imported_dataset = pd.read_csv(infile, keep_default_na=False)
     except Exception as ex:
         print("Something went wrong when loading the dataset..." + str(ex))
         return home()
@@ -793,6 +793,9 @@ def import_examples_to_dataset():
                 new_row[column] = EMPTY_TARGET_VALUE
         
         new_row[EXAMPLE_CATEGORY_FIELD_NAME] = category
+
+        if i % 10000 == 0:
+            print(new_row)
         
         existing_dataset.loc[len(existing_dataset)] = new_row
     

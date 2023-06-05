@@ -906,6 +906,55 @@ def add_model_to_train_queue():
     
     return home()
 
+@app.route('/remove_from_train_queue', methods=['POST'])
+def remove_session_from_train_queue():
+
+    form = request.form
+
+    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
+    needed_form_fields = [QUEUE_INDEX_FIELD_NAME]
+    
+    needed_fields_recieved = True
+
+    for needed_session_field in needed_session_fields:
+        if needed_session_field not in session:
+            needed_fields_recieved = False
+    
+    for needed_form_field in needed_form_fields:
+        if needed_form_field not in form:
+            needed_fields_recieved = False
+    
+    if not needed_fields_recieved:
+        print("Missing fields!")
+        return home()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    queue_index = session[QUEUE_INDEX_FIELD_NAME]
+
+    try:
+        training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                                           [CHECKPOINT_PATH_FIELD_NAME], 
+                                           [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                                           [user_id, env_id, queue_index])
+        
+        if len(training_sessions) == 0:
+            print("There is no training session at this index!")
+            return home()
+        
+        training_session = training_sessions[0]
+        checkpoint_path = training_session[0]
+
+        delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                       [user_id, env_id, queue_index])
+        
+        shutil.rmtree(checkpoint_path)
+        
+    except:
+        print("Couldn't delete training session!")
+        return home()
+
 @app.route('/start_train', methods=['POST'])
 def start_train():
 
@@ -1015,7 +1064,8 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
                                                     SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME, 
                                                     targets[0])
             
-            epochs_updating_callback = UpdateDBCallback(user_id, env_id, current_queue_index)
+            epochs_updating_callback = UpdateDBCallback(user_id, env_id, 
+                                                        current_queue_index, db_connection)
             additional_callbacks = [epochs_updating_callback]
             
             loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
@@ -1277,7 +1327,7 @@ def execute_custom_update_query(query):
 
 class UpdateDBCallback(tf.keras.callbacks.Callback):
 
-    def __init__(self, user_id:int, env_id:int, current_queue_index:int):
+    def __init__(self, user_id:int, env_id:int, current_queue_index:int, db_connection):
         super().__init__()
         self.__user_id = user_id
         self.__env_id = env_id
@@ -1291,10 +1341,14 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
 
         update_epochs_left_query = "UPDATE " + ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME + " SET "
         update_epochs_left_query += NUM_OF_EPOCHS_FIELD_NAME + " = " + NUM_OF_EPOCHS_FIELD_NAME + " - 1 "
-        update_epochs_left_query += " WHERE " + USER_ID_FIELD_NAME + " = " + user_id + " AND "
-        update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + env_id + " AND "
-        update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + current_queue_index
-        execute_custom_update_query(update_epochs_left_query)
+        update_epochs_left_query += " WHERE " + USER_ID_FIELD_NAME + " = " + str(user_id) + " AND "
+        update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + str(env_id) + " AND "
+        update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + str(current_queue_index)
+        
+        cursor = db_connection.cursor()
+        cursor.execute(update_epochs_left_query)
+        db_connection.commit()
+        cursor.close()
 
 if __name__ == "__main__":
     initialize_server()

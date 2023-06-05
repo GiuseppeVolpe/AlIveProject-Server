@@ -112,6 +112,13 @@
   </div>
 
   <div>
+    <form action="/remove_from_train_queue", method="POST">
+      <input type="number" min="0" value="1" placeholder="Queue Index" name="queue_index">
+      <input type="submit" value="Remove from train queue" class="btn btn-primary btn-large btn-block">
+    </form>
+  </div>
+
+  <div>
     <form action="/stop_train", method="POST">
       <input type="submit" value="Stop train" class="btn btn-primary btn-large btn-block">
     </form>

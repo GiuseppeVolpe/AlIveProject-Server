@@ -611,7 +611,7 @@ def predict():
 def create_dataset():
 
     form = request.form
-
+    
     if USER_ID_FIELD_NAME not in session:
         return login_form()
     
@@ -837,26 +837,21 @@ def import_examples_to_dataset():
 def add_model_to_train_queue():
 
     form = request.form
-
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
-                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
     needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, 
                           TARGETS_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME, 
                           BATCH_SIZE_FIELD_NAME]
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
-    
     for needed_form_field in needed_form_fields:
         if needed_form_field not in form:
-            needed_fields_recieved = False
-    
-    if not needed_fields_recieved:
-        print("Missing fields!")
-        return home()
+            print("Incomplete form recieved!")
+            return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
@@ -868,92 +863,85 @@ def add_model_to_train_queue():
     num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
     batch_size = form[BATCH_SIZE_FIELD_NAME]
     
-    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                            [MODEL_ID_FIELD_NAME, MODEL_TYPE_FIELD_NAME, FINETUNABLE_FIELD_NAME], 
-                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
-                            [user_id, env_id, model_name])
-    
-    if len(models) == 0:
-        print("A model with this name doesn't exist!")
-        return home()
-    
-    model_id = models[0][0]
-    model_type = models[0][1]
-    model_finetunable = models[0][2]
-    
-    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                              [DATASET_ID_FIELD_NAME, DATASET_TYPE_FIELD_NAME], 
-                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
-                              [user_id, env_id, dataset_name])
-    
-    if len(datasets) == 0:
-        print("A dataset with this name doesn't exist!")
-        return home()
-    
-    dataset_id = datasets[0][0]
-    dataset_type = datasets[0][1]
-
-    if model_type != dataset_type:
-        print("Can't add to train queue, dataset type is invalid!")
-        return home()
-    
-    queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
-                                       [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME], 
-                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                                       [user_id, env_id])
-    
-    max_id = 0
-
-    for training_session in queue_in_this_env:
-        
-        if training_session[0] > max_id:
-            max_id = training_session[0]
-        
-        if model_id == training_session[1] and not model_finetunable:
-            print("Can't add this model to the queue, is already trained and not finetunable!")
-            return home()
-        
-    new_id = max_id + 1
-
-    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-    path_to_training_sessions = path_to_env + "/" + TRAINING_SESSIONS_FOLDER_NAME + "/"
-    checkpoint_name = str(model_id) + str(dataset_id) + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-    checkpoint_path = path_to_training_sessions + "/" + checkpoint_name + "/"
-    
     try:
-        insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                [MODEL_ID_FIELD_NAME, MODEL_TYPE_FIELD_NAME, FINETUNABLE_FIELD_NAME], 
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                                [user_id, env_id, model_name])
+        
+        if len(models) == 0:
+            print("A model with this name doesn't exist!")
+            return environment_form()
+        
+        model_id = models[0][0]
+        model_type = models[0][1]
+        model_finetunable = models[0][2]
+        
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_ID_FIELD_NAME, DATASET_TYPE_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [user_id, env_id, dataset_name])
+        
+        if len(datasets) == 0:
+            print("A dataset with this name doesn't exist!")
+            return environment_form()
+        
+        dataset_id = datasets[0][0]
+        dataset_type = datasets[0][1]
+
+        if model_type != dataset_type:
+            print("Can't add to train queue, dataset type is invalid!")
+            return environment_form()
+        
+        queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                                           [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME], 
+                                           [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                           [user_id, env_id])
+        
+        max_id = 0
+
+        for training_session in queue_in_this_env:
+            
+            if training_session[0] > max_id:
+                max_id = training_session[0]
+            
+            if model_id == training_session[1] and not model_finetunable:
+                print("Can't add this model, it is already in queue and not finetunable!")
+                return environment_form()
+            
+        new_id = max_id + 1
+
+        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+        path_to_training_sessions = path_to_env + TRAINING_SESSIONS_FOLDER_NAME + "/"
+        checkpoint_name = str(model_id) + str(dataset_id) + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+        checkpoint_path = path_to_training_sessions + checkpoint_name + "/"
+        
+        insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME, 
                         MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, TARGETS_FIELD_NAME, 
                         NUM_OF_EPOCHS_FIELD_NAME, BATCH_SIZE_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME], 
                         [user_id, env_id, new_id, 
-                         model_id, dataset_id, target,
+                         model_id, dataset_id, target, 
                          num_of_epochs, batch_size, checkpoint_path])
-    except Exception as ex:
-        print("Couldn't add this model to train queue! " + str(ex))
+    except:
+        print("Something went wrong, couldn't add to train queue...")
     
-    return home()
+    return environment_form()
 
 @app.route('/remove_from_train_queue', methods=['POST'])
 def remove_session_from_train_queue():
 
     form = request.form
-
-    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
-    needed_form_fields = [QUEUE_INDEX_FIELD_NAME]
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
     
-    for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            needed_fields_recieved = False
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
     
-    if not needed_fields_recieved:
-        print("Missing fields!")
-        return home()
+    if QUEUE_INDEX_FIELD_NAME not in form:
+        print("Incomplete form recieved, the train session to delete is not specified...")
+        return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
@@ -967,36 +955,36 @@ def remove_session_from_train_queue():
         
         if len(training_sessions) == 0:
             print("There is no training session at this index!")
-            return home()
+            return environment_form()
         
-        training_session = training_sessions[0]
-        checkpoint_path = training_session[0]
+        checkpoint_path = training_sessions[0][0]
 
         delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
                        [user_id, env_id, queue_index])
         
-        if os.path.exists(checkpoint_path):
+        if os.path.exists(checkpoint_path) and os.path.isdir(checkpoint_path):
             shutil.rmtree(checkpoint_path)
-        
     except:
-        print("Couldn't delete training session!")
+        print("Something went wrong, couldn't remove the training session from the queue...")
     
-    return home()
+    return environment_form()
 
 @app.route('/start_train', methods=['POST'])
 def start_train():
 
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
     if TRAINING_THREAD_INFO_FIELD_NAME in session:
         if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
             print("The training has already started!")
-            return home()
-
-    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            return home()
+            return environment_form()
+        else:
+            del(session[TRAINING_THREAD_INFO_FIELD_NAME])
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
@@ -1009,7 +997,7 @@ def start_train():
     training_thread = Thread(target=lambda_training_function, daemon=True, name='Monitor')
     training_thread.start()
 
-    return home()
+    return environment_form()
 
 def train_queue(user_id:int, env_id:int, training_thread_info:dict):
     
@@ -1113,11 +1101,14 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
 
-    needed_session_fields = [TRAINING_THREAD_INFO_FIELD_NAME]
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            return home()
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
+    if TRAINING_THREAD_INFO_FIELD_NAME not in session:
+        return environment_form()
     
     training_thread_info = session[TRAINING_THREAD_INFO_FIELD_NAME]
     training_thread_info[WANT_TO_STOP_THREAD_FIELD_NAME] = True

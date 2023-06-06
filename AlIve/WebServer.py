@@ -549,7 +549,8 @@ def delete_model():
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                        [user_id, env_id, model_name])
         
-        shutil.rmtree(path_to_model)
+        if os.path.exists(path_to_model) and os.path.isdir(path_to_model):
+            shutil.rmtree(path_to_model)
     except:
         print("Something went wrong, couldn't delete the environment...")
     
@@ -610,23 +611,19 @@ def predict():
 def create_dataset():
 
     form = request.form
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, 
-                             ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
-    needed_form_fields = [DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME]
-    
-    needed_fields_recieved = True
 
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
+    needed_form_fields = [DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
         if needed_form_field not in form:
-            needed_fields_recieved = False
-    
-    if not needed_fields_recieved:
-        print("Missing fields in the form!")
-        return home()
+            print("Incomplete form recieved!")
+            return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
@@ -636,133 +633,124 @@ def create_dataset():
     dataset_type = form[DATASET_TYPE_FIELD_NAME]
     public = PUBLIC_FIELD_NAME in form
     
-    if len(dataset_name) <= 1:
+    if len(dataset_name) < 2:
         print("Invaild name!")
-        return home()
-    
-    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
-                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                              [user_id, env_id])
-    
-    max_dataset_id = 0
-
-    for dataset in datasets:
-        
-        if dataset[0] > max_dataset_id:
-            max_dataset_id = dataset[0]
-
-        if dataset[1] == dataset_name:
-            print("A dataset with this name already exists!")
-            return home()
-    
-    new_dataset_id = max_dataset_id + 1
-
-    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-    dataset_folder = path_to_env + "/" + DATASETS_FOLDER_NAME + "/"
-    path_to_dataset = dataset_folder + dataset_name + ".pickle"
-
-    if dataset_type == SLC_MODEL_TYPE:
-        dataframe = pd.DataFrame({TEXT_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
-    elif dataset_type == TLC_MODEL_TYPE:
-        dataframe = pd.DataFrame({SENTENCE_IDX_FIELD_NAME:[], WORD_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
-    else:
-        print("Invalid dataset type!")
-        return home()
+        return environment_form()
     
     try:
-        if not os.path.exists(dataset_folder):
-            os.makedirs(dataset_folder)
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                  [user_id, env_id])
         
+        max_dataset_id = 0
+
+        for dataset in datasets:
+            
+            if dataset[0] > max_dataset_id:
+                max_dataset_id = dataset[0]
+
+            if dataset[1] == dataset_name:
+                print("A dataset with this name already exists in this environment!")
+                return environment_form()
+        
+        new_dataset_id = max_dataset_id + 1
+
+        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+        dataset_folder = path_to_env + "/" + DATASETS_FOLDER_NAME + "/"
+        path_to_dataset = dataset_folder + dataset_name + ".pickle"
+
+        if dataset_type == SLC_MODEL_TYPE:
+            dataframe = pd.DataFrame({TEXT_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
+        elif dataset_type == TLC_MODEL_TYPE:
+            dataframe = pd.DataFrame({SENTENCE_IDX_FIELD_NAME:[], WORD_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
+        else:
+            print("Invalid dataset type!")
+            return environment_form()
+        
+        if os.path.exists(dataset_folder):
+            shutil.rmtree(dataset_folder)
+        
+        os.makedirs(dataset_folder)
         dataframe.to_pickle(path_to_dataset)
-    except:
-        print("Couldn't create the dataset!")
-        return home()
-    
-    try:
+        
         insert_into_db(ALIVE_DB_DATASETS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
                         DATASET_NAME_FIELD_NAME, DATASET_PATH_FIELD_NAME, DATASET_TYPE_FIELD_NAME, 
                         PUBLIC_FIELD_NAME], 
-                       [user_id, env_id, new_dataset_id, 
-                        dataset_name, path_to_dataset, dataset_type, 
-                        public])
-    except Exception as ex:
-        print("Couldn't insert dataset to database! " + str(ex))
-    finally:
-        return home()
+                        [user_id, env_id, new_dataset_id, 
+                         dataset_name, path_to_dataset, dataset_type, 
+                         public])
+    except:
+        print("Something went wrong, couldn't create the dataset...")
+    
+    return environment_form()
 
 @app.route('/delete_dataset', methods=['POST'])
 def delete_dataset():
     
     form = request.form
-
-    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
-    needed_form_fields = [DATASET_NAME_FIELD_NAME]
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
     
-    for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            needed_fields_recieved = False
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
     
-    if not needed_fields_recieved:
-        return home()
+    if DATASET_NAME_FIELD_NAME not in form:
+        print("Incomplete form recieved, the name of the dataset is not specified...")
+        return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     dataset_name = form[DATASET_NAME_FIELD_NAME]
     
-    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                              [DATASET_PATH_FIELD_NAME], 
-                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
-                              [user_id, env_id, dataset_name])
-    
-    if len(datasets) == 0:
-        print("A dataset with this name doesn't exist!")
-        return home()
-    
-    dataset = datasets[0]
-    path_to_dataset = dataset[0]
-    
     try:
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_PATH_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [user_id, env_id, dataset_name])
+        
+        if len(datasets) == 0:
+            print("A dataset with this name doesn't exist!")
+            return environment_form()
+        
+        path_to_dataset = datasets[0][0]
+        
         delete_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
                        [user_id, env_id, dataset_name])
         
-        os.remove(path_to_dataset)
+        if os.path.exists(path_to_dataset):
+            os.remove(path_to_dataset)
     except:
-        print("Couldn't delete the dataset!")
+        print("Something went wrong, couldn't delete the dataset...")
     
-    return home()
+    return environment_form()
 
 @app.route('/import_csv_to_dataset', methods=['POST'])
 def import_examples_to_dataset():
     
     form = request.form
-
-    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
     needed_form_fields = [DATASET_NAME_FIELD_NAME, EXAMPLE_CATEGORY_FIELD_NAME, 
                           TEXT_COLUMN_NAME_FIELD_NAME, SENTENCE_IDX_COLUMN_NAME_FIELD_NAME, 
                           WORD_COLUMN_NAME_FIELD_NAME]
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
-    
     for needed_form_field in needed_form_fields:
         if needed_form_field not in form:
-            needed_fields_recieved = False
+            print("Incomplete form recieved!")
+            return environment_form()
     
-    if not needed_fields_recieved:
-        print("Missing fields in the form!")
-        return home()
+    if DATASET_CSV_FIELD_NAME not in request.files:
+        print("No file uploaded!")
+        return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
@@ -773,80 +761,73 @@ def import_examples_to_dataset():
     sentence_idx_column_name = form[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
     word_column_name = form[WORD_COLUMN_NAME_FIELD_NAME]
     
-    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME, 
-                               DATASET_TYPE_FIELD_NAME, DATASET_PATH_FIELD_NAME], 
-                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
-                              [user_id, env_id, dataset_name])
-    
-    if len(datasets) == 0:
-        print("A dataset with this name doesn't exist!")
-        return home()
-    
-    existing_dataset = datasets[0]
-
-    existing_dataset_id = existing_dataset[0]
-    existing_dataset_type = existing_dataset[2]
-    existing_dataset_path = existing_dataset[3]
-
     try:
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_ID_FIELD_NAME, DATASET_TYPE_FIELD_NAME, DATASET_PATH_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [user_id, env_id, dataset_name])
+        
+        if len(datasets) == 0:
+            print("A dataset with this name doesn't exist!")
+            return environment_form()
+        
+        existing_dataset = datasets[0]
+
+        existing_dataset_id = existing_dataset[0]
+        existing_dataset_type = existing_dataset[1]
+        existing_dataset_path = existing_dataset[2]
+
         existing_dataset = pd.read_pickle(existing_dataset_path)
         
         infile = request.files[DATASET_CSV_FIELD_NAME]
         imported_dataset = pd.read_csv(infile, keep_default_na=False)
-    except Exception as ex:
-        print("Something went wrong when loading the dataset..." + str(ex))
-        return home()
-    
-    needed_fields = []
-
-    if text_column_name in imported_dataset.columns:
-        imported_dataset.rename(columns={text_column_name: TEXT_FIELD_NAME})
-
-    if sentence_idx_column_name in imported_dataset.columns:
-        imported_dataset.rename(columns={sentence_idx_column_name: SENTENCE_IDX_FIELD_NAME})
-
-    if word_column_name in imported_dataset.columns:
-        imported_dataset.rename(columns={word_column_name: WORD_FIELD_NAME})
-
-    if existing_dataset_type == SLC_MODEL_TYPE:
-        needed_fields += [TEXT_FIELD_NAME]
-    elif existing_dataset_type == TLC_MODEL_TYPE:
-        needed_fields += [SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME]
-
-    for needed_field in needed_fields:
-        if needed_field not in imported_dataset.columns:
-            print("Trying to import from an invalid dataframe!")
-            return home()
-
-    for column in imported_dataset.columns:
-        if column not in existing_dataset.columns:
-            existing_dataset[column] = EMPTY_TARGET_VALUE
-
-    for i, new_row in imported_dataset.iterrows():
-
-        for column in existing_dataset:
-            if column not in imported_dataset:
-                new_row[column] = EMPTY_TARGET_VALUE
         
-        new_row[EXAMPLE_CATEGORY_FIELD_NAME] = category
-
-        if i % 10000 == 0:
-            print(new_row)
+        if text_column_name in imported_dataset.columns:
+            imported_dataset.rename(columns={text_column_name: TEXT_FIELD_NAME})
         
-        existing_dataset.loc[len(existing_dataset)] = new_row
-    
-    try:
+        if sentence_idx_column_name in imported_dataset.columns:
+            imported_dataset.rename(columns={sentence_idx_column_name: SENTENCE_IDX_FIELD_NAME})
+        
+        if word_column_name in imported_dataset.columns:
+            imported_dataset.rename(columns={word_column_name: WORD_FIELD_NAME})
+        
+        needed_fields = []
+        
+        if existing_dataset_type == SLC_MODEL_TYPE:
+            needed_fields += [TEXT_FIELD_NAME]
+        elif existing_dataset_type == TLC_MODEL_TYPE:
+            needed_fields += [SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME]
+        
+        for needed_field in needed_fields:
+            if needed_field not in imported_dataset.columns:
+                print("Trying to import from an invalid dataframe!")
+                return environment_form()
+
+        for column in imported_dataset.columns:
+            if column not in existing_dataset.columns:
+                existing_dataset[column] = EMPTY_TARGET_VALUE
+
+        for i, new_row in imported_dataset.iterrows():
+
+            for column in existing_dataset:
+                if column not in imported_dataset:
+                    new_row[column] = EMPTY_TARGET_VALUE
+            
+            new_row[EXAMPLE_CATEGORY_FIELD_NAME] = category
+
+            if i % 10000 == 0:
+                print(new_row)
+            
+            existing_dataset.loc[len(existing_dataset)] = new_row
+        
         if os.path.exists(existing_dataset_path):
             os.remove(existing_dataset_path)
         
         existing_dataset.to_pickle(existing_dataset_path)
     except:
-        print("Couldn't save the updated dataset!")
+        print("Something went wrong, couldn't import this file to the dataset...")
     
-    print(existing_dataset)
-
-    return home()
+    return environment_form()
 
 #endregion
 

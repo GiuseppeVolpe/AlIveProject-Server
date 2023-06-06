@@ -1,6 +1,6 @@
 
 <div>
-    <form method="POST">      
+    <form method="POST">
         <select name="env_name">
             <option value="{{environments[0]}}" selected>{{environments[0]}}</option>
             {% for environment in environments[1:] %}
@@ -9,5 +9,14 @@
         </select>
         <button formaction="/select_env">Select Environment</button>
         <button formaction="/delete_env">Delete Environment</button>
+    </form>
+</div>
+
+<div>or</div>
+
+<div>
+    <form action="/create_env", method="POST">
+        <input type="text" name="env_name" placeholder="Environment Name">
+        <input type="submit" value="Create Environment">
     </form>
 </div>

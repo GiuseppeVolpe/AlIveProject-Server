@@ -106,16 +106,6 @@ db_connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_D
 
 #region FORMS GETTERS
 
-@app.route('/')
-def home():
-    if not session.get(LOGGED_IN_FIELD_NAME):
-        return render_template('login.html')
-    else:
-        return render_template('index.html', 
-                               available_models=get_available_models(), 
-                               example_categories=EXAMPLE_CATEGORIES,
-                               model_types=MODEL_TYPES)
-
 @app.route('/signup_form', methods=['POST'])
 def signup_form():
     return render_template('signup.html')
@@ -123,10 +113,6 @@ def signup_form():
 @app.route('/login_form')
 def login_form():
     return render_template('login.html')
-
-@app.route('/user_space', methods=['POST'])
-def user_space():
-    return render_template('index.html')
 
 @app.route('/environment_selection', methods=['POST'])
 def environment_selection_form():
@@ -195,7 +181,7 @@ def signup():
 
     for needed_field in needed_fields:
         if needed_field not in form:
-            return home()
+            return signup_form()
     
     username = form[USERNAME_FIELD_NAME]
     user_email = form[USER_EMAIL_FIELD_NAME]
@@ -303,7 +289,7 @@ def login():
 @app.route('/logout')
 def logout():
     reset_session()
-    return home()
+    return login_form()
 
 #endregion
 
@@ -447,23 +433,21 @@ def select_environment():
 def create_model():
     
     form = request.form
-
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME]
-    needed_form_fields = [MODEL_NAME_FIELD_NAME, MODEL_TYPE_FIELD_NAME, BASEMODEL_FIELD_NAME, 
-                          NUM_OF_CLASSES_FIELD_NAME, DROPOUT_RATE_FIELD_NAME, OPTIMIZER_LR_FIELD_NAME]
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
+    needed_form_fields = [MODEL_NAME_FIELD_NAME, MODEL_TYPE_FIELD_NAME, 
+                          BASEMODEL_FIELD_NAME, NUM_OF_CLASSES_FIELD_NAME, 
+                          DROPOUT_RATE_FIELD_NAME, OPTIMIZER_LR_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
         if needed_form_field not in form:
-            needed_fields_recieved = False
-    
-    if not needed_fields_recieved:
-        return home()
+            print("Incomplete form recieved!")
+            return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
@@ -480,147 +464,143 @@ def create_model():
     additional_metrics = []
     public = PUBLIC_FIELD_NAME in form
     
-    encoder_link, preprocess_link = get_handle_preprocess_link(base_model)
-    
-    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                            [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
-                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                            [user_id, envid])
-    
-    max_id = 0
+    try:
+        encoder_link, preprocess_link = get_handle_preprocess_link(base_model)
 
-    for model in models:
-
-        if model[0] > max_id:
-            max_id = model[0]
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                [user_id, envid])
         
-        if model[1] == model_name:
-            print("A model with this name already exists!")
-            return home()
-    
-    new_model_id = max_id + 1
+        max_id = 0
 
-    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-    path_to_model = path_to_env + "/" + MODELS_FOLDER_NAME + "/" + model_name + "/"
-    
-    if not os.path.exists(path_to_model):
+        for model in models:
+
+            if model[0] > max_id:
+                max_id = model[0]
+            
+            if model[1] == model_name:
+                print("A model with this name already exists in this environment!")
+                return environment_form()
+        
+        new_model_id = max_id + 1
+
+        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+        path_to_model = path_to_env + "/" + MODELS_FOLDER_NAME + "/" + model_name + "/"
+        
+        if os.path.exists(path_to_model):
+            shutil.rmtree(path_to_model)
+        
         os.makedirs(path_to_model)
+        
+        if model_type == SLC_MODEL_TYPE:
+            new_model = SentenceLevelClassificationModel(model_name, finetunable)
+            new_model.build(encoder_link, num_of_classes, preprocess_link, encoder_trainable, "pooled_output", 
+                            dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, 
+                            additional_metrics=additional_metrics)
+            new_model.save(path_to_model, True)
+        elif model_type == TLC_MODEL_TYPE:
+            new_model = TokenLevelClassificationModel(model_name, finetunable)
+            new_model.build(preprocess_link, encoder_link, num_of_classes, encoder_trainable, 
+                            dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, additional_metrics=additional_metrics)
+            new_model.save(path_to_model, True)
+        
+        insert_into_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME, 
+                        MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, PUBLIC_FIELD_NAME], 
+                        [user_id, envid, new_model_id, model_name, path_to_model, model_type, public])
+    except:
+        print("Something went wrong, couldn't create the model...")
     
-    if model_type == SLC_MODEL_TYPE:
-        new_model = SentenceLevelClassificationModel(model_name, finetunable)
-        new_model.build(encoder_link, num_of_classes, preprocess_link, encoder_trainable, "pooled_output", 
-                        dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, 
-                        additional_metrics=additional_metrics)
-        new_model.save(path_to_model, True)
-    elif model_type == TLC_MODEL_TYPE:
-        new_model = TokenLevelClassificationModel(model_name, finetunable)
-        new_model.build(preprocess_link, encoder_link, num_of_classes, encoder_trainable, 
-                        dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, additional_metrics=additional_metrics)
-        new_model.save(path_to_model, True)
-    
-    insert_into_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                   [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME, 
-                    MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, PUBLIC_FIELD_NAME], 
-                   [user_id, envid, new_model_id, model_name, path_to_model, model_type, public])
-    
-    return home()
+    return environment_form()
 
 @app.route('/delete_model', methods=['POST'])
 def delete_model():
     
     form = request.form
-
-    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
-    needed_form_fields = [MODEL_NAME_FIELD_NAME]
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
     
-    for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            needed_fields_recieved = False
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
     
-    if not needed_fields_recieved:
-        return home()
+    if MODEL_NAME_FIELD_NAME not in form:
+        print("Incomplete form recieved, the name of the model is not specified...")
+        return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
     
-    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                            [MODEL_PATH_FIELD_NAME], 
-                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
-                            [user_id, env_id, model_name])
-    
-    if len(models) == 0:
-        print("A model with this name doesn't exist!")
-        return home()
-    
-    model = models[0]
-    path_to_model = model[0]
-    
     try:
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                [MODEL_PATH_FIELD_NAME], 
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                                [user_id, env_id, model_name])
+        
+        if len(models) == 0:
+            print("A model with this name doesn't exist!")
+            return environment_form()
+        
+        path_to_model = models[0][0]
+        
         delete_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                        [user_id, env_id, model_name])
         
         shutil.rmtree(path_to_model)
     except:
-        print("Couldn't delete the model!")
+        print("Something went wrong, couldn't delete the environment...")
     
-    return home()
+    return environment_form()
 
 @app.route('/predict', methods=['POST'])
 def predict():
 
     form = request.form
-
-    needed_session_fields = [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME]
-    needed_form_fields = [MODEL_NAME_FIELD_NAME, SENTENCE_TO_PREDICT_FIELD_NAME]
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
+    needed_form_fields = [MODEL_NAME_FIELD_NAME, SENTENCE_TO_PREDICT_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
         if needed_form_field not in form:
-            needed_fields_recieved = False
-    
-    if not needed_fields_recieved:
-        return home()
+            print("Incomplete form recieved...")
+            return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     envid = session[ENV_ID_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
     sent_to_predict = form[SENTENCE_TO_PREDICT_FIELD_NAME]
 
-    model_tuples = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                                 [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
-                                 [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+    try:
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, 
+                                 MODEL_NAME_FIELD_NAME], 
                                  [user_id, envid, model_name])
-    
-    if len(model_tuples) == 0:
-        print("No model with this name found!")
-        return home()
-    
-    path_to_model = model_tuples[0][0]
-
-    try:
+        
+        if len(models) == 0:
+            print("No model with this name found!")
+            return environment_form()
+        
+        model = models[0]
+        
+        path_to_model = model[0]
+        model_type = model[1]
+        
         new_model = NLPClassificationModel.load_model(path_to_model)
-    except:
-        print("Couldn't load the model!")
-        return home()
-    try:
+        
         print(new_model.predict([sent_to_predict]))
     except:
         print("Something went wrong during the prediction...")
     
-    return home()
+    return environment_form()
 
 #endregion
 

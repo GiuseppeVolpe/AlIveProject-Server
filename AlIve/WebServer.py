@@ -1133,6 +1133,7 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
             continue
     
     training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = False
+    print("\nTraining is over.\n")
 
 @app.route('/stop_train', methods=['POST'])
 def stop_train():

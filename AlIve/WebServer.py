@@ -486,7 +486,7 @@ def create_model():
         new_model_id = max_id + 1
 
         path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-        path_to_model = path_to_env + "/" + MODELS_FOLDER_NAME + "/" + model_name + "/"
+        path_to_model = path_to_env + MODELS_FOLDER_NAME + "/" + model_name + "/"
         
         if os.path.exists(path_to_model):
             shutil.rmtree(path_to_model)
@@ -657,7 +657,7 @@ def create_dataset():
         new_dataset_id = max_dataset_id + 1
 
         path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
-        dataset_folder = path_to_env + "/" + DATASETS_FOLDER_NAME + "/"
+        dataset_folder = path_to_env + DATASETS_FOLDER_NAME + "/"
         path_to_dataset = dataset_folder + dataset_name + ".pickle"
 
         if dataset_type == SLC_MODEL_TYPE:

@@ -529,6 +529,11 @@ def delete_model():
         print("Incomplete form recieved, the name of the model is not specified...")
         return environment_form()
     
+    if TRAINING_THREAD_INFO_FIELD_NAME in session:
+        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
+            print("This function is disabled when training is in progress.")
+            return environment_form()
+    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
@@ -574,6 +579,11 @@ def predict():
             print("Incomplete form recieved...")
             return environment_form()
     
+    if TRAINING_THREAD_INFO_FIELD_NAME in session:
+        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
+            print("This function is disabled when training is in progress.")
+            return environment_form()
+    
     user_id = session[USER_ID_FIELD_NAME]
     envid = session[ENV_ID_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
@@ -599,7 +609,7 @@ def predict():
         
         print(new_model.predict([sent_to_predict]))
     except:
-        print("Something went wrong during the prediction... ")
+        print("Something went wrong during the prediction...")
     
     return environment_form()
 
@@ -701,6 +711,11 @@ def delete_dataset():
         print("Incomplete form recieved, the name of the dataset is not specified...")
         return environment_form()
     
+    if TRAINING_THREAD_INFO_FIELD_NAME in session:
+        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
+            print("This function is disabled when training is in progress.")
+            return environment_form()
+    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     dataset_name = form[DATASET_NAME_FIELD_NAME]
@@ -751,6 +766,11 @@ def import_examples_to_dataset():
     if DATASET_CSV_FIELD_NAME not in request.files:
         print("No file uploaded!")
         return environment_form()
+    
+    if TRAINING_THREAD_INFO_FIELD_NAME in session:
+        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
+            print("This function is disabled when training is in progress.")
+            return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
@@ -853,6 +873,11 @@ def add_model_to_train_queue():
             print("Incomplete form recieved!")
             return environment_form()
     
+    if TRAINING_THREAD_INFO_FIELD_NAME in session:
+        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
+            print("This function is disabled when training is in progress.")
+            return environment_form()
+    
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
@@ -942,6 +967,11 @@ def remove_session_from_train_queue():
     if QUEUE_INDEX_FIELD_NAME not in form:
         print("Incomplete form recieved, the train session to delete is not specified...")
         return environment_form()
+    
+    if TRAINING_THREAD_INFO_FIELD_NAME in session:
+        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
+            print("This function is disabled when training is in progress.")
+            return environment_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]

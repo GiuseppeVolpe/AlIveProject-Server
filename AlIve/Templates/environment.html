@@ -67,7 +67,7 @@
     <div>
         <form action="/create_dataset", method="POST">
             <input type="text" name="dataset_name" placeholder="Dataset Name">
-            <select name="model_type">
+            <select name="dataset_type">
                 <option value="{{model_types[0]}}" selected>{{model_types[0]}}</option>
                 {% for model_type in model_types[1:] %}
                     <option value="{{model_type}}">{{model_type}}</option>

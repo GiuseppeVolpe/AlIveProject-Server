@@ -106,13 +106,13 @@ db_connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_D
 
 #region FORMS GETTERS
 
+@app.route('/')
+def login_form():
+    return render_template('login.html')
+
 @app.route('/signup_form', methods=['POST'])
 def signup_form():
     return render_template('signup.html')
-
-@app.route('/login_form')
-def login_form():
-    return render_template('login.html')
 
 @app.route('/environment_selection', methods=['POST'])
 def environment_selection_form():

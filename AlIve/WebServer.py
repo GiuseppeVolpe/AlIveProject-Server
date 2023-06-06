@@ -599,7 +599,7 @@ def predict():
         
         print(new_model.predict([sent_to_predict]))
     except:
-        print("Something went wrong during the prediction...")
+        print("Something went wrong during the prediction... ")
     
     return environment_form()
 
@@ -1000,6 +1000,8 @@ def start_train():
     return environment_form()
 
 def train_queue(user_id:int, env_id:int, training_thread_info:dict):
+
+    connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                        [QUEUE_INDEX_FIELD_NAME, 
@@ -1007,7 +1009,8 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
                                         TARGETS_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME,
                                         BATCH_SIZE_FIELD_NAME, CHECKPOINT_PATH_FIELD_NAME], 
                                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                                       [user_id, env_id])
+                                       [user_id, env_id], 
+                                       connection)
     
     if len(queue_in_this_env) == 0:
         print("Nothing on train queue!")
@@ -1043,7 +1046,8 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
             models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                                     [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
                                     [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME], 
-                                    [user_id, env_id, model_id])
+                                    [user_id, env_id, model_id], 
+                                    connection)
             
             if len(models) == 0:
                 print("Couldn't find the model specified in this train session!")
@@ -1057,7 +1061,8 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
             datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
                                       [DATASET_PATH_FIELD_NAME], 
                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
-                                      [user_id, env_id, dataset_id])
+                                      [user_id, env_id, dataset_id], 
+                                      connection)
             
             if len(datasets) == 0:
                 print("Couldn't find the model specified in this train session!")
@@ -1090,8 +1095,9 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
             shutil.rmtree(checkpoint_path)
 
             delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
-                        [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
-                        [env_id, current_queue_index])
+                           [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                           [env_id, current_queue_index], 
+                           connection)
         except Exception as ex:
             print(ex)
             continue
@@ -1133,7 +1139,12 @@ def reset_session():
 
 #region DB UTILITIES
 
-def select_from_db(table_name:str, needed_fields:list=None, given_fields:list=None, given_values:list=None):
+def select_from_db(table_name:str, needed_fields:list=None, 
+                   given_fields:list=None, given_values:list=None, 
+                   connection=None):
+    
+    if connection == None:
+        connection = db_connection
 
     if needed_fields == None:
         needed_fields = ["*"]
@@ -1179,15 +1190,19 @@ def select_from_db(table_name:str, needed_fields:list=None, given_fields:list=No
             
             query += field_value
     
-    cursor = db_connection.cursor()
+    cursor = connection.cursor()
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
     
     return results
 
-def insert_into_db(table_name:str, given_fields:list, given_values:list):
-
+def insert_into_db(table_name:str, given_fields:list, given_values:list, 
+                   connection=None):
+    
+    if connection == None:
+        connection = db_connection
+    
     if len(given_fields) != len(given_values):
         raise Exception("The number of fields given is different from the number of values!")
     
@@ -1228,8 +1243,12 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list):
 
 def update_db(table_name:str, 
               fields_to_update:list=None, updated_values:list=None,
-              given_fields:list=None, given_values:list=None):
-
+              given_fields:list=None, given_values:list=None, 
+              connection=None):
+    
+    if connection == None:
+        connection = db_connection
+    
     if fields_to_update == None:
         fields_to_update = list()
     
@@ -1297,8 +1316,12 @@ def update_db(table_name:str,
     db_connection.commit()
     cursor.close()
 
-def delete_from_db(table_name:str, given_fields:list=None, given_values:list=None):
-
+def delete_from_db(table_name:str, given_fields:list=None, given_values:list=None, 
+                   connection=None):
+    
+    if connection == None:
+        connection = db_connection
+    
     if given_fields == None:
         given_fields = list()
     
@@ -1338,7 +1361,11 @@ def delete_from_db(table_name:str, given_fields:list=None, given_values:list=Non
     db_connection.commit()
     cursor.close()
 
-def execute_custom_update_query(query):
+def execute_custom_update_query(query, connection=None):
+    
+    if connection == None:
+        connection = db_connection
+    
     cursor = db_connection.cursor()
     cursor.execute(query)
     db_connection.commit()

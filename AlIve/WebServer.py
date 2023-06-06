@@ -1055,8 +1055,10 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
     
     training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = True
 
-    while training_sessions.empty:
-        
+    while not training_sessions.empty():
+
+        print("\nQUEUE SIZE: {}\n".format(training_sessions.qsize()))
+
         if training_thread_info[WANT_TO_STOP_THREAD_FIELD_NAME]:
             training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = False
             print('The training thread was stopped prematurely.')

@@ -1,0 +1,13 @@
+
+<div>
+    <form method="POST">      
+        <select name="env_name">
+            <option value="{{environments[0]}}" selected>{{environments[0]}}</option>
+            {% for environment in environments[1:] %}
+                <option value="{{environment}}">{{environment}}</option>
+            {% endfor %}
+        </select>
+        <button formaction="/select_env">Select Environment</button>
+        <button formaction="/delete_env">Delete Environment</button>
+    </form>
+</div>

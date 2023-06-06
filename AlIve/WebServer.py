@@ -20,6 +20,7 @@ USER_PASSWORD_FIELD_NAME = "user_password"
 USER_EMAIL_FIELD_NAME = "user_email"
 ENV_ID_FIELD_NAME = "env_id"
 ENV_NAME_FIELD_NAME = "env_name"
+ENV_PATH_FIELD_NAME = "env_path"
 PUBLIC_FIELD_NAME = "public"
 MODEL_ID_FIELD_NAME = "model_id"
 MODEL_NAME_FIELD_NAME = "model_name"
@@ -126,6 +127,60 @@ def login_form():
 @app.route('/user_space', methods=['POST'])
 def user_space():
     return render_template('index.html')
+
+@app.route('/environment_selection', methods=['POST'])
+def environment_selection_form():
+
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+
+    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME], 
+                                  [user_id])
+    
+    environments = [environment[1] for environment in environments]
+
+    return render_template('environment_selection.html', environments=environments)
+
+@app.route('/environment', methods=['POST'])
+def environment_form():
+
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return environment_selection_form()
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    username = session[USERNAME_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    env_name = session[ENV_NAME_FIELD_NAME]
+
+    models_in_env = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                   [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                                   [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                   [user_id, env_id])
+    
+    environment_models = [model_in_env[1] for model_in_env in models_in_env]
+
+    datasets_in_env = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                     [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                     [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                     [user_id, env_id])
+    
+    environment_datasets = [dataset_in_env[1] for dataset_in_env in datasets_in_env]
+
+    return render_template('environment.html', 
+                           available_models=get_available_models(), 
+                           example_categories=EXAMPLE_CATEGORIES, 
+                           model_types=MODEL_TYPES, 
+                           username=username, 
+                           selected_env=env_name, 
+                           environment_models=environment_models, 
+                           environment_datasets=environment_datasets)
 
 #endregion
 
@@ -243,7 +298,7 @@ def login():
     session[USERNAME_FIELD_NAME] = username
     session[USER_EMAIL_FIELD_NAME] = user_email
     
-    return home()
+    return environment_selection_form()
 
 @app.route('/logout')
 def logout():
@@ -259,97 +314,90 @@ def create_environment():
     
     form = request.form
 
-    needed_session_fields = [USER_ID_FIELD_NAME, USERNAME_FIELD_NAME]
-    needed_form_fields = [ENV_NAME_FIELD_NAME]
+    if USER_ID_FIELD_NAME not in session:
+        return login()
     
-    needed_fields_recieved = True
-
-    for needed_session_field in needed_session_fields:
-        if needed_session_field not in session:
-            needed_fields_recieved = False
-    
-    for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            needed_fields_recieved = False
-    
-    if not needed_fields_recieved:
-        return home()
+    if ENV_NAME_FIELD_NAME not in form:
+        return environment_selection_form()
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
     env_name = form[ENV_NAME_FIELD_NAME]
+    public = PUBLIC_FIELD_NAME in form
     
-    if len(env_name) <= 1:
+    if len(env_name) < 2:
         print("Invaild name!")
-        return home()
+        return environment_selection_form()
     
-    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                  [USER_ID_FIELD_NAME], 
-                                  [user_id])
-    
-    max_env_id = 0
-
-    for environment in environments:
+    try:
+        environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                      [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                      [USER_ID_FIELD_NAME], 
+                                      [user_id])
         
-        if environment[0] > max_env_id:
-            max_env_id = environment[0]
+        max_env_id = 0
 
-        if environment[1] == env_name:
-            print("An environment with this name already exists!")
-            return home()
-    
-    new_env_id = max_env_id + 1
+        for environment in environments:
+            
+            if environment[0] > max_env_id:
+                max_env_id = environment[0]
 
-    path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+            if environment[1] == env_name:
+                print("An environment with this name already exists!")
+                return environment_selection_form()
+        
+        new_env_id = max_env_id + 1
 
-    try:
-        if not os.path.exists(path_to_env):
-            os.makedirs(path_to_env)
-    except:
-        print("Couldn't create the environment!")
-        return home()
-    
-    try:
+        path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
+
+        if os.path.exists(path_to_env):
+            shutil.rmtree(path_to_env)
+        
+        os.makedirs(path_to_env)
+
         insert_into_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                       [user_id, new_env_id, env_name])
-    except Exception as ex:
-        print("Couldn't create environment! " + str(ex))
-    finally:
-        return home()
+                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME, 
+                        ENV_PATH_FIELD_NAME, PUBLIC_FIELD_NAME], 
+                       [user_id, new_env_id, env_name, path_to_env, public])
+    except:
+        print("Something went wrong, couldn't create the environment...")
+    
+    return environment_selection_form()
 
 @app.route('/delete_env', methods=['POST'])
 def delete_environment():
     
     form = request.form
 
-    if USER_ID_FIELD_NAME not in session or ENV_NAME_FIELD_NAME not in form:
-        return home()
+    if USER_ID_FIELD_NAME not in session:
+        return login_form()
+    
+    if ENV_NAME_FIELD_NAME not in form:
+        return environment_selection_form()
     
     user_id = session[USER_ID_FIELD_NAME]
-    username = session[USERNAME_FIELD_NAME]
     env_name = form[ENV_NAME_FIELD_NAME]
     
-    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                  [USER_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                  [user_id, env_name])
-    
-    if len(environments) == 0:
-        print("An environment with this name doesn't exist!")
-        return home()
-    
     try:
+        environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                      [ENV_PATH_FIELD_NAME], 
+                                      [USER_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                      [user_id, env_name])
+        
+        if len(environments) == 0:
+            print("An environment with this name doesn't exist!")
+            return environment_selection_form()
+        
+        path_to_env = environments[0][0]
+        shutil.rmtree(path_to_env)
+
         delete_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
                        [USER_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
                        [user_id, env_name])
-        
-        shutil.rmtree(USERS_DATA_FOLDER + "/" + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/")
     except:
-        print("Couldn't delete the environment!")
+        print("Something went wrong, couldn't delete the environment...")
     
-    return home()
+    return environment_selection_form()
 
 @app.route('/select_env', methods=['POST'])
 def select_environment():
@@ -367,26 +415,29 @@ def select_environment():
     
     if env_id == None and env_name == None:
         print("No env identifier given!")
-        return home()
+        return environment_selection_form()
     
-    if env_id != None:
-        environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                      [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                      [ENV_ID_FIELD_NAME], 
-                                      [env_id])
-    elif env_name != None:
-        environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                      [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                      [ENV_NAME_FIELD_NAME], 
-                                      [env_name])
+    try:
+        if env_id != None:
+            environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                        [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                        [ENV_ID_FIELD_NAME], 
+                                        [env_id])
+        elif env_name != None:
+            environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                        [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                        [ENV_NAME_FIELD_NAME], 
+                                        [env_name])
+        
+        if len(environments) == 0:
+            print("Inexisting environment!")
+        else:
+            session[ENV_ID_FIELD_NAME] = environments[0][0]
+            session[ENV_NAME_FIELD_NAME] = environments[0][1]
+    except:
+        print("Something went wrong, couldn't load the environment...")
     
-    if len(environments) == 0:
-        print("Inexisting environment!")
-    else:
-        session[ENV_ID_FIELD_NAME] = environments[0][0]
-        session[ENV_NAME_FIELD_NAME] = environments[0][1]
-    
-    return home()
+    return environment_form()
 
 #endregion
 

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Welcome to {{selected_env}}, {{username}}</title>  
+</head>
+
+<body>
+    <div class="welcome">
+        <center>
+            <h1>
+                <font size="13" color="black">Welcome</font>
+            </h1>
+        </center>
+    </div>
+
+    <div>
+        <form action="/create_model", method="POST">
+            <input type="text" name="model_name" placeholder="Model Name">
+            <select name="model_type">
+                <option value="{{model_types[0]}}" selected>{{model_types[0]}}</option>
+                {% for model_type in model_types[1:] %}
+                    <option value="{{model_type}}">{{model_type}}</option>
+                {% endfor %}
+            </select>
+            <input type="checkbox" name="finetunable" value="finetunable">
+            <select name="base_model">
+                <option value="{{available_models[0]}}" selected>{{available_models[0]}}</option>
+                {% for available_model in available_models[1:] %}
+                    <option value="{{available_model}}">{{available_model}}</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="num_of_classes" placeholder="Number of classes" value="2" min="2">
+            <input type="checkbox" name="encoder_trainable" value="encoder_trainable">
+            <input type="number" name="dropout_rate" placeholder="Dropout Rate" value="0.3" min="0.1" step="0.1">
+            <input type="number" name="optimizer_lr" placeholder="Optimizer LR" value="0.00001" min="0.0000001" step="0.0000001">
+            <input type="checkbox" name="public" value="public">
+            <input type="submit" value="Create Model">
+        </form>
+    </div>
+
+    <div>
+        <form action="/delete_model", method="POST">
+            <select name="model_name">
+                <option value="{{environment_models[0]}}" selected>{{environment_models[0]}}</option>
+                {% for environment_model in environment_models[1:] %}
+                    <option value="{{environment_model}}">{{environment_model}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Delete Model">
+        </form>
+    </div>
+
+    <div>
+        <form action="/predict", method="POST">
+            <select name="model_name">
+                <option value="{{environment_models[0]}}" selected>{{environment_models[0]}}</option>
+                {% for environment_model in environment_models[1:] %}
+                    <option value="{{environment_model}}">{{environment_model}}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="sent" placeholder="Sentence to predict" value="I want to eat something">
+            <input type="submit" value="Predict">
+        </form>
+    </div>
+
+    <div>
+        <form action="/create_dataset", method="POST">
+            <input type="text" name="dataset_name" placeholder="Dataset Name">
+            <select name="model_type">
+                <option value="{{model_types[0]}}" selected>{{model_types[0]}}</option>
+                {% for model_type in model_types[1:] %}
+                    <option value="{{model_type}}">{{model_type}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Create Dataset">
+        </form>
+    </div>
+
+    <div>
+        <form action="/delete_dataset", method="POST">
+            <select name="dataset_name">
+                <option value="{{environment_datasets[0]}}" selected>{{environment_datasets[0]}}</option>
+                {% for environment_dataset in environment_datasets[1:] %}
+                    <option value="{{environment_dataset}}">{{environment_dataset}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Delete Dataset">
+        </form>
+    </div>
+
+    <div>
+        <form action="/import_csv_to_dataset", method="POST" enctype="multipart/form-data">
+            <select name="dataset_name">
+                <option value="{{environment_datasets[0]}}" selected>{{environment_datasets[0]}}</option>
+                {% for environment_dataset in environment_datasets[1:] %}
+                    <option value="{{environment_dataset}}">{{environment_dataset}}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="text_column_name" placeholder="Text Column Name" value="text">
+            <input type="text" name="sentence_idx_column_name" placeholder="Sentence Index Column Name" value="sentence_idx">
+            <input type="text" name="word_column_name" placeholder="Word Column Name" value="word">
+            <input type="file" name="dataset_csv">
+            <select name="example_category">
+                <option value="{{example_categories[0]}}" selected>{{example_categories[0]}}</option>
+                {% for example_category in example_categories[1:] %}
+                <option value="{{example_category}}">{{example_category}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Import examples to Dataset">
+        </form>
+    </div>
+
+    <div>
+        <form action="/add_to_train_queue", method="POST">
+            <select name="model_name">
+                <option value="{{environment_models[0]}}" selected>{{environment_models[0]}}</option>
+                {% for environment_model in environment_models[1:] %}
+                    <option value="{{environment_model}}">{{environment_model}}</option>
+                {% endfor %}
+            </select>
+            <select name="dataset_name">
+                <option value="{{environment_datasets[0]}}" selected>{{environment_datasets[0]}}</option>
+                {% for environment_dataset in environment_datasets[1:] %}
+                    <option value="{{environment_dataset}}">{{environment_dataset}}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="targets" placeholder="Target" value="">
+            <input type="number" name="num_of_epochs" placeholder="Number of epochs" value="50">
+            <input type="number" name="batch_size" placeholder="Batch size" value="32">
+            <input type="submit" value="Add model to train queue">
+        </form>
+    </div>
+
+    <div>
+        <form action="/start_train", method="POST">
+        <input type="submit" value="Start train">
+        </form>
+    </div>
+
+    <div>
+        <form action="/remove_from_train_queue", method="POST">
+        <input type="number" min="0" value="1" placeholder="Queue Index" name="queue_index">
+        <input type="submit" value="Remove from train queue">
+        </form>
+    </div>
+
+    <div>
+        <form action="/stop_train", method="POST">
+        <input type="submit" value="Stop train">
+        </form>
+    </div>
+
+    <center>
+        <hr>
+    </center>
+
+    <center>
+        <a href="/logout">Logout</a>
+    </center>
+
+    <div class="breaker">
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+    </div>
+
+    <div class="footer">
+        <footer style="position: fixed; left: 2; right: 2; width: 95%; bottom: 0;">
+        <center>
+            This webpage is only accessible behind a User Web Login System written in Python
+        </center>
+        </footer>
+    </div>
+</body>
+
+</html>

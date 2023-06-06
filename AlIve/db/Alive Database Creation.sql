@@ -19,7 +19,8 @@ CHECK ((user_email IS NULL)
 CREATE TABLE IF NOT EXISTS users_environments ( 
     user_id INT(11) NOT NULL,
     env_id INT(11) NOT NULL, 
-    env_name VARCHAR(100) NOT NULL,
+    env_name VARCHAR(100) NOT NULL, 
+    env_path VARCHAR(1000) NOT NULL,
     public BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (user_id, env_id),
     UNIQUE (user_id, env_name)

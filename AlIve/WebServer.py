@@ -87,6 +87,7 @@ ENVIRONMENTS_FOLDER_NAME = "Environments"
 MODELS_FOLDER_NAME = "Models"
 DATASETS_FOLDER_NAME = "Datasets"
 TRAINING_SESSIONS_FOLDER_NAME = "TrainingSessions"
+TRAINING_GRAPHS_FOLDER_NAME = "TrainingGraphs"
 
 USERS_DATA_FOLDER = ROOT_FOLDER + "/" + USERS_DATA_FOLDER_NAME + "/"
 
@@ -1137,10 +1138,18 @@ def train_queue(user_id:int, env_id:int):
                                                         current_queue_index, connection)
             additional_callbacks = [epochs_updating_callback]
             
-            loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
+            history = loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
+
             loaded_model.save(path_to_model, True)
             shutil.rmtree(checkpoint_path)
 
+            graph_path = path_to_model + TRAINING_GRAPHS_FOLDER_NAME + "/"
+
+            try:
+                loaded_model.save_train_history_graph(history.history, datetime.now(), graph_path)
+            except:
+                print("Couldn't save graph...")
+            
             delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                            [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
                            [env_id, current_queue_index], 

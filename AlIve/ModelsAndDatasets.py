@@ -472,8 +472,8 @@ class NLPClassificationModel(ABC):
     def predict(self, examples:list):
         pass
     
-    def save_train_history_graph(self, history_dict:dict, date:datetime, metrics_to_plot:list=None, 
-                                 directory:str="/mnt/c/Users/giuse/Desktop/Plots/"):
+    def save_train_history_graph(self, history_dict:dict, date:datetime, directory:str, 
+                                 metrics_to_plot:list=None):
         
         if metrics_to_plot == None:
             metrics_to_plot = list(history_dict.keys())

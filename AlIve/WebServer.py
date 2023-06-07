@@ -32,7 +32,9 @@ DATASET_PATH_FIELD_NAME = "dataset_path"
 DATASET_TYPE_FIELD_NAME = "dataset_type"
 QUEUE_INDEX_FIELD_NAME = "queue_index"
 
-TRAINING_THREAD_INFO_FIELD_NAME = "training_thread"
+TRAINING_THREAD_FIELD_NAME = "training_thread"
+TRAINING_THREAD_STOP_EVENT_FIELD_NAME = "stop_event"
+TRAINING_THREAD_INFO_FIELD_NAME = "training_thread_info"
 IS_ALIVE_TRAINING_THREAD_FIELD_NAME = "is_alive"
 WANT_TO_STOP_THREAD_FIELD_NAME = "want_to_stop"
 
@@ -102,9 +104,10 @@ app = Flask(__name__, template_folder='Templates')
 app.config['UPLOAD_FOLDER'] = "UPLOAD_FOLDER"
 app.config['MAX_CONTENT-PATH'] = 1000000
 
-db_connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
+DB_CONNECTION = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
 
-loaded_models = dict()
+LOADED_MODELS = dict()
+TRAINING_SESSIONS = dict()
 
 #region FORMS GETTERS
 
@@ -535,14 +538,16 @@ def delete_model():
         print("Incomplete form recieved, the name of the model is not specified...")
         return environment_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME in session:
-        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
-            print("This function is disabled when training is in progress.")
-            return environment_form()
-    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     model_name = form[MODEL_NAME_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
+            print("This function is disabled when training is in progress.")
+            return environment_form()
     
     try:
         models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
@@ -585,22 +590,24 @@ def predict():
             print("Incomplete form recieved...")
             return environment_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME in session:
-        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    model_name = form[MODEL_NAME_FIELD_NAME]
+    sent_to_predict = form[SENTENCE_TO_PREDICT_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
             print("This function is disabled when training is in progress.")
             return environment_form()
     
-    user_id = session[USER_ID_FIELD_NAME]
-    envid = session[ENV_ID_FIELD_NAME]
-    model_name = form[MODEL_NAME_FIELD_NAME]
-    sent_to_predict = form[SENTENCE_TO_PREDICT_FIELD_NAME]
-
     try:
         models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
                                 [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
                                 [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, 
                                  MODEL_NAME_FIELD_NAME], 
-                                 [user_id, envid, model_name])
+                                 [user_id, env_id, model_name])
         
         if len(models) == 0:
             print("No model with this name found!")
@@ -611,12 +618,12 @@ def predict():
         path_to_model = model[0]
         model_type = model[1]
         
-        key = "{}_{}_{}".format(user_id, envid, model_name)
+        key = "{}_{}_{}".format(user_id, env_id, model_name)
+
+        if key not in LOADED_MODELS.keys():
+            LOADED_MODELS[key] = NLPClassificationModel.load_model(path_to_model)
         
-        if key not in loaded_models.keys():
-            loaded_models[key] = NLPClassificationModel.load_model(path_to_model)
-        
-        new_model = loaded_models[key]
+        new_model = LOADED_MODELS[key]
         
         return environment_form(str(new_model.predict([sent_to_predict])))
     except:
@@ -722,14 +729,16 @@ def delete_dataset():
         print("Incomplete form recieved, the name of the dataset is not specified...")
         return environment_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME in session:
-        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
-            print("This function is disabled when training is in progress.")
-            return environment_form()
-    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     dataset_name = form[DATASET_NAME_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
+            print("This function is disabled when training is in progress.")
+            return environment_form()
     
     try:
         datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
@@ -778,11 +787,6 @@ def import_examples_to_dataset():
         print("No file uploaded!")
         return environment_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME in session:
-        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
-            print("This function is disabled when training is in progress.")
-            return environment_form()
-    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
 
@@ -791,6 +795,13 @@ def import_examples_to_dataset():
     text_column_name = form[TEXT_COLUMN_NAME_FIELD_NAME]
     sentence_idx_column_name = form[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
     word_column_name = form[WORD_COLUMN_NAME_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
+            print("This function is disabled when training is in progress.")
+            return environment_form()
     
     try:
         datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
@@ -884,11 +895,6 @@ def add_model_to_train_queue():
             print("Incomplete form recieved!")
             return environment_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME in session:
-        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
-            print("This function is disabled when training is in progress.")
-            return environment_form()
-    
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
@@ -898,6 +904,13 @@ def add_model_to_train_queue():
     target = form[TARGETS_FIELD_NAME]
     num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
     batch_size = form[BATCH_SIZE_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
+            print("This function is disabled when training is in progress.")
+            return environment_form()
     
     try:
         models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
@@ -979,15 +992,17 @@ def remove_session_from_train_queue():
         print("Incomplete form recieved, the train session to delete is not specified...")
         return environment_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME in session:
-        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
-            print("This function is disabled when training is in progress.")
-            return environment_form()
-    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     queue_index = form[QUEUE_INDEX_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
 
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
+            print("This function is disabled when training is in progress.")
+            return environment_form()
+    
     try:
         training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                            [CHECKPOINT_PATH_FIELD_NAME], 
@@ -1020,23 +1035,23 @@ def start_train():
     if ENV_ID_FIELD_NAME not in session:
         return environment_selection_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME in session:
-        if session[TRAINING_THREAD_INFO_FIELD_NAME][IS_ALIVE_TRAINING_THREAD_FIELD_NAME]:
-            print("The training has already started!")
-            return environment_form()
-        else:
-            del(session[TRAINING_THREAD_INFO_FIELD_NAME])
-    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     
-    training_thread_info = {IS_ALIVE_TRAINING_THREAD_FIELD_NAME : False, 
-                            WANT_TO_STOP_THREAD_FIELD_NAME : False}
-    session[TRAINING_THREAD_INFO_FIELD_NAME] = training_thread_info
+    key = "{}_{}".format(user_id, env_id)
 
-    lambda_training_function = lambda : train_queue(user_id, env_id, training_thread_info)
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
+            print("Training is already in progress!")
+            return environment_form()
+        else:
+            del(TRAINING_SESSIONS[key])
+    
+    lambda_training_function = lambda : train_queue(user_id, env_id)
     training_thread = Thread(target=lambda_training_function, daemon=True, name='Monitor')
     training_thread.start()
+
+    TRAINING_SESSIONS[key] = training_thread
 
     return environment_form()
 
@@ -1130,7 +1145,7 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
                                                     targets[0])
             
             epochs_updating_callback = UpdateDBCallback(user_id, env_id, 
-                                                        current_queue_index, db_connection)
+                                                        current_queue_index, DB_CONNECTION)
             additional_callbacks = [epochs_updating_callback]
             
             loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
@@ -1157,11 +1172,15 @@ def stop_train():
     if ENV_ID_FIELD_NAME not in session:
         return environment_selection_form()
     
-    if TRAINING_THREAD_INFO_FIELD_NAME not in session:
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key not in TRAINING_SESSIONS.keys():
         return environment_form()
     
-    training_thread_info = session[TRAINING_THREAD_INFO_FIELD_NAME]
-    training_thread_info[WANT_TO_STOP_THREAD_FIELD_NAME] = True
+    print("Stop not implemented")
 
 #endregion
 
@@ -1179,7 +1198,6 @@ def reset_session():
     session.pop(USER_EMAIL_FIELD_NAME)
     session.pop(ENV_ID_FIELD_NAME)
     session.pop(ENV_NAME_FIELD_NAME)
-    session.pop(TRAINING_THREAD_INFO_FIELD_NAME)
 
 #region DB UTILITIES
 
@@ -1188,7 +1206,7 @@ def select_from_db(table_name:str, needed_fields:list=None,
                    connection=None):
     
     if connection == None:
-        connection = db_connection
+        connection = DB_CONNECTION
 
     if needed_fields == None:
         needed_fields = ["*"]
@@ -1245,7 +1263,7 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list,
                    connection=None):
     
     if connection == None:
-        connection = db_connection
+        connection = DB_CONNECTION
     
     if len(given_fields) != len(given_values):
         raise Exception("The number of fields given is different from the number of values!")
@@ -1280,9 +1298,9 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list,
     
     query += ")"
 
-    cursor = db_connection.cursor()
+    cursor = DB_CONNECTION.cursor()
     cursor.execute(query)
-    db_connection.commit()
+    DB_CONNECTION.commit()
     cursor.close()
 
 def update_db(table_name:str, 
@@ -1291,7 +1309,7 @@ def update_db(table_name:str,
               connection=None):
     
     if connection == None:
-        connection = db_connection
+        connection = DB_CONNECTION
     
     if fields_to_update == None:
         fields_to_update = list()
@@ -1355,16 +1373,16 @@ def update_db(table_name:str,
             
             query += field_value
     
-    cursor = db_connection.cursor()
+    cursor = DB_CONNECTION.cursor()
     cursor.execute(query)
-    db_connection.commit()
+    DB_CONNECTION.commit()
     cursor.close()
 
 def delete_from_db(table_name:str, given_fields:list=None, given_values:list=None, 
                    connection=None):
     
     if connection == None:
-        connection = db_connection
+        connection = DB_CONNECTION
     
     if given_fields == None:
         given_fields = list()
@@ -1400,19 +1418,19 @@ def delete_from_db(table_name:str, given_fields:list=None, given_values:list=Non
             
             query += field_value
     
-    cursor = db_connection.cursor()
+    cursor = DB_CONNECTION.cursor()
     cursor.execute(query)
-    db_connection.commit()
+    DB_CONNECTION.commit()
     cursor.close()
 
 def execute_custom_update_query(query, connection=None):
     
     if connection == None:
-        connection = db_connection
+        connection = DB_CONNECTION
     
-    cursor = db_connection.cursor()
+    cursor = DB_CONNECTION.cursor()
     cursor.execute(query)
-    db_connection.commit()
+    DB_CONNECTION.commit()
     cursor.close()
 
 #endregion
@@ -1437,9 +1455,9 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
         update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + str(env_id) + " AND "
         update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + str(current_queue_index)
         
-        cursor = db_connection.cursor()
+        cursor = DB_CONNECTION.cursor()
         cursor.execute(update_epochs_left_query)
-        db_connection.commit()
+        DB_CONNECTION.commit()
         cursor.close()
 
 if __name__ == "__main__":

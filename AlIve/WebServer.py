@@ -1055,7 +1055,7 @@ def start_train():
 
     return environment_form()
 
-def train_queue(user_id:int, env_id:int, training_thread_info:dict):
+def train_queue(user_id:int, env_id:int):
 
     connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
     
@@ -1079,16 +1079,9 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
     for training_session in queue_in_this_env:
         training_sessions.put(training_session)
     
-    training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = True
-
     while not training_sessions.empty():
 
         print("\nQUEUE SIZE: {}\n".format(training_sessions.qsize()))
-
-        if training_thread_info[WANT_TO_STOP_THREAD_FIELD_NAME]:
-            training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = False
-            print('The training thread was stopped prematurely.')
-            break
         
         try:
             training_session = training_sessions.get()

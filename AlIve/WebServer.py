@@ -49,7 +49,7 @@ BOOL_TYPE_NAME = "bool"
 
 FINETUNABLE_FIELD_NAME = "finetunable"
 BASEMODEL_FIELD_NAME = "base_model"
-NUM_OF_CLASSES_FIELD_NAME = "num_of_classes"
+OUTPUT_SHAPE_FIELD_NAME = "output_shape"
 ENCODER_TRAINABLE_FIELD_NAME = "encoder_trainable"
 DROPOUT_RATE_FIELD_NAME = "dropout_rate"
 OPTIMIZER_LR_FIELD_NAME = "optimizer_lr"
@@ -447,7 +447,7 @@ def create_model():
         return environment_selection_form()
     
     needed_form_fields = [MODEL_NAME_FIELD_NAME, MODEL_TYPE_FIELD_NAME, 
-                          BASEMODEL_FIELD_NAME, NUM_OF_CLASSES_FIELD_NAME, 
+                          BASEMODEL_FIELD_NAME, OUTPUT_SHAPE_FIELD_NAME, 
                           DROPOUT_RATE_FIELD_NAME, OPTIMIZER_LR_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
@@ -463,7 +463,7 @@ def create_model():
     model_type = form[MODEL_TYPE_FIELD_NAME]
     finetunable = FINETUNABLE_FIELD_NAME in form
     base_model = form[BASEMODEL_FIELD_NAME]
-    num_of_classes = form[NUM_OF_CLASSES_FIELD_NAME]
+    output_shape = form[OUTPUT_SHAPE_FIELD_NAME]
     encoder_trainable = ENCODER_TRAINABLE_FIELD_NAME in form
     dropout_rate = float(form[DROPOUT_RATE_FIELD_NAME])
     optimizer_lr = float(form[OPTIMIZER_LR_FIELD_NAME])
@@ -501,13 +501,13 @@ def create_model():
         
         if model_type == SLC_MODEL_TYPE:
             new_model = SentenceLevelClassificationModel(model_name, finetunable)
-            new_model.build(encoder_link, num_of_classes, preprocess_link, encoder_trainable, "pooled_output", 
+            new_model.build(encoder_link, output_shape, preprocess_link, encoder_trainable, "pooled_output", 
                             dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, 
                             additional_metrics=additional_metrics)
             new_model.save(path_to_model, True)
         elif model_type == TLC_MODEL_TYPE:
             new_model = TokenLevelClassificationModel(model_name, finetunable)
-            new_model.build(preprocess_link, encoder_link, num_of_classes, encoder_trainable, 
+            new_model.build(preprocess_link, encoder_link, output_shape, encoder_trainable, 
                             dropout_rate=dropout_rate, optimizer_lr=optimizer_lr, additional_metrics=additional_metrics)
             new_model.save(path_to_model, True)
         

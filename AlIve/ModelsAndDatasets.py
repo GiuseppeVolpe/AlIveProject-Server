@@ -53,7 +53,7 @@ class SentenceLevelClassificationData:
 
         binarizer = LabelBinarizer()
         encoded_df_targets = binarizer.fit_transform(df_targets.values.astype('str'))
-        print(encoded_df_targets)
+        
         if self.__binarizer == None:
             self.__binarizer = binarizer
 
@@ -556,7 +556,7 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
     def __init__(self, name:str="", finetunable:bool=False):
         super().__init__(name, finetunable)
     
-    def build(self, encoder_model_link:str, num_of_classes:list, 
+    def build(self, encoder_model_link:str, output_shape:int, 
               preprocess_model_link:str=None, encoder_trainable:bool=False, encoder_output_key:str=None, 
               dropout_rate:float=0.1, final_output_activation=None, 
               optimizer_lr:float=1e-5, additional_metrics:list=None, run_eagerly:bool=True):
@@ -578,7 +578,7 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
             net = encoder_output
         
         net = tf.keras.layers.Dropout(dropout_rate)(net)
-        net = tf.keras.layers.Dense(num_of_classes, activation=final_output_activation, name='classifier')(net)
+        net = tf.keras.layers.Dense(output_shape, activation=final_output_activation, name='classifier')(net)
 
         if self._name == "":
             self._model = tf.keras.Model(text_input, net)
@@ -590,8 +590,13 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
             additional_metrics = []
         
         optimizer = tf.keras.optimizers.Adam(optimizer_lr)
-        loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
-        metrics = [tf.metrics.CategoricalAccuracy()] + additional_metrics
+
+        if output_shape > 2:
+            loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
+            metrics = [tf.metrics.CategoricalAccuracy()] + additional_metrics
+        else:
+            loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+            metrics = [tf.metrics.BinaryAccuracy()] + additional_metrics
         
         self._model.compile(optimizer=optimizer,
                             loss=loss,
@@ -714,7 +719,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
     def __init__(self, name:str="", finetunable:bool=False):
         super().__init__(name, finetunable)
     
-    def build(self, preprocess_model_link:str, encoder_model_link:str, num_of_classes:int, 
+    def build(self, preprocess_model_link:str, encoder_model_link:str, output_shape:int, 
               encoder_trainable:bool=False, encoder_output_key:str="sequence_output", 
               dropout_rate:float=0.3, final_output_activation="softmax", 
               optimizer_lr:float=1e-5, additional_metrics:list=None, run_eagerly:bool=True):
@@ -736,7 +741,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
             encoder_output = encoder(encoder_inputs)
         
         embedding = tf.keras.layers.Dropout(dropout_rate)(encoder_output)
-        final_output = tf.keras.layers.Dense(num_of_classes, activation = final_output_activation)(embedding)
+        final_output = tf.keras.layers.Dense(output_shape, activation = final_output_activation)(embedding)
 
         if self._name == "":
             self._model = tf.keras.Model(inputs = [text_input], outputs = [final_output])
@@ -748,9 +753,14 @@ class TokenLevelClassificationModel(NLPClassificationModel):
             additional_metrics = []
         
         optimizer = tf.keras.optimizers.Adam(optimizer_lr)
-        loss = "categorical_crossentropy"
-        metrics = ["accuracy"] + additional_metrics
-
+        
+        if output_shape > 2:
+            loss = "categorical_crossentropy"
+            metrics = ["accuracy"] + additional_metrics
+        else:
+            loss = "binary_crossentropy"
+            metrics = ["accuracy"] + additional_metrics
+        
         self._model.compile(optimizer=optimizer, 
                             loss=loss, 
                             metrics=metrics, 

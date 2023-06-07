@@ -1113,7 +1113,7 @@ def train_queue(user_id:int, env_id:int):
                                       connection)
             
             if len(datasets) == 0:
-                print("Couldn't find the model specified in this train session!")
+                print("Couldn't find the dataset specified in this train session!")
                 continue
             
             dataset = datasets[0]

@@ -38,8 +38,8 @@ class SentenceLevelClassificationData:
             self.__trainfeatures, self.__traintargets = self.__encode(train, text_column_name, target_column_name)
             self.__validfeatures, self.__validtargets = self.__encode(valid, text_column_name, target_column_name)
             self.__testfeatures, self.__testtargets = self.__encode(test, text_column_name, target_column_name)
-        except:
-            raise Exception("Could not create dataset!")
+        except Exception as ex:
+            raise Exception("Could not create dataset! {}".format(ex))
     
     def __encode(self, df:pd.DataFrame, text_column_name:str, target_column_name:str):
 
@@ -52,8 +52,8 @@ class SentenceLevelClassificationData:
         df_targets = df_copy.pop(target_column_name)
 
         binarizer = LabelBinarizer()
-        encoded_df_targets = binarizer.fit_transform(df_targets.values)
-
+        encoded_df_targets = binarizer.fit_transform(df_targets.values.astype('str'))
+        print(encoded_df_targets)
         if self.__binarizer == None:
             self.__binarizer = binarizer
 

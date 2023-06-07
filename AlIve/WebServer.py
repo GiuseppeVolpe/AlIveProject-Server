@@ -1,4 +1,6 @@
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
 import re
 from queue import Queue
 from threading import Thread, Event
@@ -31,12 +33,6 @@ DATASET_NAME_FIELD_NAME = "dataset_name"
 DATASET_PATH_FIELD_NAME = "dataset_path"
 DATASET_TYPE_FIELD_NAME = "dataset_type"
 QUEUE_INDEX_FIELD_NAME = "queue_index"
-
-TRAINING_THREAD_FIELD_NAME = "training_thread"
-TRAINING_THREAD_STOP_EVENT_FIELD_NAME = "stop_event"
-TRAINING_THREAD_INFO_FIELD_NAME = "training_thread_info"
-IS_ALIVE_TRAINING_THREAD_FIELD_NAME = "is_alive"
-WANT_TO_STOP_THREAD_FIELD_NAME = "want_to_stop"
 
 ALIVE_DB_NAME = "alive_db"
 ALIVE_DB_ADMIN_USERNAME = "GiuseppeVolpe"
@@ -1153,7 +1149,6 @@ def train_queue(user_id:int, env_id:int):
             print(ex)
             continue
     
-    training_thread_info[IS_ALIVE_TRAINING_THREAD_FIELD_NAME] = False
     print("\nTraining is over.\n")
 
 @app.route('/stop_train', methods=['POST'])
@@ -1173,7 +1168,7 @@ def stop_train():
     if key not in TRAINING_SESSIONS.keys():
         return environment_form()
     
-    print("Stop not implemented")
+    print("Stop not implemented!")
     return environment_form()
 
 #endregion

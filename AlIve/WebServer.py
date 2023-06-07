@@ -1145,7 +1145,7 @@ def train_queue(user_id:int, env_id:int, training_thread_info:dict):
                                                     targets[0])
             
             epochs_updating_callback = UpdateDBCallback(user_id, env_id, 
-                                                        current_queue_index, DB_CONNECTION)
+                                                        current_queue_index, connection)
             additional_callbacks = [epochs_updating_callback]
             
             loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
@@ -1203,7 +1203,7 @@ def reset_session():
 
 def select_from_db(table_name:str, needed_fields:list=None, 
                    given_fields:list=None, given_values:list=None, 
-                   connection=None):
+                   connection:mysqlconn.MySQLConnection=None):
     
     if connection == None:
         connection = DB_CONNECTION
@@ -1260,7 +1260,7 @@ def select_from_db(table_name:str, needed_fields:list=None,
     return results
 
 def insert_into_db(table_name:str, given_fields:list, given_values:list, 
-                   connection=None):
+                   connection:mysqlconn.MySQLConnection=None):
     
     if connection == None:
         connection = DB_CONNECTION
@@ -1298,15 +1298,15 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list,
     
     query += ")"
 
-    cursor = DB_CONNECTION.cursor()
+    cursor = connection.cursor()
     cursor.execute(query)
-    DB_CONNECTION.commit()
+    connection.commit()
     cursor.close()
 
 def update_db(table_name:str, 
               fields_to_update:list=None, updated_values:list=None,
               given_fields:list=None, given_values:list=None, 
-              connection=None):
+              connection:mysqlconn.MySQLConnection=None):
     
     if connection == None:
         connection = DB_CONNECTION
@@ -1373,13 +1373,13 @@ def update_db(table_name:str,
             
             query += field_value
     
-    cursor = DB_CONNECTION.cursor()
+    cursor = connection.cursor()
     cursor.execute(query)
-    DB_CONNECTION.commit()
+    connection.commit()
     cursor.close()
 
 def delete_from_db(table_name:str, given_fields:list=None, given_values:list=None, 
-                   connection=None):
+                   connection:mysqlconn.MySQLConnection=None):
     
     if connection == None:
         connection = DB_CONNECTION
@@ -1418,30 +1418,36 @@ def delete_from_db(table_name:str, given_fields:list=None, given_values:list=Non
             
             query += field_value
     
-    cursor = DB_CONNECTION.cursor()
+    cursor = connection.cursor()
     cursor.execute(query)
-    DB_CONNECTION.commit()
+    connection.commit()
     cursor.close()
 
-def execute_custom_update_query(query, connection=None):
+def execute_custom_update_query(query, connection:mysqlconn.MySQLConnection=None):
     
     if connection == None:
         connection = DB_CONNECTION
     
-    cursor = DB_CONNECTION.cursor()
+    cursor = connection.cursor()
     cursor.execute(query)
-    DB_CONNECTION.commit()
+    connection.commit()
     cursor.close()
 
 #endregion
 
 class UpdateDBCallback(tf.keras.callbacks.Callback):
 
-    def __init__(self, user_id:int, env_id:int, current_queue_index:int, db_connection):
+    def __init__(self, user_id:int, env_id:int, current_queue_index:int, 
+                 connection:mysqlconn.MySQLConnection=None):
         super().__init__()
         self.__user_id = user_id
         self.__env_id = env_id
         self.__current_queue_index = current_queue_index
+
+        if connection == None:
+            connection = DB_CONNECTION
+        
+        self.__connection = connection
     
     def on_epoch_end(self, epoch, logs=None):
 
@@ -1455,9 +1461,9 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
         update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + str(env_id) + " AND "
         update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + str(current_queue_index)
         
-        cursor = DB_CONNECTION.cursor()
+        cursor = self.__connection.cursor()
         cursor.execute(update_epochs_left_query)
-        DB_CONNECTION.commit()
+        self.__connection.commit()
         cursor.close()
 
 if __name__ == "__main__":

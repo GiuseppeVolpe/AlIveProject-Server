@@ -1082,7 +1082,7 @@ def train_queue(user_id:int, env_id:int):
     while not training_sessions.empty():
 
         print("\nQUEUE SIZE: {}\n".format(training_sessions.qsize()))
-        
+
         try:
             training_session = training_sessions.get()
 
@@ -1174,6 +1174,7 @@ def stop_train():
         return environment_form()
     
     print("Stop not implemented")
+    return environment_form()
 
 #endregion
 

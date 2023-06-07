@@ -132,7 +132,7 @@ def environment_selection_form():
     return render_template('environment_selection.html', environments=environments)
 
 @app.route('/environment', methods=['POST'])
-def environment_form():
+def environment_form(prediction=None):
 
     if USER_ID_FIELD_NAME not in session:
         return login_form()
@@ -159,6 +159,9 @@ def environment_form():
     
     environment_datasets = [dataset_in_env[1] for dataset_in_env in datasets_in_env]
 
+    if prediction == None:
+        prediction = "No pred"
+
     return render_template('environment.html', 
                            available_models=get_available_models(), 
                            example_categories=EXAMPLE_CATEGORIES, 
@@ -166,7 +169,8 @@ def environment_form():
                            username=username, 
                            selected_env=env_name, 
                            environment_models=environment_models, 
-                           environment_datasets=environment_datasets)
+                           environment_datasets=environment_datasets, 
+                           prediction=prediction)
 
 #endregion
 
@@ -607,7 +611,7 @@ def predict():
         
         new_model = NLPClassificationModel.load_model(path_to_model)
         
-        print(new_model.predict([sent_to_predict]))
+        return environment_form(str(new_model.predict([sent_to_predict])))
     except:
         print("Something went wrong during the prediction...")
     

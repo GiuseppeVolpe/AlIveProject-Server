@@ -104,6 +104,8 @@ app.config['MAX_CONTENT-PATH'] = 1000000
 
 db_connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
 
+loaded_models = dict()
+
 #region FORMS GETTERS
 
 @app.route('/')
@@ -609,7 +611,12 @@ def predict():
         path_to_model = model[0]
         model_type = model[1]
         
-        new_model = NLPClassificationModel.load_model(path_to_model)
+        key = "{}_{}_{}".format(user_id, envid, model_name)
+        
+        if key not in loaded_models.keys():
+            loaded_models[key] = NLPClassificationModel.load_model(path_to_model)
+        
+        new_model = loaded_models[key]
         
         return environment_form(str(new_model.predict([sent_to_predict])))
     except:

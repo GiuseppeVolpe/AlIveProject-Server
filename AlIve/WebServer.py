@@ -463,7 +463,7 @@ def create_model():
     model_type = form[MODEL_TYPE_FIELD_NAME]
     finetunable = FINETUNABLE_FIELD_NAME in form
     base_model = form[BASEMODEL_FIELD_NAME]
-    output_shape = form[OUTPUT_SHAPE_FIELD_NAME]
+    output_shape = int(form[OUTPUT_SHAPE_FIELD_NAME])
     encoder_trainable = ENCODER_TRAINABLE_FIELD_NAME in form
     dropout_rate = float(form[DROPOUT_RATE_FIELD_NAME])
     optimizer_lr = float(form[OPTIMIZER_LR_FIELD_NAME])
@@ -515,8 +515,8 @@ def create_model():
                        [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME, 
                         MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, PUBLIC_FIELD_NAME], 
                         [user_id, envid, new_model_id, model_name, path_to_model, model_type, public])
-    except:
-        print("Something went wrong, couldn't create the model...")
+    except Exception as ex:
+        print("Something went wrong, couldn't create the model... {}".format(ex))
     
     return environment_form()
 

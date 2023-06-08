@@ -679,8 +679,13 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
         if self._binarizer == None:
             raise Exception("Binarizer doesn't exist!")
         
-        results = tf.nn.softmax(self._model(tf.constant(examples)))
+        results = self._model(tf.constant(examples))
+
+        if results[0].shape[0] > 1:
+            results = tf.nn.softmax(results)
+        
         predictions = self._binarizer.inverse_transform(results.numpy())
+
         return predictions
 
 class TokenLevelClassificationModel(NLPClassificationModel):
@@ -721,7 +726,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
     
     def build(self, preprocess_model_link:str, encoder_model_link:str, output_shape:int, 
               encoder_trainable:bool=False, encoder_output_key:str="sequence_output", 
-              dropout_rate:float=0.3, final_output_activation="softmax", 
+              dropout_rate:float=0.3, final_output_activation=None, 
               optimizer_lr:float=1e-5, additional_metrics:list=None, run_eagerly:bool=True):
         
         text_input = tf.keras.layers.Input(shape=(), dtype=tf.string, name='text')
@@ -741,7 +746,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
             encoder_output = encoder(encoder_inputs)
         
         embedding = tf.keras.layers.Dropout(dropout_rate)(encoder_output)
-        final_output = tf.keras.layers.Dense(output_shape, activation = final_output_activation)(embedding)
+        final_output = tf.keras.layers.Dense(output_shape, activation=final_output_activation)(embedding)
 
         if self._name == "":
             self._model = tf.keras.Model(inputs = [text_input], outputs = [final_output])
@@ -847,10 +852,14 @@ class TokenLevelClassificationModel(NLPClassificationModel):
         for example in examples:
             
             sentenceprediction = np.array( self._model(tf.constant([example]))[0] )
-            sentenceprediction = self._binarizer.inverse_transform(sentenceprediction)[1:]
             
-            decoded_prediction = []
+            if sentenceprediction[0].shape[0] > 1:
+                sentenceprediction = tf.nn.softmax(sentenceprediction)
+            
+            sentenceprediction = self._binarizer.inverse_transform(sentenceprediction)[1:]
 
+            decoded_prediction = []
+            
             tokenizedexample = self.tokenize(example)
 
             for word in tokenizedexample:

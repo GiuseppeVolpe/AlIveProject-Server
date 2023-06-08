@@ -19,6 +19,8 @@ from Utils import *
 
 import matplotlib.pyplot as plt
 
+from treelib import Node, Tree
+
 #RANDOM INIT
 RANDOM_SEED = 42
 
@@ -859,7 +861,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
             sentenceprediction = self._binarizer.inverse_transform(sentenceprediction)[1:]
 
             decoded_prediction = []
-            
+
             tokenizedexample = self.tokenize(example)
 
             for word in tokenizedexample:
@@ -1117,3 +1119,123 @@ def get_available_models():
     ]
 
     return available_models
+
+class EntitiesHierarchy:
+    
+    ITALIAN_LANGUAGE_FIELD_NAME = "ita"
+    ENGLISH_LANGUAGE_FIELD_NAME = "en"
+    GERMAN_LANGUAGE_FIELD_NAME = "de"
+    
+    SUPPORTED_LANGUAGES = [ITALIAN_LANGUAGE_FIELD_NAME, 
+                           ENGLISH_LANGUAGE_FIELD_NAME, 
+                           GERMAN_LANGUAGE_FIELD_NAME]
+    
+    ROOT_TAG = "Entity"
+    ROOT_ID = "entity"
+    ROOT_ITALIAN_SYNSET = {"entità", "ente"}
+    ROOT_ENGLISH_SYNSET = {"entity"}
+    
+    def __init__(self):
+        
+        entity_synset = {
+            EntitiesHierarchy.ITALIAN_LANGUAGE_FIELD_NAME : EntitiesHierarchy.ROOT_ITALIAN_SYNSET,
+            EntitiesHierarchy.ENGLISH_LANGUAGE_FIELD_NAME : EntitiesHierarchy.ROOT_ENGLISH_SYNSET
+        }
+        
+        self.__tree = Tree()
+        self.__root = self.__tree.create_node(EntitiesHierarchy.ROOT_TAG, 
+                                              EntitiesHierarchy.ROOT_ID, 
+                                              data=entity_synset)
+    
+    def add_node(self, new_node_tag:str, new_node_id:str, parent_id:str=None, sysnset:dict=None):
+        
+        if self.__tree.get_node(new_node_id) != None:
+            raise Exception("A node with this id already exists!")
+        
+        if parent_id == None:
+            parent_id = EntitiesHierarchy.ROOT_ID
+        
+        if sysnset == None:
+            sysnset = dict()
+            
+            for language in EntitiesHierarchy.SUPPORTED_LANGUAGES:
+                sysnset[language] = set()
+        
+        if self.__tree.get_node(parent_id) == None:
+            raise Exception("Parent node with this id doesn't exist!")
+        
+        self.__tree.create_node(new_node_tag, new_node_id, parent_id, sysnset)
+    
+    def remove_node(self, node_id:str):
+
+        if node_id == EntitiesHierarchy.ROOT_ID:
+            raise Exception("Can't remove the root!")
+        
+        if self.__tree.get_node(node_id) == None:
+            raise Exception("A node with this id doesn't exist!")
+        
+        self.__tree.remove_node(node_id)
+    
+    def move_node(self, node_id:str, new_parent_id:str):
+        
+        if self.__tree.get_node(node_id) == None:
+            raise Exception("The node you want to move doesn't exist!")
+        
+        if self.__tree.get_node(new_parent_id) == None:
+            raise Exception("Parent node with this id doesn't exist!")
+        
+        self.__tree.move_node(node_id, new_parent_id)
+    
+    def add_terms_to_synset(self, node_id:str, language:str, terms:set):
+        
+        desired_node = self.__tree.get_node(node_id)
+        
+        if desired_node == None:
+            raise Exception("A node with this id doesn't exist!")
+        
+        synset = desired_node.data
+        
+        if language not in synset:
+            synset[language] = set()
+        
+        for term in terms:
+            synset[language].add(term)
+        
+        desired_node.data = synset
+    
+    def remove_terms_to_synset(self, node_id:str, language:str, terms:set):
+        
+        desired_node = self.__tree.get_node(node_id)
+        
+        if desired_node == None:
+            raise Exception("A node with this id doesn't exist!")
+        
+        synset = desired_node.data
+        
+        if language not in synset:
+            raise Exception("The synset for this node doesn't have this language!")
+        
+        for term in terms:
+            if term in synset[language]:
+                synset[language].remove(term)
+        
+        desired_node.data = synset
+    
+    def reset_synset(self, node_id:str, languages:list=None):
+        
+        desired_node = self.__tree.get_node(node_id)
+        
+        if desired_node == None:
+            raise Exception("A node with this id doesn't exist!")
+        
+        synset = desired_node.data
+        
+        if languages == None:
+            languages = synset.keys()
+        
+        for language in languages:
+            if language in synset.keys():
+                del( synset[language] )
+                synset[language] = set()
+        
+        desired_node.data = synset

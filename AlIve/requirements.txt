@@ -11,3 +11,5 @@ flask
 flask-sqlalchemy
 flask-login
 passlib
+treelib
+openai

@@ -94,6 +94,8 @@ USERS_DATA_FOLDER = ROOT_FOLDER + "/" + USERS_DATA_FOLDER_NAME + "/"
 EXAMPLE_CATEGORIES = [EXAMPLE_TRAIN_CATEGORY, EXAMPLE_VALIDATION_CATEGORY, EXAMPLE_TEST_CATEGORY]
 MODEL_TYPES = [SLC_MODEL_TYPE, TLC_MODEL_TYPE]
 
+SESSION_FIELD_NAME = "session"
+
 #endregion
 
 app = Flask(__name__, template_folder='Templates')
@@ -178,7 +180,7 @@ def signup():
 def login():
 
     json = request.json
-    
+
     needed_fields = [USERNAME_FIELD_NAME, USER_PASSWORD_FIELD_NAME]
 
     for needed_field in needed_fields:
@@ -202,17 +204,9 @@ def login():
     correct_password = user_tuple[2]
     user_email = user_tuple[3]
 
-    logged = (inserted_password == correct_password)
-    
-    if logged:
-        session[LOGGED_IN_FIELD_NAME] = True
-    else:
+    if inserted_password != correct_password:
         return compose_response("Wrong password!", code=FAILURE_CODE)
     
-    session[USER_ID_FIELD_NAME] = user_id
-    session[USERNAME_FIELD_NAME] = username
-    session[USER_EMAIL_FIELD_NAME] = user_email
-
     data = {
         USER_ID_FIELD_NAME : user_id, 
         USERNAME_FIELD_NAME : username, 
@@ -223,7 +217,6 @@ def login():
 
 @app.route('/logout')
 def logout():
-    reset_session()
     return compose_response("Logout done succesfully!")
 
 #endregion
@@ -232,6 +225,11 @@ def logout():
 
 @app.route('/create_env', methods=['POST'])
 def create_environment():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
     
     json = request.json
 
@@ -286,6 +284,11 @@ def create_environment():
 @app.route('/delete_env', methods=['POST'])
 def delete_environment():
     
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
 
     if USER_ID_FIELD_NAME not in session:
@@ -319,7 +322,12 @@ def delete_environment():
 
 @app.route('/select_env', methods=['POST'])
 def select_environment():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
 
     env_id = None
@@ -353,9 +361,7 @@ def select_environment():
         
         if len(environments) == 0:
             return compose_response("Inexisting environment!", code=FAILURE_CODE)
-        else:
-            session[ENV_ID_FIELD_NAME] = environments[0][0]
-            session[ENV_NAME_FIELD_NAME] = environments[0][1]
+        
     except:
         return compose_response("Something went wrong, couldn't select the environment...", code=FAILURE_CODE)
     
@@ -366,12 +372,39 @@ def select_environment():
     
     return compose_response("Environment selected successfully!", data)
 
+@app.route('/get_user_envs', methods=['POST'])
+def get_user_environments():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    
+    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME], 
+                                  [user_id])
+    
+    data = dict([(env[1], env[1]) for env in environments])
+
+    return compose_response("Environments fetched!", data)
+
 #endregion
 
 #region MODELS HANDLING
 
 @app.route('/create_model', methods=['POST'])
 def create_model():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
     
     json = request.json
     
@@ -457,6 +490,11 @@ def create_model():
 @app.route('/delete_model', methods=['POST'])
 def delete_model():
     
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -502,7 +540,12 @@ def delete_model():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -564,7 +607,12 @@ def predict():
 
 @app.route('/create_dataset', methods=['POST'])
 def create_dataset():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -640,6 +688,11 @@ def create_dataset():
 @app.route('/delete_dataset', methods=['POST'])
 def delete_dataset():
     
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -685,6 +738,11 @@ def delete_dataset():
 
 @app.route('/import_csv_to_dataset', methods=['POST'])
 def import_examples_to_dataset():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
     
     json = request.json
     
@@ -792,7 +850,12 @@ def import_examples_to_dataset():
 
 @app.route('/add_to_train_queue', methods=['POST'])
 def add_model_to_train_queue():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -888,7 +951,12 @@ def add_model_to_train_queue():
 
 @app.route('/remove_from_train_queue', methods=['POST'])
 def remove_session_from_train_queue():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -934,7 +1002,12 @@ def remove_session_from_train_queue():
 
 @app.route('/start_train', methods=['POST'])
 def start_train():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     if USER_ID_FIELD_NAME not in session:
         return compose_response("User not logged!", code=FAILURE_CODE)
     
@@ -1071,6 +1144,11 @@ def train_queue(user_id:int, env_id:int):
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
     
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
     if USER_ID_FIELD_NAME not in session:
         return compose_response("User not logged!", code=FAILURE_CODE)
     
@@ -1095,14 +1173,6 @@ def initialize_server():
 
     if not os.path.exists(path_to_users_data):
         os.makedirs(path_to_users_data)
-    
-def reset_session():
-    session[LOGGED_IN_FIELD_NAME] = False
-    session.pop(USER_ID_FIELD_NAME)
-    session.pop(USERNAME_FIELD_NAME)
-    session.pop(USER_EMAIL_FIELD_NAME)
-    session.pop(ENV_ID_FIELD_NAME)
-    session.pop(ENV_NAME_FIELD_NAME)
 
 #region DB UTILITIES
 

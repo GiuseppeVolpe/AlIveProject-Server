@@ -6,8 +6,8 @@ from queue import Queue
 from threading import Thread, Event
 
 import mysql.connector as mysqlconn
-from flask import Flask
-from flask import Flask, flash, redirect, render_template, request, session, abort
+from flask import Flask, jsonify, flash, redirect, render_template, request, session, abort
+from flask_cors import CORS, cross_origin
 
 import tensorflow as tf
 
@@ -97,9 +97,9 @@ MODEL_TYPES = [SLC_MODEL_TYPE, TLC_MODEL_TYPE]
 #endregion
 
 app = Flask(__name__, template_folder='Templates')
-
 app.config['UPLOAD_FOLDER'] = "UPLOAD_FOLDER"
 app.config['MAX_CONTENT-PATH'] = 1000000
+CORS(app)
 
 DB_CONNECTION = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
 
@@ -181,36 +181,33 @@ def environment_form(prediction=None):
 @app.route('/signup', methods=['POST'])
 def signup():
 
-    form = request.form
+    json = request.json
 
     needed_fields = [USERNAME_FIELD_NAME, USER_PASSWORD_FIELD_NAME, USER_EMAIL_FIELD_NAME]
 
     for needed_field in needed_fields:
-        if needed_field not in form:
-            return signup_form()
+        if needed_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
-    username = form[USERNAME_FIELD_NAME]
-    user_email = form[USER_EMAIL_FIELD_NAME]
-    user_password = form[USER_PASSWORD_FIELD_NAME]
+    username = json[USERNAME_FIELD_NAME]
+    user_email = json[USER_EMAIL_FIELD_NAME]
+    user_password = json[USER_PASSWORD_FIELD_NAME]
 
-    error_found = False
+    errors = list()
 
     if len(username) < 2:
-        flash("This username is too short!")
-        error_found = True
+        errors.append("The length of the username should be at least 2!")
     
     email_regex = "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$"
     
     if not bool( re.match(email_regex, user_email) ):
-        flash("This is not a valid email!")
-        error_found = True
+        errors.append("This is not a valid email!")
     
     if len(user_password) < 8:
-        flash("The length of the password should be at least 8!")
-        error_found = True
+        errors.append("The length of the password should be at least 8!")
     
-    if error_found:
-        return signup_form()
+    if len(errors) > 0:
+        return compose_response("Errors in the form compilation!", errors, RETURNING_ERRORS_CODE)
     
     usernames = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
                                [USERNAME_FIELD_NAME], 
@@ -218,8 +215,7 @@ def signup():
                                [username])
     
     if len(usernames) > 0:
-        flash("This username is already taken!")
-        error_found = True
+        errors.append("This username is already taken!")
     
     email_addresses = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
                                      [USER_EMAIL_FIELD_NAME], 
@@ -227,11 +223,10 @@ def signup():
                                      [user_email])
     
     if len(email_addresses) > 0:
-        flash("This email address is already taken!")
-        error_found = True
+        errors.append("This email address is already taken!")
     
-    if error_found:
-        return signup_form()
+    if len(errors) > 0:
+        return compose_response("Errors found!", errors, RETURNING_ERRORS_CODE)
     
     try:
         insert_into_db(ALIVE_DB_USERS_TABLE_NAME, 
@@ -239,30 +234,29 @@ def signup():
                        [username, user_password, user_email])
     except Exception as ex:
         print(ex)
-        flash("Couldn't add user...")
-        return signup_form()
+        return compose_response("Couldn't add user!", code=FAILURE_CODE)
     
     user_space_path = USERS_DATA_FOLDER + username + "/"
     user_environments_path = user_space_path + "/" + ENVIRONMENTS_FOLDER_NAME + "/"
 
     if not os.path.exists(user_environments_path):
         os.makedirs(user_environments_path)
-
-    return login_form()
+    
+    return compose_response("User added succesfully!")
 
 @app.route('/login', methods=['POST'])
 def login():
 
-    form = request.form
+    json = request.json
     
     needed_fields = [USERNAME_FIELD_NAME, USER_PASSWORD_FIELD_NAME]
 
     for needed_field in needed_fields:
-        if needed_field not in form:
-            return login_form()
+        if needed_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
-    username = form[USERNAME_FIELD_NAME]
-    inserted_password = form[USER_PASSWORD_FIELD_NAME]
+    username = json[USERNAME_FIELD_NAME]
+    inserted_password = json[USER_PASSWORD_FIELD_NAME]
 
     users = select_from_db(ALIVE_DB_USERS_TABLE_NAME, 
                            ["*"], 
@@ -270,8 +264,7 @@ def login():
                            [username])
     
     if len(users) == 0:
-        flash("This user doesn't exist!")
-        return login_form()
+        return compose_response("This user doesn't exist!", code=FAILURE_CODE)
     
     user_tuple = users[0]
     
@@ -284,18 +277,24 @@ def login():
     if logged:
         session[LOGGED_IN_FIELD_NAME] = True
     else:
-        flash('wrong password!')
+        return compose_response("Wrong password!", code=FAILURE_CODE)
     
     session[USER_ID_FIELD_NAME] = user_id
     session[USERNAME_FIELD_NAME] = username
     session[USER_EMAIL_FIELD_NAME] = user_email
+
+    data = {
+        USER_ID_FIELD_NAME : user_id, 
+        USERNAME_FIELD_NAME : username, 
+        USER_EMAIL_FIELD_NAME : user_email
+    }
     
-    return environment_selection_form()
+    return compose_response("Login done succesfully!", data)
 
 @app.route('/logout')
 def logout():
     reset_session()
-    return login_form()
+    return compose_response("Logout done succesfully!")
 
 #endregion
 
@@ -304,22 +303,21 @@ def logout():
 @app.route('/create_env', methods=['POST'])
 def create_environment():
     
-    form = request.form
+    json = request.json
 
     if USER_ID_FIELD_NAME not in session:
-        return login()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
-    if ENV_NAME_FIELD_NAME not in form:
-        return environment_selection_form()
+    if ENV_NAME_FIELD_NAME not in json:
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
-    env_name = form[ENV_NAME_FIELD_NAME]
-    public = PUBLIC_FIELD_NAME in form
+    env_name = json[ENV_NAME_FIELD_NAME]
+    public = PUBLIC_FIELD_NAME in json
     
     if len(env_name) < 2:
-        print("Invaild name!")
-        return environment_selection_form()
+        return compose_response("The length of the name should be at least 2!", code=FAILURE_CODE)
     
     try:
         environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
@@ -335,8 +333,7 @@ def create_environment():
                 max_env_id = environment[0]
 
             if environment[1] == env_name:
-                print("An environment with this name already exists!")
-                return environment_selection_form()
+                return compose_response("An environment with this name already exists!", code=FAILURE_CODE)
         
         new_env_id = max_env_id + 1
 
@@ -352,23 +349,23 @@ def create_environment():
                         ENV_PATH_FIELD_NAME, PUBLIC_FIELD_NAME], 
                        [user_id, new_env_id, env_name, path_to_env, public])
     except:
-        print("Something went wrong, couldn't create the environment...")
+        return compose_response("Something went wrong, couldn't create the environment...", code=FAILURE_CODE)
     
-    return environment_selection_form()
+    return compose_response("Environment created succesfully!")
 
 @app.route('/delete_env', methods=['POST'])
 def delete_environment():
     
-    form = request.form
+    json = request.json
 
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
-    if ENV_NAME_FIELD_NAME not in form:
-        return environment_selection_form()
+    if ENV_NAME_FIELD_NAME not in json:
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
-    env_name = form[ENV_NAME_FIELD_NAME]
+    env_name = json[ENV_NAME_FIELD_NAME]
     
     try:
         environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
@@ -377,8 +374,7 @@ def delete_environment():
                                       [user_id, env_name])
         
         if len(environments) == 0:
-            print("An environment with this name doesn't exist!")
-            return environment_selection_form()
+            return compose_response("An environment with this name doesn't exist!", code=FAILURE_CODE)
         
         path_to_env = environments[0][0]
         shutil.rmtree(path_to_env)
@@ -387,49 +383,58 @@ def delete_environment():
                        [USER_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
                        [user_id, env_name])
     except:
-        print("Something went wrong, couldn't delete the environment...")
+        return compose_response("Something went wrong, couldn't delete the environment...", code=FAILURE_CODE)
     
-    return environment_selection_form()
+    return compose_response("Environment deleted succesfully!")
 
 @app.route('/select_env', methods=['POST'])
 def select_environment():
 
-    form = request.form
+    json = request.json
 
     env_id = None
     env_name = None
     
-    if ENV_ID_FIELD_NAME in form:
-        env_id = form[ENV_ID_FIELD_NAME]
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
-    if ENV_NAME_FIELD_NAME in form:
-        env_name = form[ENV_NAME_FIELD_NAME]
+    user_id = session[USER_ID_FIELD_NAME]
+    
+    if ENV_ID_FIELD_NAME in json:
+        env_id = json[ENV_ID_FIELD_NAME]
+    
+    if ENV_NAME_FIELD_NAME in json:
+        env_name = json[ENV_NAME_FIELD_NAME]
     
     if env_id == None and env_name == None:
-        print("No env identifier given!")
-        return environment_selection_form()
+        return compose_response("No environment given!", code=MISSING_FIELDS_CODE)
     
     try:
         if env_id != None:
             environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                        [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                        [ENV_ID_FIELD_NAME], 
-                                        [env_id])
+                                          [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                          [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
+                                          [user_id, env_id])
         elif env_name != None:
             environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                        [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                        [ENV_NAME_FIELD_NAME], 
-                                        [env_name])
+                                          [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                          [USER_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                          [user_id, env_name])
         
         if len(environments) == 0:
-            print("Inexisting environment!")
+            return compose_response("Inexisting environment!", code=FAILURE_CODE)
         else:
             session[ENV_ID_FIELD_NAME] = environments[0][0]
             session[ENV_NAME_FIELD_NAME] = environments[0][1]
     except:
-        print("Something went wrong, couldn't load the environment...")
+        return compose_response("Something went wrong, couldn't select the environment...", code=FAILURE_CODE)
     
-    return environment_form()
+    data = {
+        ENV_ID_FIELD_NAME : environments[0][0],
+        ENV_NAME_FIELD_NAME : environments[0][1]
+    }
+    
+    return compose_response("Environment selected successfully!", data)
 
 #endregion
 
@@ -438,37 +443,36 @@ def select_environment():
 @app.route('/create_model', methods=['POST'])
 def create_model():
     
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     needed_form_fields = [MODEL_NAME_FIELD_NAME, MODEL_TYPE_FIELD_NAME, 
                           BASEMODEL_FIELD_NAME, OUTPUT_SHAPE_FIELD_NAME, 
                           DROPOUT_RATE_FIELD_NAME, OPTIMIZER_LR_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            print("Incomplete form recieved!")
-            return environment_form()
+        if needed_form_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
     envid = session[ENV_ID_FIELD_NAME]
     env_name = session[ENV_NAME_FIELD_NAME]
-    model_name = form[MODEL_NAME_FIELD_NAME]
-    model_type = form[MODEL_TYPE_FIELD_NAME]
-    finetunable = FINETUNABLE_FIELD_NAME in form
-    base_model = form[BASEMODEL_FIELD_NAME]
-    output_shape = int(form[OUTPUT_SHAPE_FIELD_NAME])
-    encoder_trainable = ENCODER_TRAINABLE_FIELD_NAME in form
-    dropout_rate = float(form[DROPOUT_RATE_FIELD_NAME])
-    optimizer_lr = float(form[OPTIMIZER_LR_FIELD_NAME])
+    model_name = json[MODEL_NAME_FIELD_NAME]
+    model_type = json[MODEL_TYPE_FIELD_NAME]
+    finetunable = FINETUNABLE_FIELD_NAME in json
+    base_model = json[BASEMODEL_FIELD_NAME]
+    output_shape = int(json[OUTPUT_SHAPE_FIELD_NAME])
+    encoder_trainable = ENCODER_TRAINABLE_FIELD_NAME in json
+    dropout_rate = float(json[DROPOUT_RATE_FIELD_NAME])
+    optimizer_lr = float(json[OPTIMIZER_LR_FIELD_NAME])
     additional_metrics = []
-    public = PUBLIC_FIELD_NAME in form
+    public = PUBLIC_FIELD_NAME in json
     
     try:
         encoder_link, preprocess_link = get_handle_preprocess_link(base_model)
@@ -486,8 +490,7 @@ def create_model():
                 max_id = model[0]
             
             if model[1] == model_name:
-                print("A model with this name already exists in this environment!")
-                return environment_form()
+                return compose_response("A model with this name already exists in this environment!", code=FAILURE_CODE)
         
         new_model_id = max_id + 1
 
@@ -516,35 +519,34 @@ def create_model():
                         MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, PUBLIC_FIELD_NAME], 
                         [user_id, envid, new_model_id, model_name, path_to_model, model_type, public])
     except Exception as ex:
-        print("Something went wrong, couldn't create the model... {}".format(ex))
+        print(ex)
+        return compose_response("Something went wrong, couldn't create the model...", code=FAILURE_CODE)
     
-    return environment_form()
+    return compose_response("Model created succesfully!")
 
 @app.route('/delete_model', methods=['POST'])
 def delete_model():
     
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
-    if MODEL_NAME_FIELD_NAME not in form:
-        print("Incomplete form recieved, the name of the model is not specified...")
-        return environment_form()
+    if MODEL_NAME_FIELD_NAME not in json:
+        return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
-    model_name = form[MODEL_NAME_FIELD_NAME]
+    model_name = json[MODEL_NAME_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
     if key in TRAINING_SESSIONS.keys():
         if TRAINING_SESSIONS[key].is_alive():
-            print("This function is disabled when training is in progress.")
-            return environment_form()
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
         models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
@@ -553,8 +555,7 @@ def delete_model():
                                 [user_id, env_id, model_name])
         
         if len(models) == 0:
-            print("A model with this name doesn't exist!")
-            return environment_form()
+            return compose_response("A model with this name doesn't exist!", code=FAILURE_CODE)
         
         path_to_model = models[0][0]
         
@@ -565,39 +566,37 @@ def delete_model():
         if os.path.exists(path_to_model) and os.path.isdir(path_to_model):
             shutil.rmtree(path_to_model)
     except:
-        print("Something went wrong, couldn't delete the environment...")
+        return compose_response("Something went wrong, couldn't delete the model...", code=FAILURE_CODE)
     
-    return environment_form()
+    return compose_response("Model deleted succesfully!")
 
 @app.route('/predict', methods=['POST'])
 def predict():
 
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     needed_form_fields = [MODEL_NAME_FIELD_NAME, SENTENCE_TO_PREDICT_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            print("Incomplete form recieved...")
-            return environment_form()
+        if needed_form_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
-    model_name = form[MODEL_NAME_FIELD_NAME]
-    sent_to_predict = form[SENTENCE_TO_PREDICT_FIELD_NAME]
+    model_name = json[MODEL_NAME_FIELD_NAME]
+    sent_to_predict = json[SENTENCE_TO_PREDICT_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
     if key in TRAINING_SESSIONS.keys():
         if TRAINING_SESSIONS[key].is_alive():
-            print("This function is disabled when training is in progress.")
-            return environment_form()
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
         models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
@@ -607,8 +606,7 @@ def predict():
                                  [user_id, env_id, model_name])
         
         if len(models) == 0:
-            print("No model with this name found!")
-            return environment_form()
+            return compose_response("No model with this name found!", code=FAILURE_CODE)
         
         model = models[0]
         
@@ -622,11 +620,13 @@ def predict():
         
         new_model = LOADED_MODELS[key]
         
-        return environment_form(str(new_model.predict([sent_to_predict])))
+        data = {
+            "prediction" : str(new_model.predict([sent_to_predict]))
+        }
+
+        return compose_response("Prediction done successfully!", data)
     except:
-        print("Something went wrong during the prediction...")
-    
-    return environment_form()
+        return compose_response("Something went wrong during the prediction...", code=FAILURE_CODE)
 
 #endregion
 
@@ -635,32 +635,30 @@ def predict():
 @app.route('/create_dataset', methods=['POST'])
 def create_dataset():
 
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     needed_form_fields = [DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            print("Incomplete form recieved!")
-            return environment_form()
+        if needed_form_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     env_name = session[ENV_NAME_FIELD_NAME]
-    dataset_name = form[DATASET_NAME_FIELD_NAME]
-    dataset_type = form[DATASET_TYPE_FIELD_NAME]
-    public = PUBLIC_FIELD_NAME in form
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
+    dataset_type = json[DATASET_TYPE_FIELD_NAME]
+    public = PUBLIC_FIELD_NAME in json
     
     if len(dataset_name) < 2:
-        print("Invaild name!")
-        return environment_form()
+        return compose_response("The length of the name should be at least 2!", code=FAILURE_CODE)
     
     try:
         datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
@@ -676,8 +674,7 @@ def create_dataset():
                 max_dataset_id = dataset[0]
 
             if dataset[1] == dataset_name:
-                print("A dataset with this name already exists in this environment!")
-                return environment_form()
+                return compose_response("A dataset with this name already exists in this environment!", code=FAILURE_CODE)
         
         new_dataset_id = max_dataset_id + 1
 
@@ -690,8 +687,7 @@ def create_dataset():
         elif dataset_type == TLC_MODEL_TYPE:
             dataframe = pd.DataFrame({SENTENCE_IDX_FIELD_NAME:[], WORD_FIELD_NAME:[], EXAMPLE_CATEGORY_FIELD_NAME:[]})
         else:
-            print("Invalid dataset type!")
-            return environment_form()
+            return compose_response("Invalid dataset type!", code=FAILURE_CODE)
         
         if os.path.exists(dataset_folder):
             shutil.rmtree(dataset_folder)
@@ -707,35 +703,33 @@ def create_dataset():
                          dataset_name, path_to_dataset, dataset_type, 
                          public])
     except:
-        print("Something went wrong, couldn't create the dataset...")
+        return compose_response("Something went wrong, couldn't create the dataset...", code=FAILURE_CODE)
     
-    return environment_form()
+    return compose_response("Dataset created succesfully!")
 
 @app.route('/delete_dataset', methods=['POST'])
 def delete_dataset():
     
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
-    if DATASET_NAME_FIELD_NAME not in form:
-        print("Incomplete form recieved, the name of the dataset is not specified...")
-        return environment_form()
+    if DATASET_NAME_FIELD_NAME not in json:
+        return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
-    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
     if key in TRAINING_SESSIONS.keys():
         if TRAINING_SESSIONS[key].is_alive():
-            print("This function is disabled when training is in progress.")
-            return environment_form()
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
         datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
@@ -744,8 +738,7 @@ def delete_dataset():
                                   [user_id, env_id, dataset_name])
         
         if len(datasets) == 0:
-            print("A dataset with this name doesn't exist!")
-            return environment_form()
+            return compose_response("A dataset with this name doesn't exist!", code=FAILURE_CODE)
         
         path_to_dataset = datasets[0][0]
         
@@ -756,49 +749,46 @@ def delete_dataset():
         if os.path.exists(path_to_dataset):
             os.remove(path_to_dataset)
     except:
-        print("Something went wrong, couldn't delete the dataset...")
+        return compose_response("Something went wrong, couldn't delete the dataset...", code=FAILURE_CODE)
     
-    return environment_form()
+    return compose_response("Dataset deleted succesfully!")
 
 @app.route('/import_csv_to_dataset', methods=['POST'])
 def import_examples_to_dataset():
     
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     needed_form_fields = [DATASET_NAME_FIELD_NAME, EXAMPLE_CATEGORY_FIELD_NAME, 
                           TEXT_COLUMN_NAME_FIELD_NAME, SENTENCE_IDX_COLUMN_NAME_FIELD_NAME, 
                           WORD_COLUMN_NAME_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            print("Incomplete form recieved!")
-            return environment_form()
+        if needed_form_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     if DATASET_CSV_FIELD_NAME not in request.files:
-        print("No file uploaded!")
-        return environment_form()
+        return compose_response("Didn't recieve needed file!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
 
-    dataset_name = form[DATASET_NAME_FIELD_NAME]
-    category = form[EXAMPLE_CATEGORY_FIELD_NAME]
-    text_column_name = form[TEXT_COLUMN_NAME_FIELD_NAME]
-    sentence_idx_column_name = form[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
-    word_column_name = form[WORD_COLUMN_NAME_FIELD_NAME]
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
+    category = json[EXAMPLE_CATEGORY_FIELD_NAME]
+    text_column_name = json[TEXT_COLUMN_NAME_FIELD_NAME]
+    sentence_idx_column_name = json[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
+    word_column_name = json[WORD_COLUMN_NAME_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
     if key in TRAINING_SESSIONS.keys():
         if TRAINING_SESSIONS[key].is_alive():
-            print("This function is disabled when training is in progress.")
-            return environment_form()
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
         datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
@@ -807,8 +797,7 @@ def import_examples_to_dataset():
                                   [user_id, env_id, dataset_name])
         
         if len(datasets) == 0:
-            print("A dataset with this name doesn't exist!")
-            return environment_form()
+            return compose_response("A dataset with this name doesn't exist!", code=FAILURE_CODE)
         
         existing_dataset = datasets[0]
 
@@ -839,8 +828,7 @@ def import_examples_to_dataset():
         
         for needed_field in needed_fields:
             if needed_field not in imported_dataset.columns:
-                print("Trying to import from an invalid dataframe!")
-                return environment_form()
+                return compose_response("Trying to import from an invalid dataframe!", code=FAILURE_CODE)
 
         for column in imported_dataset.columns:
             if column not in existing_dataset.columns:
@@ -864,9 +852,9 @@ def import_examples_to_dataset():
         
         existing_dataset.to_pickle(existing_dataset_path)
     except:
-        print("Something went wrong, couldn't import this file to the dataset...")
+        return compose_response("Trying to import from an invalid dataframe!", code=FAILURE_CODE)
     
-    return environment_form()
+    return compose_response("Examples imported succesfully!")
 
 #endregion
 
@@ -875,39 +863,37 @@ def import_examples_to_dataset():
 @app.route('/add_to_train_queue', methods=['POST'])
 def add_model_to_train_queue():
 
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     needed_form_fields = [MODEL_NAME_FIELD_NAME, DATASET_NAME_FIELD_NAME, 
                           TARGETS_FIELD_NAME, NUM_OF_EPOCHS_FIELD_NAME, 
                           BATCH_SIZE_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
-        if needed_form_field not in form:
-            print("Incomplete form recieved!")
-            return environment_form()
+        if needed_form_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     username = session[USERNAME_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     env_name = session[ENV_NAME_FIELD_NAME]
-    model_name = form[MODEL_NAME_FIELD_NAME]
-    dataset_name = form[DATASET_NAME_FIELD_NAME]
-    target = form[TARGETS_FIELD_NAME]
-    num_of_epochs = form[NUM_OF_EPOCHS_FIELD_NAME]
-    batch_size = form[BATCH_SIZE_FIELD_NAME]
+    model_name = json[MODEL_NAME_FIELD_NAME]
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
+    target = json[TARGETS_FIELD_NAME]
+    num_of_epochs = json[NUM_OF_EPOCHS_FIELD_NAME]
+    batch_size = json[BATCH_SIZE_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
     if key in TRAINING_SESSIONS.keys():
         if TRAINING_SESSIONS[key].is_alive():
-            print("This function is disabled when training is in progress.")
-            return environment_form()
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
         models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
@@ -916,8 +902,7 @@ def add_model_to_train_queue():
                                 [user_id, env_id, model_name])
         
         if len(models) == 0:
-            print("A model with this name doesn't exist!")
-            return environment_form()
+            return compose_response("A model with this name doesn't exist!", code=FAILURE_CODE)
         
         model_id = models[0][0]
         model_type = models[0][1]
@@ -929,15 +914,13 @@ def add_model_to_train_queue():
                                   [user_id, env_id, dataset_name])
         
         if len(datasets) == 0:
-            print("A dataset with this name doesn't exist!")
-            return environment_form()
+            return compose_response("A dataset with this name doesn't exist!", code=FAILURE_CODE)
         
         dataset_id = datasets[0][0]
         dataset_type = datasets[0][1]
 
         if model_type != dataset_type:
-            print("Can't add to train queue, dataset type is invalid!")
-            return environment_form()
+            return compose_response("Can't add to train queue, dataset type is invalid!", code=FAILURE_CODE)
         
         queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                                            [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME], 
@@ -952,8 +935,7 @@ def add_model_to_train_queue():
                 max_id = training_session[0]
             
             if model_id == training_session[1] and not model_finetunable:
-                print("Can't add this model, it is already in queue and not finetunable!")
-                return environment_form()
+                return compose_response("Can't add this model, it is already in queue and not finetunable!", code=FAILURE_CODE)
             
         new_id = max_id + 1
 
@@ -970,35 +952,33 @@ def add_model_to_train_queue():
                          model_id, dataset_id, target, 
                          num_of_epochs, batch_size, checkpoint_path])
     except:
-        print("Something went wrong, couldn't add to train queue...")
+        return compose_response("Something went wrong, couldn't add to train queue...", code=FAILURE_CODE)
     
-    return environment_form()
+    return compose_response("Successfully added to train queue!")
 
 @app.route('/remove_from_train_queue', methods=['POST'])
 def remove_session_from_train_queue():
 
-    form = request.form
+    json = request.json
     
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
-    if QUEUE_INDEX_FIELD_NAME not in form:
-        print("Incomplete form recieved, the train session to delete is not specified...")
-        return environment_form()
+    if QUEUE_INDEX_FIELD_NAME not in json:
+        return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
-    queue_index = form[QUEUE_INDEX_FIELD_NAME]
+    queue_index = json[QUEUE_INDEX_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
     if key in TRAINING_SESSIONS.keys():
         if TRAINING_SESSIONS[key].is_alive():
-            print("This function is disabled when training is in progress.")
-            return environment_form()
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
         training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
@@ -1007,8 +987,7 @@ def remove_session_from_train_queue():
                                            [user_id, env_id, queue_index])
         
         if len(training_sessions) == 0:
-            print("There is no training session at this index!")
-            return environment_form()
+            return compose_response("There is no training session at this index!", code=FAILURE_CODE)
         
         checkpoint_path = training_sessions[0][0]
 
@@ -1019,18 +998,18 @@ def remove_session_from_train_queue():
         if os.path.exists(checkpoint_path) and os.path.isdir(checkpoint_path):
             shutil.rmtree(checkpoint_path)
     except:
-        print("Something went wrong, couldn't remove the training session from the queue...")
+        return compose_response("Something went wrong, couldn't remove the training session from the queue...", code=FAILURE_CODE)
     
-    return environment_form()
+    return compose_response("Succesfully removed training session!")
 
 @app.route('/start_train', methods=['POST'])
 def start_train():
 
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
     
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
@@ -1039,8 +1018,7 @@ def start_train():
 
     if key in TRAINING_SESSIONS.keys():
         if TRAINING_SESSIONS[key].is_alive():
-            print("Training is already in progress!")
-            return environment_form()
+            return compose_response("Training is already in progress!", code=FAILURE_CODE)
         else:
             del(TRAINING_SESSIONS[key])
     
@@ -1050,7 +1028,7 @@ def start_train():
 
     TRAINING_SESSIONS[key] = training_thread
 
-    return environment_form()
+    return compose_response("Training started succesfully!")
 
 def train_queue(user_id:int, env_id:int):
 
@@ -1162,23 +1140,22 @@ def train_queue(user_id:int, env_id:int):
 
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
-
+    
     if USER_ID_FIELD_NAME not in session:
-        return login_form()
+        return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
-    
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
+        
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
     if key not in TRAINING_SESSIONS.keys():
-        return environment_form()
+        return compose_response("Training is not running!")
     
-    print("Stop not implemented!")
-    return environment_form()
+    return compose_response("Stop not implemented!", code=FAILURE_CODE)
 
 #endregion
 
@@ -1463,6 +1440,22 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
         cursor.execute(update_epochs_left_query)
         self.__connection.commit()
         cursor.close()
+
+#region FRONT COMMUNICATION
+
+SUCCESS_CODE = 1
+FAILURE_CODE = 1000
+MISSING_FIELDS_CODE = 1001
+RETURNING_ERRORS_CODE = 1002
+
+def compose_response(message:str, data=None, code:int=SUCCESS_CODE):
+    return jsonify({
+        "code" : code,
+        "message" : message,
+        "data" : data
+    })
+
+#endregion
 
 if __name__ == "__main__":
     initialize_server()

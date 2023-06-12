@@ -10,6 +10,7 @@ mysql-connector-python
 flask
 flask-sqlalchemy
 flask-login
+flask-cors
 passlib
 treelib
 openai

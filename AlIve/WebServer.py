@@ -15,7 +15,9 @@ from ModelsAndDatasets import *
 
 #region CONSTS
 
-LOGGED_IN_FIELD_NAME = "logged_in"
+MIN_USERNAME_LENGTH = 2
+MIN_PASSWORD_LENGTH = 8
+
 USER_ID_FIELD_NAME = "user_id"
 USERNAME_FIELD_NAME = "username"
 USER_PASSWORD_FIELD_NAME = "user_password"
@@ -127,16 +129,16 @@ def signup():
 
     errors = list()
 
-    if len(username) < 2:
-        errors.append("The length of the username should be at least 2!")
+    if len(username) < MIN_USERNAME_LENGTH:
+        errors.append("The length of the username should be at least {}!".format(MIN_USERNAME_LENGTH))
     
     email_regex = "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$"
     
     if not bool( re.match(email_regex, user_email) ):
         errors.append("This is not a valid email!")
     
-    if len(user_password) < 8:
-        errors.append("The length of the password should be at least 8!")
+    if len(user_password) < MIN_PASSWORD_LENGTH:
+        errors.append("The length of the password should be at least {}!".format(MIN_PASSWORD_LENGTH))
     
     if len(errors) > 0:
         return compose_response("Errors in the form compilation!", errors, RETURNING_ERRORS_CODE)
@@ -373,7 +375,7 @@ def select_environment():
     return compose_response("Environment selected successfully!", data)
 
 @app.route('/get_user_envs', methods=['POST'])
-def get_user_environments():
+def get_user_envs():
 
     if SESSION_FIELD_NAME not in request.json:
         return compose_response("Couldn't find session!", code=FAILURE_CODE)
@@ -390,7 +392,7 @@ def get_user_environments():
                                   [USER_ID_FIELD_NAME], 
                                   [user_id])
     
-    data = dict([(env[1], env[1]) for env in environments])
+    data = [{"value" : {"id" : env[0], "name" : env[1]}, "text" : env[1]} for env in environments]
 
     return compose_response("Environments fetched!", data)
 
@@ -600,6 +602,32 @@ def predict():
         return compose_response("Prediction done successfully!", data)
     except:
         return compose_response("Something went wrong during the prediction...", code=FAILURE_CODE)
+
+@app.route('/get_env_models', methods=['POST'])
+def get_env_models():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                            [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                            [user_id, env_id])
+    
+    data = [{"value" : {"id" : model[0], "name" : model[1]}, "text" : model[1]} for model in models]
+
+    return compose_response("Models fetched!", data)
 
 #endregion
 
@@ -843,6 +871,32 @@ def import_examples_to_dataset():
         return compose_response("Trying to import from an invalid dataframe!", code=FAILURE_CODE)
     
     return compose_response("Examples imported succesfully!")
+
+@app.route('/get_env_datasets', methods=['POST'])
+def get_env_datasets():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    datasets = select_from_db(ALIVE_DB_MODELS_TABLE_NAME,
+                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                              [user_id, env_id])
+    
+    data = [{"value" : {"id" : dataset[0], "name" : dataset[1]}, "text" : dataset[1]} for dataset in datasets]
+
+    return compose_response("Datasets fetched!", data)
 
 #endregion
 
@@ -1459,5 +1513,5 @@ def compose_response(message:str, data=None, code:int=SUCCESS_CODE):
 
 if __name__ == "__main__":
     initialize_server()
-    app.secret_key = os.urandom(12)
+    #app.secret_key = os.urandom(12)
     app.run(debug=False,host='0.0.0.0', port=5000)

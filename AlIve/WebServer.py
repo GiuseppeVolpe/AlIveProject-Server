@@ -621,11 +621,11 @@ def get_env_models():
     env_id = session[ENV_ID_FIELD_NAME]
     
     models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                            [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                            [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
                             [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
                             [user_id, env_id])
     
-    data = [{"value" : {"id" : model[0], "name" : model[1]}, "text" : model[1]} for model in models]
+    data = [{"value" : {"id" : model[0], "name" : model[1], "type": model[2]}, "text" : model[1]} for model in models]
 
     return compose_response("Models fetched!", data)
 
@@ -889,12 +889,12 @@ def get_env_datasets():
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     
-    datasets = select_from_db(ALIVE_DB_MODELS_TABLE_NAME,
-                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME,
+                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME], 
                               [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
                               [user_id, env_id])
     
-    data = [{"value" : {"id" : dataset[0], "name" : dataset[1]}, "text" : dataset[1]} for dataset in datasets]
+    data = [{"value" : {"id" : dataset[0], "name" : dataset[1], "type": dataset[2]}, "text" : dataset[1]} for dataset in datasets]
 
     return compose_response("Datasets fetched!", data)
 
@@ -1218,6 +1218,33 @@ def stop_train():
         return compose_response("Training is not running!")
     
     return compose_response("Stop not implemented!", code=FAILURE_CODE)
+
+#endregion
+
+#region OTHER APIS
+
+@app.route('/fetch_available_model_types', methods=['POST'])
+def fetch_available_model_types():
+    
+    data = [{"value" : model_type, "text" : model_type} for model_type in MODEL_TYPES]
+
+    return compose_response("Model types fetched!", data)
+
+@app.route('/fetch_available_base_models', methods=['POST'])
+def fetch_available_base_models():
+
+    base_models = get_available_base_models()
+    
+    data = [{"value" : base_model, "text" : base_model} for base_model in base_models]
+
+    return compose_response("Base models fetched!", data)
+
+@app.route('/fetch_available_example_categories', methods=['POST'])
+def fetch_available_example_categories():
+
+    data = [{"value" : example_category, "text" : example_category} for example_category in EXAMPLE_CATEGORIES]
+
+    return compose_response("Example categories fetched!", data)
 
 #endregion
 

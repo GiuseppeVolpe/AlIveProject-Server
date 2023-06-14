@@ -766,13 +766,20 @@ def delete_dataset():
 
 @app.route('/import_csv_to_dataset', methods=['POST'])
 def import_examples_to_dataset():
-    
-    if SESSION_FIELD_NAME not in request.json:
+
+    #region Composing session
+
+    if USER_ID_FIELD_NAME not in request.form or ENV_ID_FIELD_NAME not in request.form:
         return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
-    session = request.json[SESSION_FIELD_NAME]
+    session = {
+        USER_ID_FIELD_NAME : request.form[USER_ID_FIELD_NAME], 
+        ENV_ID_FIELD_NAME : request.form[ENV_ID_FIELD_NAME]
+    }
+
+    #endregion
     
-    json = request.json
+    form = request.form
     
     if USER_ID_FIELD_NAME not in session:
         return compose_response("User not logged!", code=FAILURE_CODE)
@@ -785,7 +792,7 @@ def import_examples_to_dataset():
                           WORD_COLUMN_NAME_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
-        if needed_form_field not in json:
+        if needed_form_field not in form:
             return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     if DATASET_CSV_FIELD_NAME not in request.files:
@@ -794,11 +801,13 @@ def import_examples_to_dataset():
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
 
-    dataset_name = json[DATASET_NAME_FIELD_NAME]
-    category = json[EXAMPLE_CATEGORY_FIELD_NAME]
-    text_column_name = json[TEXT_COLUMN_NAME_FIELD_NAME]
-    sentence_idx_column_name = json[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
-    word_column_name = json[WORD_COLUMN_NAME_FIELD_NAME]
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    category = form[EXAMPLE_CATEGORY_FIELD_NAME]
+    text_column_name = form[TEXT_COLUMN_NAME_FIELD_NAME]
+    sentence_idx_column_name = form[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
+    word_column_name = form[WORD_COLUMN_NAME_FIELD_NAME]
+    
+    infile = request.files[DATASET_CSV_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
@@ -822,8 +831,6 @@ def import_examples_to_dataset():
         existing_dataset_path = existing_dataset[2]
 
         existing_dataset = pd.read_pickle(existing_dataset_path)
-        
-        infile = request.files[DATASET_CSV_FIELD_NAME]
         imported_dataset = pd.read_csv(infile, keep_default_na=False)
         
         if text_column_name in imported_dataset.columns:

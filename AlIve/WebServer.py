@@ -1226,6 +1226,34 @@ def stop_train():
     
     return compose_response("Stop not implemented!", code=FAILURE_CODE)
 
+@app.route('/get_training_sessions', methods=['POST'])
+def get_training_sessions():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
+                              [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                              [user_id, env_id])
+    
+    data = [{"value" : {"id" : training_session[0], "model_name" : training_session[1], "dataset_name": training_session[2]}, 
+             "text" : training_session[1]} 
+             for training_session in training_sessions]
+
+    return compose_response("Training sessions fetched!", data)
+
 #endregion
 
 #region OTHER APIS

@@ -1249,7 +1249,7 @@ def get_training_sessions():
                               [user_id, env_id])
     
     data = [{"value" : {"id" : training_session[0], "model_name" : training_session[1], "dataset_name": training_session[2]}, 
-             "text" : training_session[1]} 
+             "text" : "{} - {}".format(training_session[1], training_session[2])} 
              for training_session in training_sessions]
 
     return compose_response("Training sessions fetched!", data)
@@ -1343,7 +1343,7 @@ def select_from_db(table_name:str, needed_fields:list=None,
             
             query += field_value
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
@@ -1389,7 +1389,7 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list,
     
     query += ")"
 
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1464,7 +1464,7 @@ def update_db(table_name:str,
             
             query += field_value
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1509,7 +1509,7 @@ def delete_from_db(table_name:str, given_fields:list=None, given_values:list=Non
             
             query += field_value
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1519,7 +1519,7 @@ def execute_custom_update_query(query, connection:mysqlconn.MySQLConnection=None
     if connection == None:
         connection = DB_CONNECTION
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1552,7 +1552,7 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
         update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + str(env_id) + " AND "
         update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + str(current_queue_index)
         
-        cursor = self.__connection.cursor()
+        cursor = self.__connection.cursor(buffered=True)
         cursor.execute(update_epochs_left_query)
         self.__connection.commit()
         cursor.close()

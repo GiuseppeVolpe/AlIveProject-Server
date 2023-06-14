@@ -995,7 +995,7 @@ def add_model_to_train_queue():
 
         path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
         path_to_training_sessions = path_to_env + TRAINING_SESSIONS_FOLDER_NAME + "/"
-        checkpoint_name = str(model_id) + str(dataset_id) + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+        checkpoint_name = str(model_id) + "_" + str(dataset_id) + "_" + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
         checkpoint_path = path_to_training_sessions + checkpoint_name + "/"
         
         insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 

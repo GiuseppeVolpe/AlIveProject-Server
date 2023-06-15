@@ -13,6 +13,8 @@ import tensorflow as tf
 
 from ModelsAndDatasets import *
 
+import socketio
+
 #region CONSTS
 
 MIN_USERNAME_LENGTH = 2
@@ -1095,7 +1097,7 @@ def start_train():
     return compose_response("Training started succesfully!")
 
 def train_queue(user_id:int, env_id:int):
-
+    
     connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
@@ -1202,6 +1204,25 @@ def train_queue(user_id:int, env_id:int):
     
     print("\nTraining is over.\n")
 
+@app.route('/is_training_in_progress', methods=['POST'])
+def is_training_in_progress():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAINING_SESSIONS.keys():
+        if TRAINING_SESSIONS[key].is_alive():
+            return compose_response("Training is in progress!", data=True)
+        else:
+            return compose_response("Training is not in progress!", data=False)
+
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
     
@@ -1243,16 +1264,57 @@ def get_training_sessions():
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     
-    training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
-                              [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
-                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
-                              [user_id, env_id])
-    
-    data = [{"value" : {"id" : training_session[0], "model_name" : training_session[1], "dataset_name": training_session[2]}, 
-             "text" : "{} - {}".format(training_session[1], training_session[2])} 
-             for training_session in training_sessions]
+    try:
+        training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
+                                           [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
+                                            NUM_OF_EPOCHS_FIELD_NAME, BATCH_SIZE_FIELD_NAME], 
+                                           [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                                           [user_id, env_id])
+        
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME,
+                                [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME],
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                                [user_id, env_id])
+        
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME,
+                                  [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME],
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                                  [user_id, env_id])
+        
+        model_names = dict()
+        dataset_names = dict()
 
-    return compose_response("Training sessions fetched!", data)
+        for model in models:
+            model_id = model[0]
+            model_name = model[1]
+            model_names[model_id] = model_name
+        
+        for dataset in datasets:
+            dataset_id = dataset[0]
+            dataset_name = dataset[1]
+            dataset_names[dataset_id] = dataset_name
+        
+        data = list()
+
+        for training_session in training_sessions:
+            id = training_session[0]
+            model_id = training_session[1]
+            dataset_id = training_session[2]
+            model_name = model_names[model_id]
+            dataset_name = dataset_names[dataset_id]
+            num_of_epochs = training_session[3]
+            batch_size = training_session[4]
+
+            value = {"id" : id, "model_name" : model_name, "dataset_name" : dataset_name, 
+                     "num_of_epochs" : num_of_epochs, "batch_size" : batch_size}
+            
+            text = "{} - {}".format(model_name, dataset_name)
+
+            data.append({"value" : value, "text" : text})
+        print(data)
+        return compose_response("Training sessions fetched!", data)
+    except:
+        return compose_response("Couldn't fetch training sessions...", code=FAILURE_CODE)
 
 #endregion
 

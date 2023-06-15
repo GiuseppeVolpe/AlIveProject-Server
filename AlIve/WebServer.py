@@ -3,17 +3,15 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import re
 from queue import Queue
-from threading import Thread, Event
+from threading import Thread
 
 import mysql.connector as mysqlconn
-from flask import Flask, jsonify, flash, redirect, render_template, request, session, abort
-from flask_cors import CORS, cross_origin
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 import tensorflow as tf
 
 from ModelsAndDatasets import *
-
-import socketio
 
 #region CONSTS
 

@@ -630,6 +630,56 @@ def get_env_models():
 
     return compose_response("Models fetched!", data)
 
+@app.route('/get_model_training_graphs', methods=['POST'])
+def get_model_training_graphs():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+
+    json = request.json
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    if MODEL_NAME_FIELD_NAME not in json:
+        return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    model_name = json[MODEL_NAME_FIELD_NAME]
+    
+    try:
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                [MODEL_PATH_FIELD_NAME], 
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                                [user_id, env_id, model_name])
+        
+        if len(models) == 0:
+            return compose_response("A model with this name doesn't exist!", code=FAILURE_CODE)
+        
+        path_to_model = models[0][0]
+        path_to_graphs = path_to_model + TRAINING_GRAPHS_FOLDER_NAME + "/"
+
+        graph_images = []
+
+        for image_name in os.listdir(path_to_graphs):
+            image_path = path_to_graphs + image_name
+            if os.path.isfile(image_path):
+                import base64
+                with open(image_path, "rb") as image_file:
+                    encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+                    graph_images.append(encoded_image)
+        
+        return compose_response("Fetched training graphs succesfully!", data=graph_images)
+    except Exception as ex:
+        print(ex)
+        return compose_response("Couldn't fetch the training graphs...", code=FAILURE_CODE)
+
 #endregion
 
 #region DATASET HANDLING

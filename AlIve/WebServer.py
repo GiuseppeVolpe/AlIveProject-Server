@@ -1232,6 +1232,10 @@ def train_queue(user_id:int, env_id:int, progress_info:TrainQueueProgressInfo):
             print(ex)
             continue
     
+    key = "{}_{}".format(user_id, env_id)
+    
+    del(TRAIN_QUEUES[key])
+    del(TRAIN_QUEUES_PROGRESS_INFOS[key])
     print("\nTraining is over.\n")
 
 @app.route('/stop_train', methods=['POST'])
@@ -1343,8 +1347,8 @@ def is_training_in_progress():
     if key in TRAIN_QUEUES.keys():
         if TRAIN_QUEUES[key].is_alive():
             return compose_response("Training is in progress!", data=True)
-        else:
-            return compose_response("Training is not in progress!", data=False)
+      
+    return compose_response("Training is not in progress!", data=False)
 
 @app.route('/get_train_queue_progress_info', methods=['POST'])
 def get_train_queue_progress_info():

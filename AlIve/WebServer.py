@@ -108,7 +108,8 @@ CORS(app)
 DB_CONNECTION = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
 
 LOADED_MODELS = dict()
-TRAINING_SESSIONS = dict()
+TRAIN_QUEUES = dict()
+TRAIN_QUEUES_PROGRESS_INFOS = dict()
 
 #region USERS HANDLING
 
@@ -514,8 +515,8 @@ def delete_model():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -569,8 +570,8 @@ def predict():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -738,8 +739,8 @@ def delete_dataset():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -811,8 +812,8 @@ def import_examples_to_dataset():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -909,6 +910,27 @@ def get_env_datasets():
 
 #region TRAINING QUEUE HANDLING
 
+class TrainQueueProgressInfo:
+    
+    def __init__(self):
+        self.current_session_index = 0
+        self.current_session_model_name = ""
+        self.current_session_dataset_name = ""
+        self.current_session_epoch = 0
+        self.current_session_epochs_left = 0
+    
+    def get_payload(self):
+
+        payload = {
+            "current_session_index" : self.current_session_index,
+            "current_session_model_name" : self.current_session_model_name,
+            "current_session_dataset_name" : self.current_session_dataset_name,
+            "current_session_epoch" : self.current_session_epoch,
+            "current_session_epochs_left" : self.current_session_epochs_left
+        }
+
+        return payload
+
 @app.route('/add_to_train_queue', methods=['POST'])
 def add_model_to_train_queue():
     
@@ -945,8 +967,8 @@ def add_model_to_train_queue():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -1035,8 +1057,8 @@ def remove_session_from_train_queue():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -1080,21 +1102,23 @@ def start_train():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("Training is already in progress!", code=FAILURE_CODE)
         else:
-            del(TRAINING_SESSIONS[key])
+            del(TRAIN_QUEUES[key])
     
-    lambda_training_function = lambda : train_queue(user_id, env_id)
+    TRAIN_QUEUES_PROGRESS_INFOS[key] = TrainQueueProgressInfo()
+    
+    lambda_training_function = lambda : train_queue(user_id, env_id, TRAIN_QUEUES_PROGRESS_INFOS[key])
     training_thread = Thread(target=lambda_training_function, daemon=True, name='Monitor')
     training_thread.start()
 
-    TRAINING_SESSIONS[key] = training_thread
+    TRAIN_QUEUES[key] = training_thread
 
     return compose_response("Training started succesfully!")
 
-def train_queue(user_id:int, env_id:int):
+def train_queue(user_id:int, env_id:int, progress_info:TrainQueueProgressInfo):
     
     connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
     
@@ -1134,7 +1158,7 @@ def train_queue(user_id:int, env_id:int):
             checkpoint_path = training_session[6]
 
             models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                                    [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
+                                    [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                                     [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME], 
                                     [user_id, env_id, model_id], 
                                     connection)
@@ -1147,9 +1171,10 @@ def train_queue(user_id:int, env_id:int):
 
             path_to_model = model[0]
             model_type = model[1]
+            model_name = model[2]
             
             datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                                      [DATASET_PATH_FIELD_NAME], 
+                                      [DATASET_PATH_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
                                       [user_id, env_id, dataset_id], 
                                       connection)
@@ -1161,6 +1186,7 @@ def train_queue(user_id:int, env_id:int):
             dataset = datasets[0]
 
             path_to_dataset = dataset[0]
+            dataset_name = dataset[1]
 
             loaded_model = NLPClassificationModel.load_model(path_to_model)
             loaded_dataset = pd.read_pickle(path_to_dataset)
@@ -1176,8 +1202,14 @@ def train_queue(user_id:int, env_id:int):
                                                     SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME, 
                                                     targets[0])
             
+            progress_info.current_session_index = current_queue_index
+            progress_info.current_session_model_name = model_name
+            progress_info.current_session_dataset_name = dataset_name
+            progress_info.current_session_epochs_left = epochs_left
+
             epochs_updating_callback = UpdateDBCallback(user_id, env_id, 
-                                                        current_queue_index, connection)
+                                                        current_queue_index, progress_info, 
+                                                        connection)
             additional_callbacks = [epochs_updating_callback]
             
             history, ending_time = loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
@@ -1202,25 +1234,6 @@ def train_queue(user_id:int, env_id:int):
     
     print("\nTraining is over.\n")
 
-@app.route('/is_training_in_progress', methods=['POST'])
-def is_training_in_progress():
-
-    if SESSION_FIELD_NAME not in request.json:
-        return compose_response("Couldn't find session!", code=FAILURE_CODE)
-
-    session = request.json[SESSION_FIELD_NAME]
-    
-    user_id = session[USER_ID_FIELD_NAME]
-    env_id = session[ENV_ID_FIELD_NAME]
-    
-    key = "{}_{}".format(user_id, env_id)
-
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
-            return compose_response("Training is in progress!", data=True)
-        else:
-            return compose_response("Training is not in progress!", data=False)
-
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
     
@@ -1240,13 +1253,13 @@ def stop_train():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key not in TRAINING_SESSIONS.keys():
+    if key not in TRAIN_QUEUES.keys():
         return compose_response("Training is not running!")
     
     return compose_response("Stop not implemented!", code=FAILURE_CODE)
 
-@app.route('/get_training_sessions', methods=['POST'])
-def get_training_sessions():
+@app.route('/get_train_queue', methods=['POST'])
+def get_train_queue():
 
     if SESSION_FIELD_NAME not in request.json:
         return compose_response("Couldn't find session!", code=FAILURE_CODE)
@@ -1309,10 +1322,58 @@ def get_training_sessions():
             text = "{} - {}".format(model_name, dataset_name)
 
             data.append({"value" : value, "text" : text})
-        print(data)
-        return compose_response("Training sessions fetched!", data)
+            
+        return compose_response("Train queue fetched!", data)
     except:
-        return compose_response("Couldn't fetch training sessions...", code=FAILURE_CODE)
+        return compose_response("Couldn't fetch train queue...", code=FAILURE_CODE)
+
+@app.route('/is_training_in_progress', methods=['POST'])
+def is_training_in_progress():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
+            return compose_response("Training is in progress!", data=True)
+        else:
+            return compose_response("Training is not in progress!", data=False)
+
+@app.route('/get_train_queue_progress_info', methods=['POST'])
+def get_train_queue_progress_info():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    key = "{}_{}".format(user_id, env_id)
+    
+    if key in TRAIN_QUEUES:
+        if isinstance(TRAIN_QUEUES[key], Thread):
+            if TRAIN_QUEUES[key].is_alive():
+                if key in TRAIN_QUEUES_PROGRESS_INFOS:
+                    return compose_response("Training progress fetched!", TRAIN_QUEUES_PROGRESS_INFOS[key])
+            else:
+                return compose_response("Training terminated!")
+    
+    return compose_response("Couldn't fetch training progress...", code=FAILURE_CODE)
 
 #endregion
 
@@ -1588,17 +1649,21 @@ def execute_custom_update_query(query, connection:mysqlconn.MySQLConnection=None
 
 class UpdateDBCallback(tf.keras.callbacks.Callback):
 
-    def __init__(self, user_id:int, env_id:int, current_queue_index:int, 
+    def __init__(self, user_id:int, env_id:int, current_queue_index:int, progress_info:TrainQueueProgressInfo,
                  connection:mysqlconn.MySQLConnection=None):
         super().__init__()
         self.__user_id = user_id
         self.__env_id = env_id
         self.__current_queue_index = current_queue_index
+        self.__progress_info = progress_info
 
         if connection == None:
             connection = DB_CONNECTION
         
         self.__connection = connection
+    
+    def on_batch_begin(self, batch, logs=None):
+        self.__progress_info.current_session_epoch += 1
     
     def on_epoch_end(self, epoch, logs=None):
 

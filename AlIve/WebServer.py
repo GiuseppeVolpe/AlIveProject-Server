@@ -918,6 +918,8 @@ class TrainQueueProgressInfo:
         self.current_session_dataset_name = ""
         self.current_session_epoch = 0
         self.current_session_epochs_left = 0
+        self.wants_to_stop = False
+        self.stopped_prematurely = False
     
     def get_payload(self):
 
@@ -1214,20 +1216,24 @@ def train_queue(user_id:int, env_id:int, progress_info:TrainQueueProgressInfo):
             
             history, ending_time = loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
 
-            loaded_model.save(path_to_model, True)
-            shutil.rmtree(checkpoint_path)
+            if not progress_info.stopped_prematurely:
+                loaded_model.save(path_to_model, True)
+                shutil.rmtree(checkpoint_path)
 
-            graph_path = path_to_model + TRAINING_GRAPHS_FOLDER_NAME + "/"
+                graph_path = path_to_model + TRAINING_GRAPHS_FOLDER_NAME + "/"
 
-            try:
-                loaded_model.save_train_history_graph(history.history, ending_time, graph_path)
-            except:
-                print("Couldn't save graph...")
-            
-            delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
-                           [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
-                           [env_id, current_queue_index], 
-                           connection)
+                try:
+                    loaded_model.save_train_history_graph(history.history, ending_time, graph_path)
+                except:
+                    print("Couldn't save graph...")
+                
+                delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                            [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                            [env_id, current_queue_index], 
+                            connection)
+            else:
+                print("Training stopped prematurely...")
+                break
         except Exception as ex:
             print(ex)
             continue
@@ -1241,26 +1247,33 @@ def train_queue(user_id:int, env_id:int, progress_info:TrainQueueProgressInfo):
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
     
-    if SESSION_FIELD_NAME not in request.json:
-        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    try:
+        if SESSION_FIELD_NAME not in request.json:
+            return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
-    session = request.json[SESSION_FIELD_NAME]
-    
-    if USER_ID_FIELD_NAME not in session:
-        return compose_response("User not logged!", code=FAILURE_CODE)
-    
-    if ENV_ID_FIELD_NAME not in session:
-        return compose_response("Environment not selected!", code=FAILURE_CODE)
+        session = request.json[SESSION_FIELD_NAME]
         
-    user_id = session[USER_ID_FIELD_NAME]
-    env_id = session[ENV_ID_FIELD_NAME]
-    
-    key = "{}_{}".format(user_id, env_id)
+        if USER_ID_FIELD_NAME not in session:
+            return compose_response("User not logged!", code=FAILURE_CODE)
+        
+        if ENV_ID_FIELD_NAME not in session:
+            return compose_response("Environment not selected!", code=FAILURE_CODE)
+            
+        user_id = session[USER_ID_FIELD_NAME]
+        env_id = session[ENV_ID_FIELD_NAME]
+        
+        key = "{}_{}".format(user_id, env_id)
 
-    if key not in TRAIN_QUEUES.keys():
-        return compose_response("Training is not running!")
-    
-    return compose_response("Stop not implemented!", code=FAILURE_CODE)
+        if key not in TRAIN_QUEUES.keys():
+            return compose_response("Training is not running!", code=FAILURE_CODE)
+        
+        if key in TRAIN_QUEUES_PROGRESS_INFOS:
+            TRAIN_QUEUES_PROGRESS_INFOS[key].wants_to_stop = True
+        
+        return compose_response("Stopped training progress!")
+    except Exception as ex:
+        print(ex)
+        return compose_response("Couldn't stop the training...")
 
 @app.route('/get_train_queue', methods=['POST'])
 def get_train_queue():
@@ -1330,25 +1343,6 @@ def get_train_queue():
         return compose_response("Train queue fetched!", data)
     except:
         return compose_response("Couldn't fetch train queue...", code=FAILURE_CODE)
-
-@app.route('/is_training_in_progress', methods=['POST'])
-def is_training_in_progress():
-
-    if SESSION_FIELD_NAME not in request.json:
-        return compose_response("Couldn't find session!", code=FAILURE_CODE)
-
-    session = request.json[SESSION_FIELD_NAME]
-    
-    user_id = session[USER_ID_FIELD_NAME]
-    env_id = session[ENV_ID_FIELD_NAME]
-    
-    key = "{}_{}".format(user_id, env_id)
-
-    if key in TRAIN_QUEUES.keys():
-        if TRAIN_QUEUES[key].is_alive():
-            return compose_response("Training is in progress!", data=True)
-      
-    return compose_response("Training is not in progress!", data=False)
 
 @app.route('/get_train_queue_progress_info', methods=['POST'])
 def get_train_queue_progress_info():
@@ -1667,6 +1661,12 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
         self.__connection = connection
     
     def on_batch_begin(self, batch, logs=None):
+
+        if self.__progress_info.wants_to_stop:
+            self.__progress_info.stopped_prematurely = True
+            self.model.stop_training = True
+    
+    def on_epoch_begin(self, epoch, logs=None):
         self.__progress_info.current_session_epoch += 1
     
     def on_epoch_end(self, epoch, logs=None):

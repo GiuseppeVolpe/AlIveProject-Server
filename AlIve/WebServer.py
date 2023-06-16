@@ -1373,7 +1373,7 @@ def get_train_queue_progress_info():
         if isinstance(TRAIN_QUEUES[key], Thread):
             if TRAIN_QUEUES[key].is_alive():
                 if key in TRAIN_QUEUES_PROGRESS_INFOS:
-                    return compose_response("Training progress fetched!", TRAIN_QUEUES_PROGRESS_INFOS[key])
+                    return compose_response("Training progress fetched!", TRAIN_QUEUES_PROGRESS_INFOS[key].get_payload())
             else:
                 return compose_response("Training terminated!")
     

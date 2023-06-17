@@ -858,7 +858,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
             if sentenceprediction[0].shape[0] > 1:
                 sentenceprediction = tf.nn.softmax(sentenceprediction)
             
-            sentenceprediction = self._binarizer.inverse_transform(sentenceprediction)[1:]
+            sentenceprediction = self._binarizer.inverse_transform(sentenceprediction.numpy())[1:]
 
             decoded_prediction = []
 

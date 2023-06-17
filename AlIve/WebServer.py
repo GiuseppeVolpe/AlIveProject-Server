@@ -601,7 +601,8 @@ def predict():
         }
 
         return compose_response("Prediction done successfully!", data)
-    except:
+    except Exception as ex:
+        print(ex)
         return compose_response("Something went wrong during the prediction...", code=FAILURE_CODE)
 
 @app.route('/get_env_models', methods=['POST'])

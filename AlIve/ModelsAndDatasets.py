@@ -574,10 +574,13 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
         encoder = hub.KerasLayer(encoder_model_link, trainable=encoder_trainable, name='encoder')
         encoder_output = encoder(encoder_inputs)
         
-        try:
-            net = encoder_output[encoder_output_key]
-        except:
+        if encoder_output_key == None:
             net = encoder_output
+        else:
+            try:
+                net = encoder_output[encoder_output_key]
+            except:
+                net = encoder_output
         
         net = tf.keras.layers.Dropout(dropout_rate)(net)
         net = tf.keras.layers.Dense(output_shape, activation=final_output_activation, name='classifier')(net)
@@ -742,10 +745,13 @@ class TokenLevelClassificationModel(NLPClassificationModel):
 
         encoder = hub.KerasLayer(encoder_model_link, trainable=encoder_trainable, name='encoder')
         
-        try:
-            encoder_output = encoder(encoder_inputs)[encoder_output_key]
-        except:
+        if encoder_output_key == None:
             encoder_output = encoder(encoder_inputs)
+        else:
+            try:
+                encoder_output = encoder(encoder_inputs)[encoder_output_key]
+            except:
+                encoder_output = encoder(encoder_inputs)
         
         embedding = tf.keras.layers.Dropout(dropout_rate)(encoder_output)
         final_output = tf.keras.layers.Dense(output_shape, activation=final_output_activation)(embedding)

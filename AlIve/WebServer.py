@@ -746,10 +746,12 @@ def create_dataset():
         else:
             return compose_response("Invalid dataset type!", code=FAILURE_CODE)
         
-        if os.path.exists(dataset_folder):
-            shutil.rmtree(dataset_folder)
+        if not os.path.exists(dataset_folder):
+            os.makedirs(dataset_folder)
         
-        os.makedirs(dataset_folder)
+        if os.path.exists(path_to_dataset):
+            os.remove(path_to_dataset)
+        
         dataframe.to_pickle(path_to_dataset)
         
         insert_into_db(ALIVE_DB_DATASETS_TABLE_NAME, 

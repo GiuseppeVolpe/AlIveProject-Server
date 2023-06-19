@@ -3,11 +3,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import re
 from queue import Queue
-from threading import Thread, Event
+from threading import Thread
 
 import mysql.connector as mysqlconn
-from flask import Flask, jsonify, flash, redirect, render_template, request, session, abort
-from flask_cors import CORS, cross_origin
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 import tensorflow as tf
 
@@ -15,7 +15,9 @@ from ModelsAndDatasets import *
 
 #region CONSTS
 
-LOGGED_IN_FIELD_NAME = "logged_in"
+MIN_USERNAME_LENGTH = 2
+MIN_PASSWORD_LENGTH = 8
+
 USER_ID_FIELD_NAME = "user_id"
 USERNAME_FIELD_NAME = "username"
 USER_PASSWORD_FIELD_NAME = "user_password"
@@ -94,6 +96,8 @@ USERS_DATA_FOLDER = ROOT_FOLDER + "/" + USERS_DATA_FOLDER_NAME + "/"
 EXAMPLE_CATEGORIES = [EXAMPLE_TRAIN_CATEGORY, EXAMPLE_VALIDATION_CATEGORY, EXAMPLE_TEST_CATEGORY]
 MODEL_TYPES = [SLC_MODEL_TYPE, TLC_MODEL_TYPE]
 
+SESSION_FIELD_NAME = "session"
+
 #endregion
 
 app = Flask(__name__, template_folder='Templates')
@@ -104,77 +108,8 @@ CORS(app)
 DB_CONNECTION = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
 
 LOADED_MODELS = dict()
-TRAINING_SESSIONS = dict()
-
-#region FORMS GETTERS
-
-@app.route('/')
-def login_form():
-    return render_template('login.html')
-
-@app.route('/signup_form', methods=['POST'])
-def signup_form():
-    return render_template('signup.html')
-
-@app.route('/environment_selection', methods=['POST'])
-def environment_selection_form():
-
-    if USER_ID_FIELD_NAME not in session:
-        return login_form()
-    
-    user_id = session[USER_ID_FIELD_NAME]
-
-    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
-                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
-                                  [USER_ID_FIELD_NAME], 
-                                  [user_id])
-    
-    environments = [environment[1] for environment in environments]
-
-    return render_template('environment_selection.html', environments=environments)
-
-@app.route('/environment', methods=['POST'])
-def environment_form(prediction=None):
-
-    if USER_ID_FIELD_NAME not in session:
-        return login_form()
-    
-    if ENV_ID_FIELD_NAME not in session:
-        return environment_selection_form()
-    
-    user_id = session[USER_ID_FIELD_NAME]
-    username = session[USERNAME_FIELD_NAME]
-    env_id = session[ENV_ID_FIELD_NAME]
-    env_name = session[ENV_NAME_FIELD_NAME]
-
-    models_in_env = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                                   [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
-                                   [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                                   [user_id, env_id])
-    
-    environment_models = [model_in_env[1] for model_in_env in models_in_env]
-
-    datasets_in_env = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                                     [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
-                                     [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME], 
-                                     [user_id, env_id])
-    
-    environment_datasets = [dataset_in_env[1] for dataset_in_env in datasets_in_env]
-
-    if prediction == None:
-        prediction = "No pred"
-
-    return render_template('environment.html', 
-                           available_models=get_available_models(), 
-                           example_categories=EXAMPLE_CATEGORIES, 
-                           model_types=MODEL_TYPES, 
-                           username=username, 
-                           selected_env=env_name, 
-                           environment_models=environment_models, 
-                           environment_datasets=environment_datasets, 
-                           prediction=prediction)
-
-#endregion
+TRAIN_QUEUES = dict()
+TRAIN_QUEUES_PROGRESS_INFOS = dict()
 
 #region USERS HANDLING
 
@@ -195,16 +130,16 @@ def signup():
 
     errors = list()
 
-    if len(username) < 2:
-        errors.append("The length of the username should be at least 2!")
+    if len(username) < MIN_USERNAME_LENGTH:
+        errors.append("The length of the username should be at least {}!".format(MIN_USERNAME_LENGTH))
     
     email_regex = "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$"
     
     if not bool( re.match(email_regex, user_email) ):
         errors.append("This is not a valid email!")
     
-    if len(user_password) < 8:
-        errors.append("The length of the password should be at least 8!")
+    if len(user_password) < MIN_PASSWORD_LENGTH:
+        errors.append("The length of the password should be at least {}!".format(MIN_PASSWORD_LENGTH))
     
     if len(errors) > 0:
         return compose_response("Errors in the form compilation!", errors, RETURNING_ERRORS_CODE)
@@ -248,7 +183,7 @@ def signup():
 def login():
 
     json = request.json
-    
+
     needed_fields = [USERNAME_FIELD_NAME, USER_PASSWORD_FIELD_NAME]
 
     for needed_field in needed_fields:
@@ -272,17 +207,9 @@ def login():
     correct_password = user_tuple[2]
     user_email = user_tuple[3]
 
-    logged = (inserted_password == correct_password)
-    
-    if logged:
-        session[LOGGED_IN_FIELD_NAME] = True
-    else:
+    if inserted_password != correct_password:
         return compose_response("Wrong password!", code=FAILURE_CODE)
     
-    session[USER_ID_FIELD_NAME] = user_id
-    session[USERNAME_FIELD_NAME] = username
-    session[USER_EMAIL_FIELD_NAME] = user_email
-
     data = {
         USER_ID_FIELD_NAME : user_id, 
         USERNAME_FIELD_NAME : username, 
@@ -293,7 +220,6 @@ def login():
 
 @app.route('/logout')
 def logout():
-    reset_session()
     return compose_response("Logout done succesfully!")
 
 #endregion
@@ -302,6 +228,11 @@ def logout():
 
 @app.route('/create_env', methods=['POST'])
 def create_environment():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
     
     json = request.json
 
@@ -356,6 +287,11 @@ def create_environment():
 @app.route('/delete_env', methods=['POST'])
 def delete_environment():
     
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
 
     if USER_ID_FIELD_NAME not in session:
@@ -389,7 +325,12 @@ def delete_environment():
 
 @app.route('/select_env', methods=['POST'])
 def select_environment():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
 
     env_id = None
@@ -423,9 +364,7 @@ def select_environment():
         
         if len(environments) == 0:
             return compose_response("Inexisting environment!", code=FAILURE_CODE)
-        else:
-            session[ENV_ID_FIELD_NAME] = environments[0][0]
-            session[ENV_NAME_FIELD_NAME] = environments[0][1]
+        
     except:
         return compose_response("Something went wrong, couldn't select the environment...", code=FAILURE_CODE)
     
@@ -436,12 +375,39 @@ def select_environment():
     
     return compose_response("Environment selected successfully!", data)
 
+@app.route('/get_user_envs', methods=['POST'])
+def get_user_envs():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    
+    environments = select_from_db(ALIVE_DB_ENVIRONMENTS_TABLE_NAME, 
+                                  [ENV_ID_FIELD_NAME, ENV_NAME_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME], 
+                                  [user_id])
+    
+    data = [{"value" : {"id" : env[0], "name" : env[1]}, "text" : env[1]} for env in environments]
+
+    return compose_response("Environments fetched!", data)
+
 #endregion
 
 #region MODELS HANDLING
 
 @app.route('/create_model', methods=['POST'])
 def create_model():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
     
     json = request.json
     
@@ -527,6 +493,11 @@ def create_model():
 @app.route('/delete_model', methods=['POST'])
 def delete_model():
     
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -544,8 +515,8 @@ def delete_model():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -572,7 +543,12 @@ def delete_model():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -594,8 +570,8 @@ def predict():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -625,8 +601,85 @@ def predict():
         }
 
         return compose_response("Prediction done successfully!", data)
-    except:
+    except Exception as ex:
+        print(ex)
         return compose_response("Something went wrong during the prediction...", code=FAILURE_CODE)
+
+@app.route('/get_env_models', methods=['POST'])
+def get_env_models():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                            [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
+                            [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                            [user_id, env_id])
+    
+    data = [{"value" : {"id" : model[0], "name" : model[1], "type": model[2]}, "text" : model[1]} for model in models]
+
+    return compose_response("Models fetched!", data)
+
+@app.route('/get_model_training_graphs', methods=['POST'])
+def get_model_training_graphs():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+
+    json = request.json
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    if MODEL_NAME_FIELD_NAME not in json:
+        return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    model_name = json[MODEL_NAME_FIELD_NAME]
+    
+    try:
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
+                                [MODEL_PATH_FIELD_NAME], 
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
+                                [user_id, env_id, model_name])
+        
+        if len(models) == 0:
+            return compose_response("A model with this name doesn't exist!", code=FAILURE_CODE)
+        
+        path_to_model = models[0][0]
+        path_to_graphs = path_to_model + TRAINING_GRAPHS_FOLDER_NAME + "/"
+
+        graph_images = []
+
+        for image_name in os.listdir(path_to_graphs):
+            image_path = path_to_graphs + image_name
+            if os.path.isfile(image_path):
+                import base64
+                with open(image_path, "rb") as image_file:
+                    encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+                    graph_images.append(encoded_image)
+        
+        return compose_response("Fetched training graphs succesfully!", data=graph_images)
+    except Exception as ex:
+        print(ex)
+        return compose_response("Couldn't fetch the training graphs...", code=FAILURE_CODE)
 
 #endregion
 
@@ -634,7 +687,12 @@ def predict():
 
 @app.route('/create_dataset', methods=['POST'])
 def create_dataset():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -689,10 +747,12 @@ def create_dataset():
         else:
             return compose_response("Invalid dataset type!", code=FAILURE_CODE)
         
-        if os.path.exists(dataset_folder):
-            shutil.rmtree(dataset_folder)
+        if not os.path.exists(dataset_folder):
+            os.makedirs(dataset_folder)
         
-        os.makedirs(dataset_folder)
+        if os.path.exists(path_to_dataset):
+            os.remove(path_to_dataset)
+        
         dataframe.to_pickle(path_to_dataset)
         
         insert_into_db(ALIVE_DB_DATASETS_TABLE_NAME, 
@@ -709,6 +769,11 @@ def create_dataset():
 
 @app.route('/delete_dataset', methods=['POST'])
 def delete_dataset():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
     
     json = request.json
     
@@ -727,8 +792,8 @@ def delete_dataset():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -755,8 +820,20 @@ def delete_dataset():
 
 @app.route('/import_csv_to_dataset', methods=['POST'])
 def import_examples_to_dataset():
+
+    #region Composing session
+
+    if USER_ID_FIELD_NAME not in request.form or ENV_ID_FIELD_NAME not in request.form:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = {
+        USER_ID_FIELD_NAME : request.form[USER_ID_FIELD_NAME], 
+        ENV_ID_FIELD_NAME : request.form[ENV_ID_FIELD_NAME]
+    }
+
+    #endregion
     
-    json = request.json
+    form = request.form
     
     if USER_ID_FIELD_NAME not in session:
         return compose_response("User not logged!", code=FAILURE_CODE)
@@ -769,7 +846,7 @@ def import_examples_to_dataset():
                           WORD_COLUMN_NAME_FIELD_NAME]
     
     for needed_form_field in needed_form_fields:
-        if needed_form_field not in json:
+        if needed_form_field not in form:
             return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
     
     if DATASET_CSV_FIELD_NAME not in request.files:
@@ -778,16 +855,18 @@ def import_examples_to_dataset():
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
 
-    dataset_name = json[DATASET_NAME_FIELD_NAME]
-    category = json[EXAMPLE_CATEGORY_FIELD_NAME]
-    text_column_name = json[TEXT_COLUMN_NAME_FIELD_NAME]
-    sentence_idx_column_name = json[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
-    word_column_name = json[WORD_COLUMN_NAME_FIELD_NAME]
+    dataset_name = form[DATASET_NAME_FIELD_NAME]
+    category = form[EXAMPLE_CATEGORY_FIELD_NAME]
+    text_column_name = form[TEXT_COLUMN_NAME_FIELD_NAME]
+    sentence_idx_column_name = form[SENTENCE_IDX_COLUMN_NAME_FIELD_NAME]
+    word_column_name = form[WORD_COLUMN_NAME_FIELD_NAME]
+    
+    infile = request.files[DATASET_CSV_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -806,8 +885,6 @@ def import_examples_to_dataset():
         existing_dataset_path = existing_dataset[2]
 
         existing_dataset = pd.read_pickle(existing_dataset_path)
-        
-        infile = request.files[DATASET_CSV_FIELD_NAME]
         imported_dataset = pd.read_csv(infile, keep_default_na=False)
         
         if text_column_name in imported_dataset.columns:
@@ -856,13 +933,247 @@ def import_examples_to_dataset():
     
     return compose_response("Examples imported succesfully!")
 
+@app.route('/get_env_datasets', methods=['POST'])
+def get_env_datasets():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME,
+                              [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME, DATASET_TYPE_FIELD_NAME], 
+                              [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                              [user_id, env_id])
+    
+    data = [{"value" : {"id" : dataset[0], "name" : dataset[1], "type": dataset[2]}, "text" : dataset[1]} for dataset in datasets]
+
+    return compose_response("Datasets fetched!", data)
+
+@app.route('/get_dataset_examples', methods=['POST'])
+def get_dataset_examples():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    json = request.json
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
+    
+    needed_fields = [DATASET_NAME_FIELD_NAME, "starting_index", "number_of_examples"]
+    
+    for needed_field in needed_fields:
+        if needed_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
+    starting_index = int(json["starting_index"])
+    number_of_examples_to_fetch = int(json["number_of_examples"])
+
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
+    
+    try:
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_PATH_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [user_id, env_id, dataset_name])
+        
+        if len(datasets) == 0:
+            return compose_response("A dataset with this name doesn't exist!", code=FAILURE_CODE)
+        
+        path_to_dataset = datasets[0][0]
+        
+        dataframe = pd.read_pickle(path_to_dataset)
+
+        print(dataframe.tail())
+
+        examples = list()
+        fields = list()
+
+        for column in dataframe.columns:
+
+            column_name = str(column)
+
+            if "Unnamed:" not in column_name:
+                fields.append(column_name)
+        
+        counter = 0
+
+        for (row_index, row) in dataframe.iterrows():
+
+            if row_index < starting_index:
+                continue
+
+            currentElement = dict()
+
+            for column in dataframe.columns:
+
+                column_name = column
+                
+                if "Unnamed:" in str(column):
+                    column_name = "index"
+                
+                currentElement[column_name] = row[column]
+            
+            examples.append(currentElement)
+
+            counter += 1
+
+            if counter > number_of_examples_to_fetch:
+                break
+        
+        data = {
+            "examples": examples,
+            "fields": fields,
+        }
+
+        return compose_response("Dataset examples fetched!", data)
+    except Exception as ex:
+        print(ex)
+        return compose_response("Something went wrong, couldn't fetch the examples...", code=FAILURE_CODE)
+
+@app.route('/append_example_to_dataset', methods=['POST'])
+def append_example_to_dataset():
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    json = request.json
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
+    
+    needed_fields = [DATASET_NAME_FIELD_NAME, "example_text", "example_targets", "example_category"]
+    
+    for needed_field in needed_fields:
+        if needed_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
+    example_text = json["example_text"]
+    example_targets = json["example_targets"]
+    example_category = json["example_category"]
+
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
+    
+    try:
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_PATH_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [user_id, env_id, dataset_name])
+        
+        if len(datasets) == 0:
+            return compose_response("A dataset with this name doesn't exist!", code=FAILURE_CODE)
+        
+        path_to_dataset = datasets[0][0]
+        
+        dataframe = pd.read_pickle(path_to_dataset)
+
+        new_row = dict()
+
+        new_row[TEXT_FIELD_NAME] = example_text
+        new_row[EXAMPLE_CATEGORY_FIELD_NAME] = example_category
+        
+        for new_example_target_data in example_targets:
+
+            target_name = new_example_target_data["targetName"]
+            target_value = new_example_target_data["targetValue"]
+
+            if target_name not in dataframe.columns:
+                dataframe[target_name] = EMPTY_TARGET_VALUE
+            
+            new_row[target_name] = target_value
+        
+        columns_to_drop = []
+
+        for column in dataframe.columns:
+            
+            if str(column) not in new_row.keys():
+                new_row[str(column)] = EMPTY_TARGET_VALUE
+
+            if "Unnamed:" in str(column):
+                columns_to_drop.append(str(column))
+        
+        dataframe.loc[len(dataframe)] = new_row
+
+        dataframe.drop(columns=columns_to_drop, inplace=True)
+        
+        if os.path.exists(path_to_dataset):
+            os.remove(path_to_dataset)
+
+        dataframe.to_pickle(path_to_dataset)
+
+        return compose_response("Example added!")
+    except Exception as ex:
+        print(ex)
+        return compose_response("Something went wrong, couldn't add the example the dataset...", code=FAILURE_CODE)
+
 #endregion
 
 #region TRAINING QUEUE HANDLING
 
+class TrainQueueProgressInfo:
+    
+    def __init__(self):
+        self.current_session_index = 0
+        self.current_session_model_name = ""
+        self.current_session_dataset_name = ""
+        self.current_session_epoch = 0
+        self.current_session_epochs_left = 0
+        self.wants_to_stop = False
+        self.stopped_prematurely = False
+    
+    def get_payload(self):
+
+        payload = {
+            "current_session_index" : self.current_session_index,
+            "current_session_model_name" : self.current_session_model_name,
+            "current_session_dataset_name" : self.current_session_dataset_name,
+            "current_session_epoch" : self.current_session_epoch,
+            "current_session_epochs_left" : self.current_session_epochs_left
+        }
+
+        return payload
+
 @app.route('/add_to_train_queue', methods=['POST'])
 def add_model_to_train_queue():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -891,8 +1202,8 @@ def add_model_to_train_queue():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -941,7 +1252,7 @@ def add_model_to_train_queue():
 
         path_to_env = USERS_DATA_FOLDER + username + "/" + ENVIRONMENTS_FOLDER_NAME + "/" + env_name + "/"
         path_to_training_sessions = path_to_env + TRAINING_SESSIONS_FOLDER_NAME + "/"
-        checkpoint_name = str(model_id) + str(dataset_id) + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+        checkpoint_name = str(model_id) + "_" + str(dataset_id) + "_" + datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
         checkpoint_path = path_to_training_sessions + checkpoint_name + "/"
         
         insert_into_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
@@ -958,7 +1269,12 @@ def add_model_to_train_queue():
 
 @app.route('/remove_from_train_queue', methods=['POST'])
 def remove_session_from_train_queue():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     json = request.json
     
     if USER_ID_FIELD_NAME not in session:
@@ -976,8 +1292,8 @@ def remove_session_from_train_queue():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
     
     try:
@@ -1004,7 +1320,12 @@ def remove_session_from_train_queue():
 
 @app.route('/start_train', methods=['POST'])
 def start_train():
+    
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
 
+    session = request.json[SESSION_FIELD_NAME]
+    
     if USER_ID_FIELD_NAME not in session:
         return compose_response("User not logged!", code=FAILURE_CODE)
     
@@ -1016,22 +1337,24 @@ def start_train():
     
     key = "{}_{}".format(user_id, env_id)
 
-    if key in TRAINING_SESSIONS.keys():
-        if TRAINING_SESSIONS[key].is_alive():
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
             return compose_response("Training is already in progress!", code=FAILURE_CODE)
         else:
-            del(TRAINING_SESSIONS[key])
+            del(TRAIN_QUEUES[key])
     
-    lambda_training_function = lambda : train_queue(user_id, env_id)
+    TRAIN_QUEUES_PROGRESS_INFOS[key] = TrainQueueProgressInfo()
+    
+    lambda_training_function = lambda : train_queue(user_id, env_id, TRAIN_QUEUES_PROGRESS_INFOS[key])
     training_thread = Thread(target=lambda_training_function, daemon=True, name='Monitor')
     training_thread.start()
 
-    TRAINING_SESSIONS[key] = training_thread
+    TRAIN_QUEUES[key] = training_thread
 
     return compose_response("Training started succesfully!")
 
-def train_queue(user_id:int, env_id:int):
-
+def train_queue(user_id:int, env_id:int, progress_info:TrainQueueProgressInfo):
+    
     connection = mysqlconn.connect(user=ALIVE_DB_ADMIN_USERNAME, password=ALIVE_DB_ADMIN_PASSWORD, database=ALIVE_DB_NAME)
     
     queue_in_this_env = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
@@ -1070,7 +1393,7 @@ def train_queue(user_id:int, env_id:int):
             checkpoint_path = training_session[6]
 
             models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME, 
-                                    [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME], 
+                                    [MODEL_PATH_FIELD_NAME, MODEL_TYPE_FIELD_NAME, MODEL_NAME_FIELD_NAME], 
                                     [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, MODEL_ID_FIELD_NAME], 
                                     [user_id, env_id, model_id], 
                                     connection)
@@ -1083,9 +1406,10 @@ def train_queue(user_id:int, env_id:int):
 
             path_to_model = model[0]
             model_type = model[1]
+            model_name = model[2]
             
             datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
-                                      [DATASET_PATH_FIELD_NAME], 
+                                      [DATASET_PATH_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
                                       [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_ID_FIELD_NAME], 
                                       [user_id, env_id, dataset_id], 
                                       connection)
@@ -1097,6 +1421,7 @@ def train_queue(user_id:int, env_id:int):
             dataset = datasets[0]
 
             path_to_dataset = dataset[0]
+            dataset_name = dataset[1]
 
             loaded_model = NLPClassificationModel.load_model(path_to_model)
             loaded_dataset = pd.read_pickle(path_to_dataset)
@@ -1112,50 +1437,201 @@ def train_queue(user_id:int, env_id:int):
                                                     SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME, 
                                                     targets[0])
             
+            progress_info.current_session_index = current_queue_index
+            progress_info.current_session_model_name = model_name
+            progress_info.current_session_dataset_name = dataset_name
+            progress_info.current_session_epochs_left = epochs_left
+
             epochs_updating_callback = UpdateDBCallback(user_id, env_id, 
-                                                        current_queue_index, connection)
+                                                        current_queue_index, progress_info, 
+                                                        connection)
             additional_callbacks = [epochs_updating_callback]
             
             history, ending_time = loaded_model.train(data, epochs_left, batch_size, checkpoint_path, additional_callbacks)
 
-            loaded_model.save(path_to_model, True)
-            shutil.rmtree(checkpoint_path)
+            if not progress_info.stopped_prematurely:
+                loaded_model.save(path_to_model, True)
+                shutil.rmtree(checkpoint_path)
 
-            graph_path = path_to_model + TRAINING_GRAPHS_FOLDER_NAME + "/"
+                graph_path = path_to_model + TRAINING_GRAPHS_FOLDER_NAME + "/"
 
-            try:
-                loaded_model.save_train_history_graph(history.history, ending_time, graph_path)
-            except:
-                print("Couldn't save graph...")
-            
-            delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
-                           [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
-                           [env_id, current_queue_index], 
-                           connection)
+                try:
+                    loaded_model.save_train_history_graph(history.history, ending_time, graph_path)
+                except:
+                    print("Couldn't save graph...")
+                
+                delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
+                            [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 
+                            [env_id, current_queue_index], 
+                            connection)
+            else:
+                print("Training stopped prematurely...")
+                break
         except Exception as ex:
             print(ex)
             continue
     
+    key = "{}_{}".format(user_id, env_id)
+    
+    del(TRAIN_QUEUES[key])
+    del(TRAIN_QUEUES_PROGRESS_INFOS[key])
     print("\nTraining is over.\n")
 
 @app.route('/stop_train', methods=['POST'])
 def stop_train():
     
+    try:
+        if SESSION_FIELD_NAME not in request.json:
+            return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+        session = request.json[SESSION_FIELD_NAME]
+        
+        if USER_ID_FIELD_NAME not in session:
+            return compose_response("User not logged!", code=FAILURE_CODE)
+        
+        if ENV_ID_FIELD_NAME not in session:
+            return compose_response("Environment not selected!", code=FAILURE_CODE)
+            
+        user_id = session[USER_ID_FIELD_NAME]
+        env_id = session[ENV_ID_FIELD_NAME]
+        
+        key = "{}_{}".format(user_id, env_id)
+
+        if key not in TRAIN_QUEUES.keys():
+            return compose_response("Training is not running!", code=FAILURE_CODE)
+        
+        if key in TRAIN_QUEUES_PROGRESS_INFOS:
+            TRAIN_QUEUES_PROGRESS_INFOS[key].wants_to_stop = True
+        
+        return compose_response("Stopped training progress!")
+    except Exception as ex:
+        print(ex)
+        return compose_response("Couldn't stop the training...")
+
+@app.route('/get_train_queue', methods=['POST'])
+def get_train_queue():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
     if USER_ID_FIELD_NAME not in session:
         return compose_response("User not logged!", code=FAILURE_CODE)
     
     if ENV_ID_FIELD_NAME not in session:
-        return compose_response("Environment not selected!", code=FAILURE_CODE)
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    
+    try:
+        training_sessions = select_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME,
+                                           [QUEUE_INDEX_FIELD_NAME, MODEL_ID_FIELD_NAME, DATASET_ID_FIELD_NAME, 
+                                            NUM_OF_EPOCHS_FIELD_NAME, BATCH_SIZE_FIELD_NAME], 
+                                           [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                                           [user_id, env_id])
         
+        models = select_from_db(ALIVE_DB_MODELS_TABLE_NAME,
+                                [MODEL_ID_FIELD_NAME, MODEL_NAME_FIELD_NAME],
+                                [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                                [user_id, env_id])
+        
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME,
+                                  [DATASET_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME],
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME],
+                                  [user_id, env_id])
+        
+        model_names = dict()
+        dataset_names = dict()
+
+        for model in models:
+            model_id = model[0]
+            model_name = model[1]
+            model_names[model_id] = model_name
+        
+        for dataset in datasets:
+            dataset_id = dataset[0]
+            dataset_name = dataset[1]
+            dataset_names[dataset_id] = dataset_name
+        
+        data = list()
+
+        for training_session in training_sessions:
+            id = training_session[0]
+            model_id = training_session[1]
+            dataset_id = training_session[2]
+            model_name = model_names[model_id]
+            dataset_name = dataset_names[dataset_id]
+            num_of_epochs = training_session[3]
+            batch_size = training_session[4]
+
+            value = {"id" : id, "model_name" : model_name, "dataset_name" : dataset_name, 
+                     "num_of_epochs" : num_of_epochs, "batch_size" : batch_size}
+            
+            text = "{} - {}".format(model_name, dataset_name)
+
+            data.append({"value" : value, "text" : text})
+            
+        return compose_response("Train queue fetched!", data)
+    except:
+        return compose_response("Couldn't fetch train queue...", code=FAILURE_CODE)
+
+@app.route('/get_train_queue_progress_info', methods=['POST'])
+def get_train_queue_progress_info():
+
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+    
+    session = request.json[SESSION_FIELD_NAME]
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("No environment selected!", code=FAILURE_CODE)
+    
     user_id = session[USER_ID_FIELD_NAME]
     env_id = session[ENV_ID_FIELD_NAME]
     
     key = "{}_{}".format(user_id, env_id)
-
-    if key not in TRAINING_SESSIONS.keys():
-        return compose_response("Training is not running!")
     
-    return compose_response("Stop not implemented!", code=FAILURE_CODE)
+    if key in TRAIN_QUEUES:
+        if isinstance(TRAIN_QUEUES[key], Thread):
+            if TRAIN_QUEUES[key].is_alive():
+                if key in TRAIN_QUEUES_PROGRESS_INFOS:
+                    return compose_response("Training progress fetched!", TRAIN_QUEUES_PROGRESS_INFOS[key].get_payload())
+            else:
+                return compose_response("Training terminated!")
+    
+    return compose_response("Couldn't fetch training progress...", code=FAILURE_CODE)
+
+#endregion
+
+#region OTHER APIS
+
+@app.route('/fetch_available_model_types', methods=['POST'])
+def fetch_available_model_types():
+    
+    data = [{"value" : model_type, "text" : model_type} for model_type in MODEL_TYPES]
+
+    return compose_response("Model types fetched!", data)
+
+@app.route('/fetch_available_base_models', methods=['POST'])
+def fetch_available_base_models():
+
+    base_models = get_available_base_models()
+    
+    data = [{"value" : base_model, "text" : base_model} for base_model in base_models]
+
+    return compose_response("Base models fetched!", data)
+
+@app.route('/fetch_available_example_categories', methods=['POST'])
+def fetch_available_example_categories():
+
+    data = [{"value" : example_category, "text" : example_category} for example_category in EXAMPLE_CATEGORIES]
+
+    return compose_response("Example categories fetched!", data)
 
 #endregion
 
@@ -1165,14 +1641,6 @@ def initialize_server():
 
     if not os.path.exists(path_to_users_data):
         os.makedirs(path_to_users_data)
-    
-def reset_session():
-    session[LOGGED_IN_FIELD_NAME] = False
-    session.pop(USER_ID_FIELD_NAME)
-    session.pop(USERNAME_FIELD_NAME)
-    session.pop(USER_EMAIL_FIELD_NAME)
-    session.pop(ENV_ID_FIELD_NAME)
-    session.pop(ENV_NAME_FIELD_NAME)
 
 #region DB UTILITIES
 
@@ -1227,7 +1695,7 @@ def select_from_db(table_name:str, needed_fields:list=None,
             
             query += field_value
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     results = cursor.fetchall()
     cursor.close()
@@ -1273,7 +1741,7 @@ def insert_into_db(table_name:str, given_fields:list, given_values:list,
     
     query += ")"
 
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1348,7 +1816,7 @@ def update_db(table_name:str,
             
             query += field_value
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1393,7 +1861,7 @@ def delete_from_db(table_name:str, given_fields:list=None, given_values:list=Non
             
             query += field_value
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1403,7 +1871,7 @@ def execute_custom_update_query(query, connection:mysqlconn.MySQLConnection=None
     if connection == None:
         connection = DB_CONNECTION
     
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -1412,17 +1880,27 @@ def execute_custom_update_query(query, connection:mysqlconn.MySQLConnection=None
 
 class UpdateDBCallback(tf.keras.callbacks.Callback):
 
-    def __init__(self, user_id:int, env_id:int, current_queue_index:int, 
+    def __init__(self, user_id:int, env_id:int, current_queue_index:int, progress_info:TrainQueueProgressInfo,
                  connection:mysqlconn.MySQLConnection=None):
         super().__init__()
         self.__user_id = user_id
         self.__env_id = env_id
         self.__current_queue_index = current_queue_index
+        self.__progress_info = progress_info
 
         if connection == None:
             connection = DB_CONNECTION
         
         self.__connection = connection
+    
+    def on_batch_begin(self, batch, logs=None):
+
+        if self.__progress_info.wants_to_stop:
+            self.__progress_info.stopped_prematurely = True
+            self.model.stop_training = True
+    
+    def on_epoch_begin(self, epoch, logs=None):
+        self.__progress_info.current_session_epoch += 1
     
     def on_epoch_end(self, epoch, logs=None):
 
@@ -1436,7 +1914,7 @@ class UpdateDBCallback(tf.keras.callbacks.Callback):
         update_epochs_left_query += ENV_ID_FIELD_NAME + " = " + str(env_id) + " AND "
         update_epochs_left_query += QUEUE_INDEX_FIELD_NAME + " = " + str(current_queue_index)
         
-        cursor = self.__connection.cursor()
+        cursor = self.__connection.cursor(buffered=True)
         cursor.execute(update_epochs_left_query)
         self.__connection.commit()
         cursor.close()
@@ -1459,5 +1937,5 @@ def compose_response(message:str, data=None, code:int=SUCCESS_CODE):
 
 if __name__ == "__main__":
     initialize_server()
-    app.secret_key = os.urandom(12)
+    #app.secret_key = os.urandom(12)
     app.run(debug=False,host='0.0.0.0', port=5000)

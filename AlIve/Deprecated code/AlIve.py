@@ -479,7 +479,7 @@ def get_handle_preprocess_link(model_name:str):
     
     return tfhub_handle_handle, tfhub_handle_preprocess
 
-def get_available_models():
+def get_available_base_models():
     
     available_models = [
         'bert_en_uncased_L-12_H-768_A-12',

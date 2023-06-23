@@ -1006,8 +1006,6 @@ def get_dataset_examples():
         
         dataframe = pd.read_pickle(path_to_dataset)
 
-        print(dataframe.tail())
-
         examples = list()
         fields = list()
 
@@ -1036,6 +1034,9 @@ def get_dataset_examples():
                 
                 currentElement[column_name] = row[column]
             
+            if "index" not in currentElement:
+                currentElement["index"] = row_index
+            
             examples.append(currentElement)
 
             counter += 1
@@ -1052,6 +1053,93 @@ def get_dataset_examples():
     except Exception as ex:
         print(ex)
         return compose_response("Something went wrong, couldn't fetch the examples...", code=FAILURE_CODE)
+
+@app.route('/modify_example_in_dataset', methods=['POST'])
+def modify_example_in_dataset():
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    json = request.json
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
+    
+    needed_fields = [DATASET_NAME_FIELD_NAME, "example_index", "example_text", "example_targets", "example_category"]
+    
+    for needed_field in needed_fields:
+        if needed_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
+    example_index = json["example_index"]
+    example_text = json["example_text"]
+    example_targets = json["example_targets"]
+    example_category = json["example_category"]
+
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
+    
+    try:
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_PATH_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [user_id, env_id, dataset_name])
+        
+        if len(datasets) == 0:
+            return compose_response("A dataset with this name doesn't exist!", code=FAILURE_CODE)
+        
+        path_to_dataset = datasets[0][0]
+        
+        dataframe = pd.read_pickle(path_to_dataset)
+
+        new_row = dict()
+
+        new_row[TEXT_FIELD_NAME] = example_text
+        new_row[EXAMPLE_CATEGORY_FIELD_NAME] = example_category
+        
+        for new_example_target_data in example_targets:
+
+            target_name = new_example_target_data["targetName"]
+            target_value = new_example_target_data["targetValue"]
+
+            if target_name not in dataframe.columns:
+                dataframe[target_name] = EMPTY_TARGET_VALUE
+            
+            new_row[target_name] = target_value
+        
+        columns_to_drop = []
+
+        for column in dataframe.columns:
+            
+            if str(column) not in new_row.keys():
+                new_row[str(column)] = EMPTY_TARGET_VALUE
+
+            if "Unnamed:" in str(column):
+                columns_to_drop.append(str(column))
+        
+        dataframe.loc[example_index] = new_row
+
+        dataframe.drop(columns=columns_to_drop, inplace=True)
+        
+        if os.path.exists(path_to_dataset):
+            os.remove(path_to_dataset)
+
+        dataframe.to_pickle(path_to_dataset)
+
+        return compose_response("Example modified!")
+    except Exception as ex:
+        print(ex)
+        return compose_response("Something went wrong, couldn't add the example the dataset...", code=FAILURE_CODE)
 
 @app.route('/append_example_to_dataset', methods=['POST'])
 def append_example_to_dataset():
@@ -1138,6 +1226,76 @@ def append_example_to_dataset():
     except Exception as ex:
         print(ex)
         return compose_response("Something went wrong, couldn't add the example the dataset...", code=FAILURE_CODE)
+
+@app.route('/remove_example_from_dataset', methods=['POST'])
+def remove_example_from_dataset():
+    if SESSION_FIELD_NAME not in request.json:
+        return compose_response("Couldn't find session!", code=FAILURE_CODE)
+
+    session = request.json[SESSION_FIELD_NAME]
+    
+    json = request.json
+    
+    if USER_ID_FIELD_NAME not in session:
+        return compose_response("User not logged!", code=FAILURE_CODE)
+    
+    if ENV_ID_FIELD_NAME not in session:
+        return compose_response("Environment not selected!", code=FAILURE_CODE)
+    
+    needed_fields = [DATASET_NAME_FIELD_NAME, "example_index"]
+    
+    for needed_field in needed_fields:
+        if needed_field not in json:
+            return compose_response("Didn't recieve needed fields!", code=MISSING_FIELDS_CODE)
+    
+    user_id = session[USER_ID_FIELD_NAME]
+    env_id = session[ENV_ID_FIELD_NAME]
+    dataset_name = json[DATASET_NAME_FIELD_NAME]
+    example_index = json["example_index"]
+
+    key = "{}_{}".format(user_id, env_id)
+
+    if key in TRAIN_QUEUES.keys():
+        if TRAIN_QUEUES[key].is_alive():
+            return compose_response("This function is disabled when training is in progress!", code=FAILURE_CODE)
+    
+    try:
+        datasets = select_from_db(ALIVE_DB_DATASETS_TABLE_NAME, 
+                                  [DATASET_PATH_FIELD_NAME], 
+                                  [USER_ID_FIELD_NAME, ENV_ID_FIELD_NAME, DATASET_NAME_FIELD_NAME], 
+                                  [user_id, env_id, dataset_name])
+        
+        if len(datasets) == 0:
+            return compose_response("A dataset with this name doesn't exist!", code=FAILURE_CODE)
+        
+        path_to_dataset = datasets[0][0]
+        
+        dataframe = pd.read_pickle(path_to_dataset)
+        
+        columns_to_drop = []
+
+        for column in dataframe.columns:
+            
+            if "Unnamed:" in str(column):
+                columns_to_drop.append(str(column))
+        
+        print(example_index)
+
+        dataframe.drop(example_index, inplace=True)
+        
+        print(dataframe.head())
+
+        dataframe.drop(columns=columns_to_drop, inplace=True)
+        
+        if os.path.exists(path_to_dataset):
+            os.remove(path_to_dataset)
+
+        dataframe.to_pickle(path_to_dataset)
+
+        return compose_response("Example removed!")
+    except Exception as ex:
+        print(ex)
+        return compose_response("Something went wrong, couldn't remove the example the dataset...", code=FAILURE_CODE)
 
 #endregion
 

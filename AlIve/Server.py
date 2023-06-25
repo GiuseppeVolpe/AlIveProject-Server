@@ -596,8 +596,11 @@ def predict():
         
         new_model = LOADED_MODELS[key]
         
+        prediction, prob = new_model.predict(sent_to_predict)
+        
         data = {
-            "prediction" : str(new_model.predict([sent_to_predict]))
+            "prediction" : str(prediction),
+            "prob" : prob,
         }
 
         return compose_response("Prediction done successfully!", data)

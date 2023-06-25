@@ -676,7 +676,7 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
         loss, accuracy = self._model.evaluate(testfeatures, testtargets)
         return loss, accuracy
     
-    def predict(self, examples:list):
+    def predict(self, example):
 
         if not isinstance(self._model, tf.keras.Model):
             raise Exception("Model not built!")
@@ -684,14 +684,32 @@ class SentenceLevelClassificationModel(NLPClassificationModel):
         if self._binarizer == None:
             raise Exception("Binarizer doesn't exist!")
         
-        results = self._model(tf.constant(examples))
+        result = self._model(tf.constant([example]))
 
-        if results[0].shape[0] > 1:
-            results = tf.nn.softmax(results)
+        max_prob = 0
+
+        if result[0].shape[0] > 1:
+
+            result = tf.nn.softmax(result)
+            
+            for prob in result[0]:
+
+                prob = float(prob)
+
+                if prob > max_prob:
+                    max_prob = prob
+
+        elif result[0].shape[0] == 1:
+            prob = float(tf.nn.sigmoid(result))
+
+            if prob >= 0.5:
+                max_prob = prob
+            else:
+                max_prob = 1 - prob
         
-        predictions = self._binarizer.inverse_transform(results.numpy())
+        prediction = self._binarizer.inverse_transform(result.numpy())[0]
 
-        return predictions
+        return prediction, max_prob
 
 class TokenLevelClassificationModel(NLPClassificationModel):
 

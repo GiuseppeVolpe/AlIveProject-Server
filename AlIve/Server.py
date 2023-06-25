@@ -594,14 +594,26 @@ def predict():
         if key not in LOADED_MODELS.keys():
             LOADED_MODELS[key] = NLPClassificationModel.load_model(path_to_model)
         
+        print("Loaded model for prediction!")
+        
         new_model = LOADED_MODELS[key]
+
+        data = {"prediction" : ""}
         
-        prediction, prob = new_model.predict(sent_to_predict)
-        
-        data = {
-            "prediction" : str(prediction),
-            "prob" : prob,
-        }
+        if model_type == SLC_MODEL_TYPE:
+            prediction, prob = new_model.predict(sent_to_predict)
+            
+            data = {
+                "prediction" : str(prediction),
+                "prob" : prob,
+            }
+        elif model_type == TLC_MODEL_TYPE:
+            prediction, entities = new_model.predict(sent_to_predict) 
+            
+            data = {
+                "prediction" : str(prediction),
+                "entities" : entities,
+            }
 
         return compose_response("Prediction done successfully!", data)
     except Exception as ex:

@@ -471,7 +471,7 @@ class NLPClassificationModel(ABC):
         pass
     
     @abstractmethod
-    def predict(self, examples:list):
+    def predict(self, example):
         pass
     
     def save_train_history_graph(self, history_dict:dict, date:datetime, directory:str, 
@@ -865,7 +865,10 @@ class TokenLevelClassificationModel(NLPClassificationModel):
         loss, accuracy = self._model.evaluate(testfeatures, testtargets)
         return loss, accuracy
     
-    def predict(self, examples:list):
+    def predict(self, example):
+
+        example = self.preprocess_example(example)
+        words_list = re.split(r"\s+", example)
 
         if not isinstance(self._model, tf.keras.Model):
             raise Exception("Model not built!")
@@ -873,32 +876,42 @@ class TokenLevelClassificationModel(NLPClassificationModel):
         if self._binarizer == None:
             raise Exception("Binarizer doesn't exist!")
         
-        results = []
+        sentenceprediction = np.array( self._model(tf.constant([example]))[0] )
         
-        for example in examples:
-            
-            sentenceprediction = np.array( self._model(tf.constant([example]))[0] )
-            
-            if sentenceprediction[0].shape[0] > 1:
-                sentenceprediction = tf.nn.softmax(sentenceprediction)
-            
-            sentenceprediction = self._binarizer.inverse_transform(sentenceprediction.numpy())[1:]
-
-            decoded_prediction = []
-
-            tokenizedexample = self.tokenize(example)
-
-            for word in tokenizedexample:
-                num_of_tokens = word.shape[0]
-                word_class = sentenceprediction[0]
-                decoded_prediction.append(word_class)
-                sentenceprediction = sentenceprediction[num_of_tokens:]
-            
-            results.append(np.array(decoded_prediction))
+        if sentenceprediction[0].shape[0] > 1:
+            sentenceprediction = tf.nn.softmax(sentenceprediction)
         
-        results = np.array(results)
+        sentenceprediction = self._binarizer.inverse_transform(sentenceprediction.numpy())[1:]
+
+        decoded_prediction = []
+
+        tokenizedexample = self.tokenize(example)
+
+        for word in tokenizedexample:
+            num_of_tokens = word.shape[0]
+            word_class = sentenceprediction[0]
+            decoded_prediction.append(word_class)
+            sentenceprediction = sentenceprediction[num_of_tokens:]
         
-        return results
+        result = np.array(decoded_prediction)
+
+        entities = []
+
+        for word, index in words_list:
+            entity_prediction = result[index]
+
+            if (entity_prediction != "O"):
+                entities.append(word, entity_prediction)
+        
+        print(entities)
+
+        return result, entities
+    
+    def preprocess_example(self, example):
+        
+        clean_example = re.sub(r'[\W_]', " ", example)
+
+        return clean_example
 
     def tokenize(self, sentence):
 

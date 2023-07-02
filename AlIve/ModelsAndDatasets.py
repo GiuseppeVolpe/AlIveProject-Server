@@ -901,7 +901,8 @@ class TokenLevelClassificationModel(NLPClassificationModel):
             entity_prediction = result[index]
 
             if (entity_prediction != "O"):
-                entities.append(word, entity_prediction)
+                entity_tuple = (word, entity_prediction)
+                entities.append(entity_tuple)
         
         print(entities)
 

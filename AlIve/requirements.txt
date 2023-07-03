@@ -1,5 +1,5 @@
 tqdm
-numpy
+numpy==1.22
 pandas
 scikit-learn
 tensorflow==2.12.0

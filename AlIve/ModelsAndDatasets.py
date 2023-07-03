@@ -897,14 +897,15 @@ class TokenLevelClassificationModel(NLPClassificationModel):
 
         entities = []
 
-        for word, index in words_list:
+        for index, word in enumerate(words_list):
+
             entity_prediction = result[index]
 
             if (entity_prediction != "O"):
                 entity_tuple = (word, entity_prediction)
                 entities.append(entity_tuple)
         
-        print(entities)
+        print("Entities recognized: " + str(entities))
 
         return result, entities
     

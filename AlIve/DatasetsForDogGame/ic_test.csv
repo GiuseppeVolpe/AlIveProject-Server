@@ -1,0 +1,1801 @@
+,text,intent
+851,puoi andare dove si trova quella chiave ,Reach
+852,puoi andare in corrispondenza di quella chiave ,Reach
+853,potresti andare dove sta quella chiave ,Reach
+854,potresti andare dove si trova quella chiave ,Reach
+855,potresti andare in corrispondenza di quella chiave ,Reach
+856,puoi recarti dove sta quella chiave ,Reach
+857,puoi recarti dove si trova quella chiave ,Reach
+858,puoi recarti in corrispondenza di quella chiave ,Reach
+859,potresti recarti dove sta quella chiave ,Reach
+860,potresti recarti dove si trova quella chiave ,Reach
+861,potresti recarti in corrispondenza di quella chiave ,Reach
+862,puoi raggiungere quella chiave ,Reach
+863,potresti raggiungere quella chiave ,Reach
+864,raggiungi la chiave ,Reach
+865,vai dove sta la chiave ,Reach
+866,vai dove si trova la chiave ,Reach
+867,vai in corrispondenza di la chiave ,Reach
+868,recati dove sta la chiave ,Reach
+869,recati dove si trova la chiave ,Reach
+870,recati in corrispondenza di la chiave ,Reach
+871,andresti dove sta la chiave ,Reach
+872,andresti dove si trova la chiave ,Reach
+873,andresti in corrispondenza di la chiave ,Reach
+874,ti recheresti dove sta la chiave ,Reach
+875,ti recheresti dove si trova la chiave ,Reach
+876,ti recheresti in corrispondenza di la chiave ,Reach
+877,puoi andare dove sta la chiave ,Reach
+878,puoi andare dove si trova la chiave ,Reach
+879,puoi andare in corrispondenza di la chiave ,Reach
+880,potresti andare dove sta la chiave ,Reach
+881,potresti andare dove si trova la chiave ,Reach
+882,potresti andare in corrispondenza di la chiave ,Reach
+883,puoi recarti dove sta la chiave ,Reach
+884,puoi recarti dove si trova la chiave ,Reach
+885,puoi recarti in corrispondenza di la chiave ,Reach
+886,potresti recarti dove sta la chiave ,Reach
+887,potresti recarti dove si trova la chiave ,Reach
+888,potresti recarti in corrispondenza di la chiave ,Reach
+889,puoi raggiungere la chiave ,Reach
+890,potresti raggiungere la chiave ,Reach
+891,raggiungi queste chiavi ,Reach
+892,vai dove sta queste chiavi ,Reach
+893,vai dove si trova queste chiavi ,Reach
+894,vai in corrispondenza di queste chiavi ,Reach
+895,recati dove sta queste chiavi ,Reach
+896,recati dove si trova queste chiavi ,Reach
+897,recati in corrispondenza di queste chiavi ,Reach
+898,andresti dove sta queste chiavi ,Reach
+899,andresti dove si trova queste chiavi ,Reach
+900,andresti in corrispondenza di queste chiavi ,Reach
+901,ti recheresti dove sta queste chiavi ,Reach
+902,ti recheresti dove si trova queste chiavi ,Reach
+903,ti recheresti in corrispondenza di queste chiavi ,Reach
+904,puoi andare dove sta queste chiavi ,Reach
+905,puoi andare dove si trova queste chiavi ,Reach
+906,puoi andare in corrispondenza di queste chiavi ,Reach
+907,potresti andare dove sta queste chiavi ,Reach
+908,potresti andare dove si trova queste chiavi ,Reach
+909,potresti andare in corrispondenza di queste chiavi ,Reach
+910,puoi recarti dove sta queste chiavi ,Reach
+911,puoi recarti dove si trova queste chiavi ,Reach
+912,puoi recarti in corrispondenza di queste chiavi ,Reach
+913,potresti recarti dove sta queste chiavi ,Reach
+914,potresti recarti dove si trova queste chiavi ,Reach
+915,potresti recarti in corrispondenza di queste chiavi ,Reach
+916,puoi raggiungere queste chiavi ,Reach
+917,potresti raggiungere queste chiavi ,Reach
+918,raggiungi quelle chiavi ,Reach
+919,vai dove sta quelle chiavi ,Reach
+920,vai dove si trova quelle chiavi ,Reach
+921,vai in corrispondenza di quelle chiavi ,Reach
+922,recati dove sta quelle chiavi ,Reach
+923,recati dove si trova quelle chiavi ,Reach
+924,recati in corrispondenza di quelle chiavi ,Reach
+925,andresti dove sta quelle chiavi ,Reach
+926,andresti dove si trova quelle chiavi ,Reach
+927,andresti in corrispondenza di quelle chiavi ,Reach
+928,ti recheresti dove sta quelle chiavi ,Reach
+929,ti recheresti dove si trova quelle chiavi ,Reach
+930,ti recheresti in corrispondenza di quelle chiavi ,Reach
+931,puoi andare dove sta quelle chiavi ,Reach
+932,puoi andare dove si trova quelle chiavi ,Reach
+933,puoi andare in corrispondenza di quelle chiavi ,Reach
+934,potresti andare dove sta quelle chiavi ,Reach
+935,potresti andare dove si trova quelle chiavi ,Reach
+936,potresti andare in corrispondenza di quelle chiavi ,Reach
+937,puoi recarti dove sta quelle chiavi ,Reach
+938,puoi recarti dove si trova quelle chiavi ,Reach
+939,puoi recarti in corrispondenza di quelle chiavi ,Reach
+940,potresti recarti dove sta quelle chiavi ,Reach
+941,potresti recarti dove si trova quelle chiavi ,Reach
+942,potresti recarti in corrispondenza di quelle chiavi ,Reach
+943,puoi raggiungere quelle chiavi ,Reach
+944,potresti raggiungere quelle chiavi ,Reach
+945,raggiungi le chiavi ,Reach
+946,vai dove sta le chiavi ,Reach
+947,vai dove si trova le chiavi ,Reach
+948,vai in corrispondenza di le chiavi ,Reach
+949,recati dove sta le chiavi ,Reach
+950,recati dove si trova le chiavi ,Reach
+951,recati in corrispondenza di le chiavi ,Reach
+952,andresti dove sta le chiavi ,Reach
+953,andresti dove si trova le chiavi ,Reach
+954,andresti in corrispondenza di le chiavi ,Reach
+955,ti recheresti dove sta le chiavi ,Reach
+956,ti recheresti dove si trova le chiavi ,Reach
+957,ti recheresti in corrispondenza di le chiavi ,Reach
+958,puoi andare dove sta le chiavi ,Reach
+959,puoi andare dove si trova le chiavi ,Reach
+960,puoi andare in corrispondenza di le chiavi ,Reach
+961,potresti andare dove sta le chiavi ,Reach
+962,potresti andare dove si trova le chiavi ,Reach
+963,potresti andare in corrispondenza di le chiavi ,Reach
+964,puoi recarti dove sta le chiavi ,Reach
+965,puoi recarti dove si trova le chiavi ,Reach
+966,puoi recarti in corrispondenza di le chiavi ,Reach
+967,potresti recarti dove sta le chiavi ,Reach
+968,potresti recarti dove si trova le chiavi ,Reach
+969,potresti recarti in corrispondenza di le chiavi ,Reach
+970,puoi raggiungere le chiavi ,Reach
+971,potresti raggiungere le chiavi ,Reach
+972,raggiungi questo ramo ,Reach
+973,vai dove sta questo ramo ,Reach
+974,vai dove si trova questo ramo ,Reach
+975,vai in corrispondenza di questo ramo ,Reach
+976,recati dove sta questo ramo ,Reach
+977,recati dove si trova questo ramo ,Reach
+978,recati in corrispondenza di questo ramo ,Reach
+979,andresti dove sta questo ramo ,Reach
+980,andresti dove si trova questo ramo ,Reach
+981,andresti in corrispondenza di questo ramo ,Reach
+982,ti recheresti dove sta questo ramo ,Reach
+983,ti recheresti dove si trova questo ramo ,Reach
+984,ti recheresti in corrispondenza di questo ramo ,Reach
+985,puoi andare dove sta questo ramo ,Reach
+986,puoi andare dove si trova questo ramo ,Reach
+987,puoi andare in corrispondenza di questo ramo ,Reach
+988,potresti andare dove sta questo ramo ,Reach
+989,potresti andare dove si trova questo ramo ,Reach
+990,potresti andare in corrispondenza di questo ramo ,Reach
+991,puoi recarti dove sta questo ramo ,Reach
+992,puoi recarti dove si trova questo ramo ,Reach
+993,puoi recarti in corrispondenza di questo ramo ,Reach
+994,potresti recarti dove sta questo ramo ,Reach
+995,potresti recarti dove si trova questo ramo ,Reach
+996,potresti recarti in corrispondenza di questo ramo ,Reach
+997,puoi raggiungere questo ramo ,Reach
+998,potresti raggiungere questo ramo ,Reach
+999,raggiungi quel ramo ,Reach
+1000,vai dove sta quel ramo ,Reach
+1001,vai dove si trova quel ramo ,Reach
+1002,vai in corrispondenza di quel ramo ,Reach
+1003,recati dove sta quel ramo ,Reach
+1004,recati dove si trova quel ramo ,Reach
+1005,recati in corrispondenza di quel ramo ,Reach
+1006,andresti dove sta quel ramo ,Reach
+1007,andresti dove si trova quel ramo ,Reach
+1008,andresti in corrispondenza di quel ramo ,Reach
+1009,ti recheresti dove sta quel ramo ,Reach
+1010,ti recheresti dove si trova quel ramo ,Reach
+1011,ti recheresti in corrispondenza di quel ramo ,Reach
+1012,puoi andare dove sta quel ramo ,Reach
+1013,puoi andare dove si trova quel ramo ,Reach
+1014,puoi andare in corrispondenza di quel ramo ,Reach
+1015,potresti andare dove sta quel ramo ,Reach
+1016,potresti andare dove si trova quel ramo ,Reach
+1017,potresti andare in corrispondenza di quel ramo ,Reach
+1018,puoi recarti dove sta quel ramo ,Reach
+1019,puoi recarti dove si trova quel ramo ,Reach
+1020,puoi recarti in corrispondenza di quel ramo ,Reach
+1021,potresti recarti dove sta quel ramo ,Reach
+1022,potresti recarti dove si trova quel ramo ,Reach
+1023,potresti recarti in corrispondenza di quel ramo ,Reach
+1024,puoi raggiungere quel ramo ,Reach
+1025,potresti raggiungere quel ramo ,Reach
+1026,raggiungi il ramo ,Reach
+1027,vai dove sta il ramo ,Reach
+1028,vai dove si trova il ramo ,Reach
+1029,vai in corrispondenza di il ramo ,Reach
+1030,recati dove sta il ramo ,Reach
+1031,recati dove si trova il ramo ,Reach
+1032,recati in corrispondenza di il ramo ,Reach
+1033,andresti dove sta il ramo ,Reach
+1034,andresti dove si trova il ramo ,Reach
+1035,andresti in corrispondenza di il ramo ,Reach
+1036,ti recheresti dove sta il ramo ,Reach
+1037,ti recheresti dove si trova il ramo ,Reach
+1038,ti recheresti in corrispondenza di il ramo ,Reach
+1039,puoi andare dove sta il ramo ,Reach
+1040,puoi andare dove si trova il ramo ,Reach
+1041,puoi andare in corrispondenza di il ramo ,Reach
+1042,potresti andare dove sta il ramo ,Reach
+1043,potresti andare dove si trova il ramo ,Reach
+1044,potresti andare in corrispondenza di il ramo ,Reach
+1045,puoi recarti dove sta il ramo ,Reach
+1046,puoi recarti dove si trova il ramo ,Reach
+1047,puoi recarti in corrispondenza di il ramo ,Reach
+1048,potresti recarti dove sta il ramo ,Reach
+1049,potresti recarti dove si trova il ramo ,Reach
+1050,potresti recarti in corrispondenza di il ramo ,Reach
+1051,puoi raggiungere il ramo ,Reach
+1052,potresti raggiungere il ramo ,Reach
+1053,raggiungi questo ramoscello ,Reach
+1054,vai dove sta questo ramoscello ,Reach
+1055,vai dove si trova questo ramoscello ,Reach
+1056,vai in corrispondenza di questo ramoscello ,Reach
+1057,recati dove sta questo ramoscello ,Reach
+1058,recati dove si trova questo ramoscello ,Reach
+1059,recati in corrispondenza di questo ramoscello ,Reach
+1060,andresti dove sta questo ramoscello ,Reach
+1061,andresti dove si trova questo ramoscello ,Reach
+1062,andresti in corrispondenza di questo ramoscello ,Reach
+1063,ti recheresti dove sta questo ramoscello ,Reach
+1064,ti recheresti dove si trova questo ramoscello ,Reach
+1065,ti recheresti in corrispondenza di questo ramoscello ,Reach
+1066,puoi andare dove sta questo ramoscello ,Reach
+1067,puoi andare dove si trova questo ramoscello ,Reach
+1068,puoi andare in corrispondenza di questo ramoscello ,Reach
+1069,potresti andare dove sta questo ramoscello ,Reach
+1070,potresti andare dove si trova questo ramoscello ,Reach
+1071,potresti andare in corrispondenza di questo ramoscello ,Reach
+1072,puoi recarti dove sta questo ramoscello ,Reach
+1073,puoi recarti dove si trova questo ramoscello ,Reach
+1074,puoi recarti in corrispondenza di questo ramoscello ,Reach
+1075,potresti recarti dove sta questo ramoscello ,Reach
+1076,potresti recarti dove si trova questo ramoscello ,Reach
+1077,potresti recarti in corrispondenza di questo ramoscello ,Reach
+1078,puoi raggiungere questo ramoscello ,Reach
+1079,potresti raggiungere questo ramoscello ,Reach
+1080,raggiungi quel ramoscello ,Reach
+1081,vai dove sta quel ramoscello ,Reach
+1082,vai dove si trova quel ramoscello ,Reach
+1083,vai in corrispondenza di quel ramoscello ,Reach
+1084,recati dove sta quel ramoscello ,Reach
+1085,recati dove si trova quel ramoscello ,Reach
+1086,recati in corrispondenza di quel ramoscello ,Reach
+1087,andresti dove sta quel ramoscello ,Reach
+1088,andresti dove si trova quel ramoscello ,Reach
+1089,andresti in corrispondenza di quel ramoscello ,Reach
+1090,ti recheresti dove sta quel ramoscello ,Reach
+1091,ti recheresti dove si trova quel ramoscello ,Reach
+1092,ti recheresti in corrispondenza di quel ramoscello ,Reach
+1093,puoi andare dove sta quel ramoscello ,Reach
+1094,puoi andare dove si trova quel ramoscello ,Reach
+1095,puoi andare in corrispondenza di quel ramoscello ,Reach
+1096,potresti andare dove sta quel ramoscello ,Reach
+1097,potresti andare dove si trova quel ramoscello ,Reach
+1098,potresti andare in corrispondenza di quel ramoscello ,Reach
+1099,puoi recarti dove sta quel ramoscello ,Reach
+1100,puoi recarti dove si trova quel ramoscello ,Reach
+1101,puoi recarti in corrispondenza di quel ramoscello ,Reach
+1102,potresti recarti dove sta quel ramoscello ,Reach
+1103,potresti recarti dove si trova quel ramoscello ,Reach
+1104,potresti recarti in corrispondenza di quel ramoscello ,Reach
+1105,puoi raggiungere quel ramoscello ,Reach
+1106,potresti raggiungere quel ramoscello ,Reach
+1107,raggiungi il ramoscello ,Reach
+1108,vai dove sta il ramoscello ,Reach
+1109,vai dove si trova il ramoscello ,Reach
+1110,vai in corrispondenza di il ramoscello ,Reach
+1111,recati dove sta il ramoscello ,Reach
+1112,recati dove si trova il ramoscello ,Reach
+1113,recati in corrispondenza di il ramoscello ,Reach
+1114,andresti dove sta il ramoscello ,Reach
+1115,andresti dove si trova il ramoscello ,Reach
+1116,andresti in corrispondenza di il ramoscello ,Reach
+1117,ti recheresti dove sta il ramoscello ,Reach
+1118,ti recheresti dove si trova il ramoscello ,Reach
+1119,ti recheresti in corrispondenza di il ramoscello ,Reach
+1120,puoi andare dove sta il ramoscello ,Reach
+1121,puoi andare dove si trova il ramoscello ,Reach
+1122,puoi andare in corrispondenza di il ramoscello ,Reach
+1123,potresti andare dove sta il ramoscello ,Reach
+1124,potresti andare dove si trova il ramoscello ,Reach
+1125,potresti andare in corrispondenza di il ramoscello ,Reach
+1126,puoi recarti dove sta il ramoscello ,Reach
+1127,puoi recarti dove si trova il ramoscello ,Reach
+1128,puoi recarti in corrispondenza di il ramoscello ,Reach
+1129,potresti recarti dove sta il ramoscello ,Reach
+1130,potresti recarti dove si trova il ramoscello ,Reach
+1131,potresti recarti in corrispondenza di il ramoscello ,Reach
+1132,puoi raggiungere il ramoscello ,Reach
+1133,potresti raggiungere il ramoscello ,Reach
+1134,raggiungi questo rametto ,Reach
+1135,vai dove sta questo rametto ,Reach
+1136,vai dove si trova questo rametto ,Reach
+1137,vai in corrispondenza di questo rametto ,Reach
+1138,recati dove sta questo rametto ,Reach
+1139,recati dove si trova questo rametto ,Reach
+1140,recati in corrispondenza di questo rametto ,Reach
+1141,andresti dove sta questo rametto ,Reach
+1142,andresti dove si trova questo rametto ,Reach
+1143,andresti in corrispondenza di questo rametto ,Reach
+1144,ti recheresti dove sta questo rametto ,Reach
+1145,ti recheresti dove si trova questo rametto ,Reach
+1146,ti recheresti in corrispondenza di questo rametto ,Reach
+1147,puoi andare dove sta questo rametto ,Reach
+1148,puoi andare dove si trova questo rametto ,Reach
+1149,puoi andare in corrispondenza di questo rametto ,Reach
+1150,potresti andare dove sta questo rametto ,Reach
+1151,potresti andare dove si trova questo rametto ,Reach
+1152,potresti andare in corrispondenza di questo rametto ,Reach
+1153,puoi recarti dove sta questo rametto ,Reach
+1154,puoi recarti dove si trova questo rametto ,Reach
+1155,puoi recarti in corrispondenza di questo rametto ,Reach
+1156,potresti recarti dove sta questo rametto ,Reach
+1157,potresti recarti dove si trova questo rametto ,Reach
+1158,potresti recarti in corrispondenza di questo rametto ,Reach
+1159,puoi raggiungere questo rametto ,Reach
+1160,potresti raggiungere questo rametto ,Reach
+1161,raggiungi quel rametto ,Reach
+1162,vai dove sta quel rametto ,Reach
+1163,vai dove si trova quel rametto ,Reach
+1164,vai in corrispondenza di quel rametto ,Reach
+1165,recati dove sta quel rametto ,Reach
+1166,recati dove si trova quel rametto ,Reach
+1167,recati in corrispondenza di quel rametto ,Reach
+1168,andresti dove sta quel rametto ,Reach
+1169,andresti dove si trova quel rametto ,Reach
+1170,andresti in corrispondenza di quel rametto ,Reach
+1171,ti recheresti dove sta quel rametto ,Reach
+1172,ti recheresti dove si trova quel rametto ,Reach
+1173,ti recheresti in corrispondenza di quel rametto ,Reach
+1174,puoi andare dove sta quel rametto ,Reach
+1175,puoi andare dove si trova quel rametto ,Reach
+1176,puoi andare in corrispondenza di quel rametto ,Reach
+1177,potresti andare dove sta quel rametto ,Reach
+1178,potresti andare dove si trova quel rametto ,Reach
+1179,potresti andare in corrispondenza di quel rametto ,Reach
+1180,puoi recarti dove sta quel rametto ,Reach
+1181,puoi recarti dove si trova quel rametto ,Reach
+1182,puoi recarti in corrispondenza di quel rametto ,Reach
+1183,potresti recarti dove sta quel rametto ,Reach
+1184,potresti recarti dove si trova quel rametto ,Reach
+1185,potresti recarti in corrispondenza di quel rametto ,Reach
+1186,puoi raggiungere quel rametto ,Reach
+1187,potresti raggiungere quel rametto ,Reach
+1188,raggiungi il rametto ,Reach
+1189,vai dove sta il rametto ,Reach
+1190,vai dove si trova il rametto ,Reach
+1191,vai in corrispondenza di il rametto ,Reach
+1192,recati dove sta il rametto ,Reach
+1193,recati dove si trova il rametto ,Reach
+1194,recati in corrispondenza di il rametto ,Reach
+1195,andresti dove sta il rametto ,Reach
+1196,andresti dove si trova il rametto ,Reach
+1197,andresti in corrispondenza di il rametto ,Reach
+1198,ti recheresti dove sta il rametto ,Reach
+1199,ti recheresti dove si trova il rametto ,Reach
+1200,ti recheresti in corrispondenza di il rametto ,Reach
+1201,puoi andare dove sta il rametto ,Reach
+1202,puoi andare dove si trova il rametto ,Reach
+1203,puoi andare in corrispondenza di il rametto ,Reach
+1204,potresti andare dove sta il rametto ,Reach
+1205,potresti andare dove si trova il rametto ,Reach
+1206,potresti andare in corrispondenza di il rametto ,Reach
+1207,puoi recarti dove sta il rametto ,Reach
+1208,puoi recarti dove si trova il rametto ,Reach
+1209,puoi recarti in corrispondenza di il rametto ,Reach
+1210,potresti recarti dove sta il rametto ,Reach
+1211,potresti recarti dove si trova il rametto ,Reach
+1212,potresti recarti in corrispondenza di il rametto ,Reach
+1213,puoi raggiungere il rametto ,Reach
+1214,potresti raggiungere il rametto ,Reach
+1215,raggiungi questo bastone ,Reach
+1216,vai dove sta questo bastone ,Reach
+1217,vai dove si trova questo bastone ,Reach
+1218,vai in corrispondenza di questo bastone ,Reach
+1219,recati dove sta questo bastone ,Reach
+1220,recati dove si trova questo bastone ,Reach
+1221,recati in corrispondenza di questo bastone ,Reach
+1222,andresti dove sta questo bastone ,Reach
+1223,andresti dove si trova questo bastone ,Reach
+1224,andresti in corrispondenza di questo bastone ,Reach
+1225,ti recheresti dove sta questo bastone ,Reach
+1226,ti recheresti dove si trova questo bastone ,Reach
+1227,ti recheresti in corrispondenza di questo bastone ,Reach
+1228,puoi andare dove sta questo bastone ,Reach
+1229,puoi andare dove si trova questo bastone ,Reach
+1230,puoi andare in corrispondenza di questo bastone ,Reach
+1231,potresti andare dove sta questo bastone ,Reach
+1232,potresti andare dove si trova questo bastone ,Reach
+1233,potresti andare in corrispondenza di questo bastone ,Reach
+1234,puoi recarti dove sta questo bastone ,Reach
+1235,puoi recarti dove si trova questo bastone ,Reach
+1236,puoi recarti in corrispondenza di questo bastone ,Reach
+1237,potresti recarti dove sta questo bastone ,Reach
+1238,potresti recarti dove si trova questo bastone ,Reach
+1239,potresti recarti in corrispondenza di questo bastone ,Reach
+1240,puoi raggiungere questo bastone ,Reach
+1241,potresti raggiungere questo bastone ,Reach
+1242,raggiungi quel bastone ,Reach
+1243,vai dove sta quel bastone ,Reach
+1244,vai dove si trova quel bastone ,Reach
+1245,vai in corrispondenza di quel bastone ,Reach
+1246,recati dove sta quel bastone ,Reach
+1247,recati dove si trova quel bastone ,Reach
+1248,recati in corrispondenza di quel bastone ,Reach
+1249,andresti dove sta quel bastone ,Reach
+1250,andresti dove si trova quel bastone ,Reach
+1251,andresti in corrispondenza di quel bastone ,Reach
+1252,ti recheresti dove sta quel bastone ,Reach
+1253,ti recheresti dove si trova quel bastone ,Reach
+1254,ti recheresti in corrispondenza di quel bastone ,Reach
+1255,puoi andare dove sta quel bastone ,Reach
+1256,puoi andare dove si trova quel bastone ,Reach
+1257,puoi andare in corrispondenza di quel bastone ,Reach
+1258,potresti andare dove sta quel bastone ,Reach
+1259,potresti andare dove si trova quel bastone ,Reach
+1260,potresti andare in corrispondenza di quel bastone ,Reach
+1261,puoi recarti dove sta quel bastone ,Reach
+1262,puoi recarti dove si trova quel bastone ,Reach
+1263,puoi recarti in corrispondenza di quel bastone ,Reach
+1264,potresti recarti dove sta quel bastone ,Reach
+1265,potresti recarti dove si trova quel bastone ,Reach
+1266,potresti recarti in corrispondenza di quel bastone ,Reach
+1267,puoi raggiungere quel bastone ,Reach
+1268,potresti raggiungere quel bastone ,Reach
+1269,raggiungi il bastone ,Reach
+1270,vai dove sta il bastone ,Reach
+1271,vai dove si trova il bastone ,Reach
+1272,vai in corrispondenza di il bastone ,Reach
+1273,recati dove sta il bastone ,Reach
+1274,recati dove si trova il bastone ,Reach
+1275,recati in corrispondenza di il bastone ,Reach
+1276,andresti dove sta il bastone ,Reach
+1277,andresti dove si trova il bastone ,Reach
+1278,andresti in corrispondenza di il bastone ,Reach
+1279,ti recheresti dove sta il bastone ,Reach
+1280,ti recheresti dove si trova il bastone ,Reach
+1281,ti recheresti in corrispondenza di il bastone ,Reach
+1282,puoi andare dove sta il bastone ,Reach
+1283,puoi andare dove si trova il bastone ,Reach
+1284,puoi andare in corrispondenza di il bastone ,Reach
+1285,potresti andare dove sta il bastone ,Reach
+1286,potresti andare dove si trova il bastone ,Reach
+1287,potresti andare in corrispondenza di il bastone ,Reach
+1288,puoi recarti dove sta il bastone ,Reach
+1289,puoi recarti dove si trova il bastone ,Reach
+1290,puoi recarti in corrispondenza di il bastone ,Reach
+1291,potresti recarti dove sta il bastone ,Reach
+1292,potresti recarti dove si trova il bastone ,Reach
+1293,potresti recarti in corrispondenza di il bastone ,Reach
+1294,puoi raggiungere il bastone ,Reach
+1295,potresti raggiungere il bastone ,Reach
+1296,raggiungi questa bacchetta ,Reach
+1297,vai dove sta questa bacchetta ,Reach
+1298,vai dove si trova questa bacchetta ,Reach
+1299,vai in corrispondenza di questa bacchetta ,Reach
+1300,recati dove sta questa bacchetta ,Reach
+1301,recati dove si trova questa bacchetta ,Reach
+1302,recati in corrispondenza di questa bacchetta ,Reach
+1303,andresti dove sta questa bacchetta ,Reach
+1304,andresti dove si trova questa bacchetta ,Reach
+1305,andresti in corrispondenza di questa bacchetta ,Reach
+1306,ti recheresti dove sta questa bacchetta ,Reach
+1307,ti recheresti dove si trova questa bacchetta ,Reach
+1308,ti recheresti in corrispondenza di questa bacchetta ,Reach
+1309,puoi andare dove sta questa bacchetta ,Reach
+1310,puoi andare dove si trova questa bacchetta ,Reach
+1311,puoi andare in corrispondenza di questa bacchetta ,Reach
+1312,potresti andare dove sta questa bacchetta ,Reach
+1313,potresti andare dove si trova questa bacchetta ,Reach
+1314,potresti andare in corrispondenza di questa bacchetta ,Reach
+1315,puoi recarti dove sta questa bacchetta ,Reach
+1316,puoi recarti dove si trova questa bacchetta ,Reach
+1317,puoi recarti in corrispondenza di questa bacchetta ,Reach
+1318,potresti recarti dove sta questa bacchetta ,Reach
+1319,potresti recarti dove si trova questa bacchetta ,Reach
+1320,potresti recarti in corrispondenza di questa bacchetta ,Reach
+1321,puoi raggiungere questa bacchetta ,Reach
+1322,potresti raggiungere questa bacchetta ,Reach
+1323,raggiungi quella bacchetta ,Reach
+1324,vai dove sta quella bacchetta ,Reach
+1325,vai dove si trova quella bacchetta ,Reach
+1326,vai in corrispondenza di quella bacchetta ,Reach
+1327,recati dove sta quella bacchetta ,Reach
+1328,recati dove si trova quella bacchetta ,Reach
+1329,recati in corrispondenza di quella bacchetta ,Reach
+1330,andresti dove sta quella bacchetta ,Reach
+1331,andresti dove si trova quella bacchetta ,Reach
+1332,andresti in corrispondenza di quella bacchetta ,Reach
+1333,ti recheresti dove sta quella bacchetta ,Reach
+1334,ti recheresti dove si trova quella bacchetta ,Reach
+1335,ti recheresti in corrispondenza di quella bacchetta ,Reach
+1336,puoi andare dove sta quella bacchetta ,Reach
+1337,puoi andare dove si trova quella bacchetta ,Reach
+1338,puoi andare in corrispondenza di quella bacchetta ,Reach
+1339,potresti andare dove sta quella bacchetta ,Reach
+1340,potresti andare dove si trova quella bacchetta ,Reach
+1341,potresti andare in corrispondenza di quella bacchetta ,Reach
+1342,puoi recarti dove sta quella bacchetta ,Reach
+1343,puoi recarti dove si trova quella bacchetta ,Reach
+1344,puoi recarti in corrispondenza di quella bacchetta ,Reach
+1345,potresti recarti dove sta quella bacchetta ,Reach
+1346,potresti recarti dove si trova quella bacchetta ,Reach
+1347,potresti recarti in corrispondenza di quella bacchetta ,Reach
+1348,puoi raggiungere quella bacchetta ,Reach
+1349,potresti raggiungere quella bacchetta ,Reach
+1350,raggiungi la bacchetta ,Reach
+1351,vai dove sta la bacchetta ,Reach
+1352,vai dove si trova la bacchetta ,Reach
+1353,vai in corrispondenza di la bacchetta ,Reach
+1354,recati dove sta la bacchetta ,Reach
+1355,recati dove si trova la bacchetta ,Reach
+1356,recati in corrispondenza di la bacchetta ,Reach
+1357,andresti dove sta la bacchetta ,Reach
+1358,andresti dove si trova la bacchetta ,Reach
+1359,andresti in corrispondenza di la bacchetta ,Reach
+1360,ti recheresti dove sta la bacchetta ,Reach
+1361,ti recheresti dove si trova la bacchetta ,Reach
+1362,ti recheresti in corrispondenza di la bacchetta ,Reach
+1363,puoi andare dove sta la bacchetta ,Reach
+1364,puoi andare dove si trova la bacchetta ,Reach
+1365,puoi andare in corrispondenza di la bacchetta ,Reach
+1366,potresti andare dove sta la bacchetta ,Reach
+1367,potresti andare dove si trova la bacchetta ,Reach
+1368,potresti andare in corrispondenza di la bacchetta ,Reach
+1369,puoi recarti dove sta la bacchetta ,Reach
+1370,puoi recarti dove si trova la bacchetta ,Reach
+1371,puoi recarti in corrispondenza di la bacchetta ,Reach
+1372,potresti recarti dove sta la bacchetta ,Reach
+1373,potresti recarti dove si trova la bacchetta ,Reach
+1374,potresti recarti in corrispondenza di la bacchetta ,Reach
+1375,puoi raggiungere la bacchetta ,Reach
+1376,potresti raggiungere la bacchetta ,Reach
+1377,raggiungi questo vaso ,Reach
+1378,vai dove sta questo vaso ,Reach
+1379,vai dove si trova questo vaso ,Reach
+1380,vai in corrispondenza di questo vaso ,Reach
+1381,recati dove sta questo vaso ,Reach
+1382,recati dove si trova questo vaso ,Reach
+1383,recati in corrispondenza di questo vaso ,Reach
+1384,andresti dove sta questo vaso ,Reach
+1385,andresti dove si trova questo vaso ,Reach
+1386,andresti in corrispondenza di questo vaso ,Reach
+1387,ti recheresti dove sta questo vaso ,Reach
+1388,ti recheresti dove si trova questo vaso ,Reach
+1389,ti recheresti in corrispondenza di questo vaso ,Reach
+1390,puoi andare dove sta questo vaso ,Reach
+1391,puoi andare dove si trova questo vaso ,Reach
+1392,puoi andare in corrispondenza di questo vaso ,Reach
+1393,potresti andare dove sta questo vaso ,Reach
+1394,potresti andare dove si trova questo vaso ,Reach
+1395,potresti andare in corrispondenza di questo vaso ,Reach
+1396,puoi recarti dove sta questo vaso ,Reach
+1397,puoi recarti dove si trova questo vaso ,Reach
+1398,puoi recarti in corrispondenza di questo vaso ,Reach
+1399,potresti recarti dove sta questo vaso ,Reach
+1400,potresti recarti dove si trova questo vaso ,Reach
+1401,potresti recarti in corrispondenza di questo vaso ,Reach
+1402,puoi raggiungere questo vaso ,Reach
+1403,potresti raggiungere questo vaso ,Reach
+1404,raggiungi quel vaso ,Reach
+1405,vai dove sta quel vaso ,Reach
+1406,vai dove si trova quel vaso ,Reach
+1407,vai in corrispondenza di quel vaso ,Reach
+1408,recati dove sta quel vaso ,Reach
+1409,recati dove si trova quel vaso ,Reach
+1410,recati in corrispondenza di quel vaso ,Reach
+1411,andresti dove sta quel vaso ,Reach
+1412,andresti dove si trova quel vaso ,Reach
+1413,andresti in corrispondenza di quel vaso ,Reach
+1414,ti recheresti dove sta quel vaso ,Reach
+1415,ti recheresti dove si trova quel vaso ,Reach
+1416,ti recheresti in corrispondenza di quel vaso ,Reach
+1417,puoi andare dove sta quel vaso ,Reach
+1418,puoi andare dove si trova quel vaso ,Reach
+1419,puoi andare in corrispondenza di quel vaso ,Reach
+1420,potresti andare dove sta quel vaso ,Reach
+1421,potresti andare dove si trova quel vaso ,Reach
+1422,potresti andare in corrispondenza di quel vaso ,Reach
+1423,puoi recarti dove sta quel vaso ,Reach
+1424,puoi recarti dove si trova quel vaso ,Reach
+1425,puoi recarti in corrispondenza di quel vaso ,Reach
+1426,potresti recarti dove sta quel vaso ,Reach
+1427,potresti recarti dove si trova quel vaso ,Reach
+1428,potresti recarti in corrispondenza di quel vaso ,Reach
+1429,puoi raggiungere quel vaso ,Reach
+1430,potresti raggiungere quel vaso ,Reach
+1431,raggiungi il vaso ,Reach
+1432,vai dove sta il vaso ,Reach
+1433,vai dove si trova il vaso ,Reach
+1434,vai in corrispondenza di il vaso ,Reach
+1435,recati dove sta il vaso ,Reach
+1436,recati dove si trova il vaso ,Reach
+1437,recati in corrispondenza di il vaso ,Reach
+1438,andresti dove sta il vaso ,Reach
+1439,andresti dove si trova il vaso ,Reach
+1440,andresti in corrispondenza di il vaso ,Reach
+1441,ti recheresti dove sta il vaso ,Reach
+1442,ti recheresti dove si trova il vaso ,Reach
+1443,ti recheresti in corrispondenza di il vaso ,Reach
+1444,puoi andare dove sta il vaso ,Reach
+1445,puoi andare dove si trova il vaso ,Reach
+1446,puoi andare in corrispondenza di il vaso ,Reach
+1447,potresti andare dove sta il vaso ,Reach
+1448,potresti andare dove si trova il vaso ,Reach
+1449,potresti andare in corrispondenza di il vaso ,Reach
+1450,puoi recarti dove sta il vaso ,Reach
+1451,puoi recarti dove si trova il vaso ,Reach
+1452,puoi recarti in corrispondenza di il vaso ,Reach
+1453,potresti recarti dove sta il vaso ,Reach
+1454,potresti recarti dove si trova il vaso ,Reach
+1455,potresti recarti in corrispondenza di il vaso ,Reach
+1456,puoi raggiungere il vaso ,Reach
+1457,potresti raggiungere il vaso ,Reach
+1458,raggiungi questa pianta ,Reach
+1459,vai dove sta questa pianta ,Reach
+1460,vai dove si trova questa pianta ,Reach
+1461,vai in corrispondenza di questa pianta ,Reach
+1462,recati dove sta questa pianta ,Reach
+1463,recati dove si trova questa pianta ,Reach
+1464,recati in corrispondenza di questa pianta ,Reach
+1465,andresti dove sta questa pianta ,Reach
+1466,andresti dove si trova questa pianta ,Reach
+1467,andresti in corrispondenza di questa pianta ,Reach
+1468,ti recheresti dove sta questa pianta ,Reach
+1469,ti recheresti dove si trova questa pianta ,Reach
+1470,ti recheresti in corrispondenza di questa pianta ,Reach
+1471,puoi andare dove sta questa pianta ,Reach
+1472,puoi andare dove si trova questa pianta ,Reach
+1473,puoi andare in corrispondenza di questa pianta ,Reach
+1474,potresti andare dove sta questa pianta ,Reach
+1475,potresti andare dove si trova questa pianta ,Reach
+1476,potresti andare in corrispondenza di questa pianta ,Reach
+1477,puoi recarti dove sta questa pianta ,Reach
+1478,puoi recarti dove si trova questa pianta ,Reach
+1479,puoi recarti in corrispondenza di questa pianta ,Reach
+1480,potresti recarti dove sta questa pianta ,Reach
+1481,potresti recarti dove si trova questa pianta ,Reach
+1482,potresti recarti in corrispondenza di questa pianta ,Reach
+1483,puoi raggiungere questa pianta ,Reach
+1484,potresti raggiungere questa pianta ,Reach
+1485,raggiungi quella pianta ,Reach
+1486,vai dove sta quella pianta ,Reach
+1487,vai dove si trova quella pianta ,Reach
+1488,vai in corrispondenza di quella pianta ,Reach
+1489,recati dove sta quella pianta ,Reach
+1490,recati dove si trova quella pianta ,Reach
+1491,recati in corrispondenza di quella pianta ,Reach
+1492,andresti dove sta quella pianta ,Reach
+1493,andresti dove si trova quella pianta ,Reach
+1494,andresti in corrispondenza di quella pianta ,Reach
+1495,ti recheresti dove sta quella pianta ,Reach
+1496,ti recheresti dove si trova quella pianta ,Reach
+1497,ti recheresti in corrispondenza di quella pianta ,Reach
+1498,puoi andare dove sta quella pianta ,Reach
+1499,puoi andare dove si trova quella pianta ,Reach
+1500,puoi andare in corrispondenza di quella pianta ,Reach
+1501,potresti andare dove sta quella pianta ,Reach
+1502,potresti andare dove si trova quella pianta ,Reach
+1503,potresti andare in corrispondenza di quella pianta ,Reach
+1504,puoi recarti dove sta quella pianta ,Reach
+1505,puoi recarti dove si trova quella pianta ,Reach
+1506,puoi recarti in corrispondenza di quella pianta ,Reach
+1507,potresti recarti dove sta quella pianta ,Reach
+1508,potresti recarti dove si trova quella pianta ,Reach
+1509,potresti recarti in corrispondenza di quella pianta ,Reach
+1510,puoi raggiungere quella pianta ,Reach
+1511,potresti raggiungere quella pianta ,Reach
+1512,raggiungi la pianta ,Reach
+1513,vai dove sta la pianta ,Reach
+1514,vai dove si trova la pianta ,Reach
+1515,vai in corrispondenza di la pianta ,Reach
+1516,recati dove sta la pianta ,Reach
+1517,recati dove si trova la pianta ,Reach
+1518,recati in corrispondenza di la pianta ,Reach
+1519,andresti dove sta la pianta ,Reach
+1520,andresti dove si trova la pianta ,Reach
+1521,andresti in corrispondenza di la pianta ,Reach
+1522,ti recheresti dove sta la pianta ,Reach
+1523,ti recheresti dove si trova la pianta ,Reach
+1524,ti recheresti in corrispondenza di la pianta ,Reach
+1525,puoi andare dove sta la pianta ,Reach
+1526,puoi andare dove si trova la pianta ,Reach
+1527,puoi andare in corrispondenza di la pianta ,Reach
+1528,potresti andare dove sta la pianta ,Reach
+1529,potresti andare dove si trova la pianta ,Reach
+1530,potresti andare in corrispondenza di la pianta ,Reach
+1531,puoi recarti dove sta la pianta ,Reach
+1532,puoi recarti dove si trova la pianta ,Reach
+1533,puoi recarti in corrispondenza di la pianta ,Reach
+1534,potresti recarti dove sta la pianta ,Reach
+1535,potresti recarti dove si trova la pianta ,Reach
+1536,potresti recarti in corrispondenza di la pianta ,Reach
+1537,puoi raggiungere la pianta ,Reach
+1538,potresti raggiungere la pianta ,Reach
+1539,raggiungi questa pianta nel vaso ,Reach
+1540,vai dove sta questa pianta nel vaso ,Reach
+1541,vai dove si trova questa pianta nel vaso ,Reach
+1542,vai in corrispondenza di questa pianta nel vaso ,Reach
+1543,recati dove sta questa pianta nel vaso ,Reach
+1544,recati dove si trova questa pianta nel vaso ,Reach
+1545,recati in corrispondenza di questa pianta nel vaso ,Reach
+1546,andresti dove sta questa pianta nel vaso ,Reach
+1547,andresti dove si trova questa pianta nel vaso ,Reach
+1548,andresti in corrispondenza di questa pianta nel vaso ,Reach
+1549,ti recheresti dove sta questa pianta nel vaso ,Reach
+1550,ti recheresti dove si trova questa pianta nel vaso ,Reach
+1551,ti recheresti in corrispondenza di questa pianta nel vaso ,Reach
+1552,puoi andare dove sta questa pianta nel vaso ,Reach
+1553,puoi andare dove si trova questa pianta nel vaso ,Reach
+1554,puoi andare in corrispondenza di questa pianta nel vaso ,Reach
+1555,potresti andare dove sta questa pianta nel vaso ,Reach
+1556,potresti andare dove si trova questa pianta nel vaso ,Reach
+1557,potresti andare in corrispondenza di questa pianta nel vaso ,Reach
+1558,puoi recarti dove sta questa pianta nel vaso ,Reach
+1559,puoi recarti dove si trova questa pianta nel vaso ,Reach
+1560,puoi recarti in corrispondenza di questa pianta nel vaso ,Reach
+1561,potresti recarti dove sta questa pianta nel vaso ,Reach
+1562,potresti recarti dove si trova questa pianta nel vaso ,Reach
+1563,potresti recarti in corrispondenza di questa pianta nel vaso ,Reach
+1564,puoi raggiungere questa pianta nel vaso ,Reach
+1565,potresti raggiungere questa pianta nel vaso ,Reach
+1566,raggiungi quella pianta nel vaso ,Reach
+1567,vai dove sta quella pianta nel vaso ,Reach
+1568,vai dove si trova quella pianta nel vaso ,Reach
+1569,vai in corrispondenza di quella pianta nel vaso ,Reach
+1570,recati dove sta quella pianta nel vaso ,Reach
+1571,recati dove si trova quella pianta nel vaso ,Reach
+1572,recati in corrispondenza di quella pianta nel vaso ,Reach
+1573,andresti dove sta quella pianta nel vaso ,Reach
+1574,andresti dove si trova quella pianta nel vaso ,Reach
+1575,andresti in corrispondenza di quella pianta nel vaso ,Reach
+1576,ti recheresti dove sta quella pianta nel vaso ,Reach
+1577,ti recheresti dove si trova quella pianta nel vaso ,Reach
+1578,ti recheresti in corrispondenza di quella pianta nel vaso ,Reach
+1579,puoi andare dove sta quella pianta nel vaso ,Reach
+1580,puoi andare dove si trova quella pianta nel vaso ,Reach
+1581,puoi andare in corrispondenza di quella pianta nel vaso ,Reach
+1582,potresti andare dove sta quella pianta nel vaso ,Reach
+1583,potresti andare dove si trova quella pianta nel vaso ,Reach
+1584,potresti andare in corrispondenza di quella pianta nel vaso ,Reach
+1585,puoi recarti dove sta quella pianta nel vaso ,Reach
+1586,puoi recarti dove si trova quella pianta nel vaso ,Reach
+1587,puoi recarti in corrispondenza di quella pianta nel vaso ,Reach
+1588,potresti recarti dove sta quella pianta nel vaso ,Reach
+1589,potresti recarti dove si trova quella pianta nel vaso ,Reach
+1590,potresti recarti in corrispondenza di quella pianta nel vaso ,Reach
+1591,puoi raggiungere quella pianta nel vaso ,Reach
+1592,potresti raggiungere quella pianta nel vaso ,Reach
+1593,raggiungi la pianta nel vaso ,Reach
+1594,vai dove sta la pianta nel vaso ,Reach
+1595,vai dove si trova la pianta nel vaso ,Reach
+1596,vai in corrispondenza di la pianta nel vaso ,Reach
+1597,recati dove sta la pianta nel vaso ,Reach
+1598,recati dove si trova la pianta nel vaso ,Reach
+1599,recati in corrispondenza di la pianta nel vaso ,Reach
+1600,andresti dove sta la pianta nel vaso ,Reach
+1601,andresti dove si trova la pianta nel vaso ,Reach
+1602,andresti in corrispondenza di la pianta nel vaso ,Reach
+1603,ti recheresti dove sta la pianta nel vaso ,Reach
+1604,ti recheresti dove si trova la pianta nel vaso ,Reach
+1605,ti recheresti in corrispondenza di la pianta nel vaso ,Reach
+1606,puoi andare dove sta la pianta nel vaso ,Reach
+1607,puoi andare dove si trova la pianta nel vaso ,Reach
+1608,puoi andare in corrispondenza di la pianta nel vaso ,Reach
+1609,potresti andare dove sta la pianta nel vaso ,Reach
+1610,potresti andare dove si trova la pianta nel vaso ,Reach
+1611,potresti andare in corrispondenza di la pianta nel vaso ,Reach
+1612,puoi recarti dove sta la pianta nel vaso ,Reach
+1613,puoi recarti dove si trova la pianta nel vaso ,Reach
+1614,puoi recarti in corrispondenza di la pianta nel vaso ,Reach
+1615,potresti recarti dove sta la pianta nel vaso ,Reach
+1616,potresti recarti dove si trova la pianta nel vaso ,Reach
+1617,potresti recarti in corrispondenza di la pianta nel vaso ,Reach
+1618,puoi raggiungere la pianta nel vaso ,Reach
+1619,potresti raggiungere la pianta nel vaso ,Reach
+1620,raggiungi questo osso ,Reach
+1621,vai dove sta questo osso ,Reach
+1622,vai dove si trova questo osso ,Reach
+1623,vai in corrispondenza di questo osso ,Reach
+1624,recati dove sta questo osso ,Reach
+1625,recati dove si trova questo osso ,Reach
+1626,recati in corrispondenza di questo osso ,Reach
+1627,andresti dove sta questo osso ,Reach
+1628,andresti dove si trova questo osso ,Reach
+1629,andresti in corrispondenza di questo osso ,Reach
+1630,ti recheresti dove sta questo osso ,Reach
+1631,ti recheresti dove si trova questo osso ,Reach
+1632,ti recheresti in corrispondenza di questo osso ,Reach
+1633,puoi andare dove sta questo osso ,Reach
+1634,puoi andare dove si trova questo osso ,Reach
+1635,puoi andare in corrispondenza di questo osso ,Reach
+1636,potresti andare dove sta questo osso ,Reach
+1637,potresti andare dove si trova questo osso ,Reach
+1638,potresti andare in corrispondenza di questo osso ,Reach
+1639,puoi recarti dove sta questo osso ,Reach
+1640,puoi recarti dove si trova questo osso ,Reach
+1641,puoi recarti in corrispondenza di questo osso ,Reach
+1642,potresti recarti dove sta questo osso ,Reach
+1643,potresti recarti dove si trova questo osso ,Reach
+1644,potresti recarti in corrispondenza di questo osso ,Reach
+1645,puoi raggiungere questo osso ,Reach
+1646,potresti raggiungere questo osso ,Reach
+1647,raggiungi quell osso ,Reach
+1648,vai dove sta quell osso ,Reach
+1649,vai dove si trova quell osso ,Reach
+1650,vai in corrispondenza di quell osso ,Reach
+1651,recati dove sta quell osso ,Reach
+1652,recati dove si trova quell osso ,Reach
+1653,recati in corrispondenza di quell osso ,Reach
+1654,andresti dove sta quell osso ,Reach
+1655,andresti dove si trova quell osso ,Reach
+1656,andresti in corrispondenza di quell osso ,Reach
+1657,ti recheresti dove sta quell osso ,Reach
+1658,ti recheresti dove si trova quell osso ,Reach
+1659,ti recheresti in corrispondenza di quell osso ,Reach
+1660,puoi andare dove sta quell osso ,Reach
+1661,puoi andare dove si trova quell osso ,Reach
+1662,puoi andare in corrispondenza di quell osso ,Reach
+1663,potresti andare dove sta quell osso ,Reach
+1664,potresti andare dove si trova quell osso ,Reach
+1665,potresti andare in corrispondenza di quell osso ,Reach
+1666,puoi recarti dove sta quell osso ,Reach
+1667,puoi recarti dove si trova quell osso ,Reach
+1668,puoi recarti in corrispondenza di quell osso ,Reach
+1669,potresti recarti dove sta quell osso ,Reach
+1670,potresti recarti dove si trova quell osso ,Reach
+1671,potresti recarti in corrispondenza di quell osso ,Reach
+1672,puoi raggiungere quell osso ,Reach
+1673,potresti raggiungere quell osso ,Reach
+1674,raggiungi l osso ,Reach
+1675,vai dove sta l osso ,Reach
+1676,vai dove si trova l osso ,Reach
+1677,vai in corrispondenza di l osso ,Reach
+1678,recati dove sta l osso ,Reach
+1679,recati dove si trova l osso ,Reach
+1680,recati in corrispondenza di l osso ,Reach
+1681,andresti dove sta l osso ,Reach
+1682,andresti dove si trova l osso ,Reach
+1683,andresti in corrispondenza di l osso ,Reach
+1684,ti recheresti dove sta l osso ,Reach
+1685,ti recheresti dove si trova l osso ,Reach
+1686,ti recheresti in corrispondenza di l osso ,Reach
+1687,puoi andare dove sta l osso ,Reach
+1688,puoi andare dove si trova l osso ,Reach
+1689,puoi andare in corrispondenza di l osso ,Reach
+1690,potresti andare dove sta l osso ,Reach
+1691,potresti andare dove si trova l osso ,Reach
+1692,potresti andare in corrispondenza di l osso ,Reach
+1693,puoi recarti dove sta l osso ,Reach
+1694,puoi recarti dove si trova l osso ,Reach
+1695,puoi recarti in corrispondenza di l osso ,Reach
+1696,potresti recarti dove sta l osso ,Reach
+1697,potresti recarti dove si trova l osso ,Reach
+1698,potresti recarti in corrispondenza di l osso ,Reach
+1699,puoi raggiungere l osso ,Reach
+1700,potresti raggiungere l osso ,Reach
+1701,raggiungi questo gioco ,Reach
+1702,vai dove sta questo gioco ,Reach
+1703,vai dove si trova questo gioco ,Reach
+1704,vai in corrispondenza di questo gioco ,Reach
+1705,recati dove sta questo gioco ,Reach
+1706,recati dove si trova questo gioco ,Reach
+1707,recati in corrispondenza di questo gioco ,Reach
+1708,andresti dove sta questo gioco ,Reach
+1709,andresti dove si trova questo gioco ,Reach
+1710,andresti in corrispondenza di questo gioco ,Reach
+1711,ti recheresti dove sta questo gioco ,Reach
+1712,ti recheresti dove si trova questo gioco ,Reach
+1713,ti recheresti in corrispondenza di questo gioco ,Reach
+1714,puoi andare dove sta questo gioco ,Reach
+1715,puoi andare dove si trova questo gioco ,Reach
+1716,puoi andare in corrispondenza di questo gioco ,Reach
+1717,potresti andare dove sta questo gioco ,Reach
+1718,potresti andare dove si trova questo gioco ,Reach
+1719,potresti andare in corrispondenza di questo gioco ,Reach
+1720,puoi recarti dove sta questo gioco ,Reach
+1721,puoi recarti dove si trova questo gioco ,Reach
+1722,puoi recarti in corrispondenza di questo gioco ,Reach
+1723,potresti recarti dove sta questo gioco ,Reach
+1724,potresti recarti dove si trova questo gioco ,Reach
+1725,potresti recarti in corrispondenza di questo gioco ,Reach
+1726,puoi raggiungere questo gioco ,Reach
+1727,potresti raggiungere questo gioco ,Reach
+1728,raggiungi quel gioco ,Reach
+1729,vai dove sta quel gioco ,Reach
+1730,vai dove si trova quel gioco ,Reach
+1731,vai in corrispondenza di quel gioco ,Reach
+1732,recati dove sta quel gioco ,Reach
+1733,recati dove si trova quel gioco ,Reach
+1734,recati in corrispondenza di quel gioco ,Reach
+1735,andresti dove sta quel gioco ,Reach
+1736,andresti dove si trova quel gioco ,Reach
+1737,andresti in corrispondenza di quel gioco ,Reach
+1738,ti recheresti dove sta quel gioco ,Reach
+1739,ti recheresti dove si trova quel gioco ,Reach
+1740,ti recheresti in corrispondenza di quel gioco ,Reach
+1741,puoi andare dove sta quel gioco ,Reach
+1742,puoi andare dove si trova quel gioco ,Reach
+1743,puoi andare in corrispondenza di quel gioco ,Reach
+1744,potresti andare dove sta quel gioco ,Reach
+1745,potresti andare dove si trova quel gioco ,Reach
+1746,potresti andare in corrispondenza di quel gioco ,Reach
+1747,puoi recarti dove sta quel gioco ,Reach
+1748,puoi recarti dove si trova quel gioco ,Reach
+1749,puoi recarti in corrispondenza di quel gioco ,Reach
+1750,potresti recarti dove sta quel gioco ,Reach
+1751,potresti recarti dove si trova quel gioco ,Reach
+1752,potresti recarti in corrispondenza di quel gioco ,Reach
+1753,puoi raggiungere quel gioco ,Reach
+1754,potresti raggiungere quel gioco ,Reach
+1755,raggiungi il gioco ,Reach
+1756,vai dove sta il gioco ,Reach
+1757,vai dove si trova il gioco ,Reach
+1758,vai in corrispondenza di il gioco ,Reach
+1759,recati dove sta il gioco ,Reach
+1760,recati dove si trova il gioco ,Reach
+1761,recati in corrispondenza di il gioco ,Reach
+1762,andresti dove sta il gioco ,Reach
+1763,andresti dove si trova il gioco ,Reach
+1764,andresti in corrispondenza di il gioco ,Reach
+1765,ti recheresti dove sta il gioco ,Reach
+1766,ti recheresti dove si trova il gioco ,Reach
+1767,ti recheresti in corrispondenza di il gioco ,Reach
+1768,puoi andare dove sta il gioco ,Reach
+1769,puoi andare dove si trova il gioco ,Reach
+1770,puoi andare in corrispondenza di il gioco ,Reach
+1771,potresti andare dove sta il gioco ,Reach
+1772,potresti andare dove si trova il gioco ,Reach
+1773,potresti andare in corrispondenza di il gioco ,Reach
+1774,puoi recarti dove sta il gioco ,Reach
+1775,puoi recarti dove si trova il gioco ,Reach
+1776,puoi recarti in corrispondenza di il gioco ,Reach
+1777,potresti recarti dove sta il gioco ,Reach
+1778,potresti recarti dove si trova il gioco ,Reach
+1779,potresti recarti in corrispondenza di il gioco ,Reach
+1780,puoi raggiungere il gioco ,Reach
+1781,potresti raggiungere il gioco ,Reach
+1782,raggiungi questo giochino ,Reach
+1783,vai dove sta questo giochino ,Reach
+1784,vai dove si trova questo giochino ,Reach
+1785,vai in corrispondenza di questo giochino ,Reach
+1786,recati dove sta questo giochino ,Reach
+1787,recati dove si trova questo giochino ,Reach
+1788,recati in corrispondenza di questo giochino ,Reach
+1789,andresti dove sta questo giochino ,Reach
+1790,andresti dove si trova questo giochino ,Reach
+1791,andresti in corrispondenza di questo giochino ,Reach
+1792,ti recheresti dove sta questo giochino ,Reach
+1793,ti recheresti dove si trova questo giochino ,Reach
+1794,ti recheresti in corrispondenza di questo giochino ,Reach
+1795,puoi andare dove sta questo giochino ,Reach
+1796,puoi andare dove si trova questo giochino ,Reach
+1797,puoi andare in corrispondenza di questo giochino ,Reach
+1798,potresti andare dove sta questo giochino ,Reach
+1799,potresti andare dove si trova questo giochino ,Reach
+1800,potresti andare in corrispondenza di questo giochino ,Reach
+1801,puoi recarti dove sta questo giochino ,Reach
+1802,puoi recarti dove si trova questo giochino ,Reach
+1803,puoi recarti in corrispondenza di questo giochino ,Reach
+1804,potresti recarti dove sta questo giochino ,Reach
+1805,potresti recarti dove si trova questo giochino ,Reach
+1806,potresti recarti in corrispondenza di questo giochino ,Reach
+1807,puoi raggiungere questo giochino ,Reach
+1808,potresti raggiungere questo giochino ,Reach
+1809,raggiungi quel giochino ,Reach
+1810,vai dove sta quel giochino ,Reach
+1811,vai dove si trova quel giochino ,Reach
+1812,vai in corrispondenza di quel giochino ,Reach
+1813,recati dove sta quel giochino ,Reach
+1814,recati dove si trova quel giochino ,Reach
+1815,recati in corrispondenza di quel giochino ,Reach
+1816,andresti dove sta quel giochino ,Reach
+1817,andresti dove si trova quel giochino ,Reach
+1818,andresti in corrispondenza di quel giochino ,Reach
+1819,ti recheresti dove sta quel giochino ,Reach
+1820,ti recheresti dove si trova quel giochino ,Reach
+1821,ti recheresti in corrispondenza di quel giochino ,Reach
+1822,puoi andare dove sta quel giochino ,Reach
+1823,puoi andare dove si trova quel giochino ,Reach
+1824,puoi andare in corrispondenza di quel giochino ,Reach
+1825,potresti andare dove sta quel giochino ,Reach
+1826,potresti andare dove si trova quel giochino ,Reach
+1827,potresti andare in corrispondenza di quel giochino ,Reach
+1828,puoi recarti dove sta quel giochino ,Reach
+1829,puoi recarti dove si trova quel giochino ,Reach
+1830,puoi recarti in corrispondenza di quel giochino ,Reach
+1831,potresti recarti dove sta quel giochino ,Reach
+1832,potresti recarti dove si trova quel giochino ,Reach
+1833,potresti recarti in corrispondenza di quel giochino ,Reach
+1834,puoi raggiungere quel giochino ,Reach
+1835,potresti raggiungere quel giochino ,Reach
+1836,raggiungi il giochino ,Reach
+1837,vai dove sta il giochino ,Reach
+1838,vai dove si trova il giochino ,Reach
+1839,vai in corrispondenza di il giochino ,Reach
+1840,recati dove sta il giochino ,Reach
+1841,recati dove si trova il giochino ,Reach
+1842,recati in corrispondenza di il giochino ,Reach
+1843,andresti dove sta il giochino ,Reach
+1844,andresti dove si trova il giochino ,Reach
+1845,andresti in corrispondenza di il giochino ,Reach
+1846,ti recheresti dove sta il giochino ,Reach
+1847,ti recheresti dove si trova il giochino ,Reach
+1848,ti recheresti in corrispondenza di il giochino ,Reach
+1849,puoi andare dove sta il giochino ,Reach
+1850,puoi andare dove si trova il giochino ,Reach
+1851,puoi andare in corrispondenza di il giochino ,Reach
+1852,potresti andare dove sta il giochino ,Reach
+1853,potresti andare dove si trova il giochino ,Reach
+1854,potresti andare in corrispondenza di il giochino ,Reach
+1855,puoi recarti dove sta il giochino ,Reach
+1856,puoi recarti dove si trova il giochino ,Reach
+1857,puoi recarti in corrispondenza di il giochino ,Reach
+1858,potresti recarti dove sta il giochino ,Reach
+1859,potresti recarti dove si trova il giochino ,Reach
+1860,potresti recarti in corrispondenza di il giochino ,Reach
+1861,puoi raggiungere il giochino ,Reach
+1862,potresti raggiungere il giochino ,Reach
+1863,raggiungi questo giochetto ,Reach
+1864,vai dove sta questo giochetto ,Reach
+1865,vai dove si trova questo giochetto ,Reach
+1866,vai in corrispondenza di questo giochetto ,Reach
+1867,recati dove sta questo giochetto ,Reach
+1868,recati dove si trova questo giochetto ,Reach
+1869,recati in corrispondenza di questo giochetto ,Reach
+1870,andresti dove sta questo giochetto ,Reach
+1871,andresti dove si trova questo giochetto ,Reach
+1872,andresti in corrispondenza di questo giochetto ,Reach
+1873,ti recheresti dove sta questo giochetto ,Reach
+1874,ti recheresti dove si trova questo giochetto ,Reach
+1875,ti recheresti in corrispondenza di questo giochetto ,Reach
+1876,puoi andare dove sta questo giochetto ,Reach
+1877,puoi andare dove si trova questo giochetto ,Reach
+1878,puoi andare in corrispondenza di questo giochetto ,Reach
+1879,potresti andare dove sta questo giochetto ,Reach
+1880,potresti andare dove si trova questo giochetto ,Reach
+1881,potresti andare in corrispondenza di questo giochetto ,Reach
+1882,puoi recarti dove sta questo giochetto ,Reach
+1883,puoi recarti dove si trova questo giochetto ,Reach
+1884,puoi recarti in corrispondenza di questo giochetto ,Reach
+1885,potresti recarti dove sta questo giochetto ,Reach
+1886,potresti recarti dove si trova questo giochetto ,Reach
+1887,potresti recarti in corrispondenza di questo giochetto ,Reach
+1888,puoi raggiungere questo giochetto ,Reach
+1889,potresti raggiungere questo giochetto ,Reach
+1890,raggiungi quel giochetto ,Reach
+1891,vai dove sta quel giochetto ,Reach
+1892,vai dove si trova quel giochetto ,Reach
+1893,vai in corrispondenza di quel giochetto ,Reach
+1894,recati dove sta quel giochetto ,Reach
+1895,recati dove si trova quel giochetto ,Reach
+1896,recati in corrispondenza di quel giochetto ,Reach
+1897,andresti dove sta quel giochetto ,Reach
+1898,andresti dove si trova quel giochetto ,Reach
+1899,andresti in corrispondenza di quel giochetto ,Reach
+1900,ti recheresti dove sta quel giochetto ,Reach
+1901,ti recheresti dove si trova quel giochetto ,Reach
+1902,ti recheresti in corrispondenza di quel giochetto ,Reach
+1903,puoi andare dove sta quel giochetto ,Reach
+1904,puoi andare dove si trova quel giochetto ,Reach
+1905,puoi andare in corrispondenza di quel giochetto ,Reach
+1906,potresti andare dove sta quel giochetto ,Reach
+1907,potresti andare dove si trova quel giochetto ,Reach
+1908,potresti andare in corrispondenza di quel giochetto ,Reach
+1909,puoi recarti dove sta quel giochetto ,Reach
+1910,puoi recarti dove si trova quel giochetto ,Reach
+1911,puoi recarti in corrispondenza di quel giochetto ,Reach
+1912,potresti recarti dove sta quel giochetto ,Reach
+1913,potresti recarti dove si trova quel giochetto ,Reach
+1914,potresti recarti in corrispondenza di quel giochetto ,Reach
+1915,puoi raggiungere quel giochetto ,Reach
+1916,potresti raggiungere quel giochetto ,Reach
+1917,raggiungi il giochetto ,Reach
+1918,vai dove sta il giochetto ,Reach
+1919,vai dove si trova il giochetto ,Reach
+1920,vai in corrispondenza di il giochetto ,Reach
+1921,recati dove sta il giochetto ,Reach
+1922,recati dove si trova il giochetto ,Reach
+1923,recati in corrispondenza di il giochetto ,Reach
+1924,andresti dove sta il giochetto ,Reach
+1925,andresti dove si trova il giochetto ,Reach
+1926,andresti in corrispondenza di il giochetto ,Reach
+1927,ti recheresti dove sta il giochetto ,Reach
+1928,ti recheresti dove si trova il giochetto ,Reach
+1929,ti recheresti in corrispondenza di il giochetto ,Reach
+1930,puoi andare dove sta il giochetto ,Reach
+1931,puoi andare dove si trova il giochetto ,Reach
+1932,puoi andare in corrispondenza di il giochetto ,Reach
+1933,potresti andare dove sta il giochetto ,Reach
+1934,potresti andare dove si trova il giochetto ,Reach
+1935,potresti andare in corrispondenza di il giochetto ,Reach
+1936,puoi recarti dove sta il giochetto ,Reach
+1937,puoi recarti dove si trova il giochetto ,Reach
+1938,puoi recarti in corrispondenza di il giochetto ,Reach
+1939,potresti recarti dove sta il giochetto ,Reach
+1940,potresti recarti dove si trova il giochetto ,Reach
+1941,potresti recarti in corrispondenza di il giochetto ,Reach
+1942,puoi raggiungere il giochetto ,Reach
+1943,potresti raggiungere il giochetto ,Reach
+1944,raggiungi questa cuccia ,Reach
+1945,vai dove sta questa cuccia ,Reach
+1946,vai dove si trova questa cuccia ,Reach
+1947,vai in corrispondenza di questa cuccia ,Reach
+1948,recati dove sta questa cuccia ,Reach
+1949,recati dove si trova questa cuccia ,Reach
+1950,recati in corrispondenza di questa cuccia ,Reach
+1951,andresti dove sta questa cuccia ,Reach
+1952,andresti dove si trova questa cuccia ,Reach
+1953,andresti in corrispondenza di questa cuccia ,Reach
+1954,ti recheresti dove sta questa cuccia ,Reach
+1955,ti recheresti dove si trova questa cuccia ,Reach
+1956,ti recheresti in corrispondenza di questa cuccia ,Reach
+1957,puoi andare dove sta questa cuccia ,Reach
+1958,puoi andare dove si trova questa cuccia ,Reach
+1959,puoi andare in corrispondenza di questa cuccia ,Reach
+1960,potresti andare dove sta questa cuccia ,Reach
+1961,potresti andare dove si trova questa cuccia ,Reach
+1962,potresti andare in corrispondenza di questa cuccia ,Reach
+1963,puoi recarti dove sta questa cuccia ,Reach
+1964,puoi recarti dove si trova questa cuccia ,Reach
+1965,puoi recarti in corrispondenza di questa cuccia ,Reach
+1966,potresti recarti dove sta questa cuccia ,Reach
+1967,potresti recarti dove si trova questa cuccia ,Reach
+1968,potresti recarti in corrispondenza di questa cuccia ,Reach
+1969,puoi raggiungere questa cuccia ,Reach
+1970,potresti raggiungere questa cuccia ,Reach
+1971,raggiungi quella cuccia ,Reach
+1972,vai dove sta quella cuccia ,Reach
+1973,vai dove si trova quella cuccia ,Reach
+1974,vai in corrispondenza di quella cuccia ,Reach
+1975,recati dove sta quella cuccia ,Reach
+1976,recati dove si trova quella cuccia ,Reach
+1977,recati in corrispondenza di quella cuccia ,Reach
+1978,andresti dove sta quella cuccia ,Reach
+1979,andresti dove si trova quella cuccia ,Reach
+1980,andresti in corrispondenza di quella cuccia ,Reach
+1981,ti recheresti dove sta quella cuccia ,Reach
+1982,ti recheresti dove si trova quella cuccia ,Reach
+1983,ti recheresti in corrispondenza di quella cuccia ,Reach
+1984,puoi andare dove sta quella cuccia ,Reach
+1985,puoi andare dove si trova quella cuccia ,Reach
+1986,puoi andare in corrispondenza di quella cuccia ,Reach
+1987,potresti andare dove sta quella cuccia ,Reach
+1988,potresti andare dove si trova quella cuccia ,Reach
+1989,potresti andare in corrispondenza di quella cuccia ,Reach
+1990,puoi recarti dove sta quella cuccia ,Reach
+1991,puoi recarti dove si trova quella cuccia ,Reach
+1992,puoi recarti in corrispondenza di quella cuccia ,Reach
+1993,potresti recarti dove sta quella cuccia ,Reach
+1994,potresti recarti dove si trova quella cuccia ,Reach
+1995,potresti recarti in corrispondenza di quella cuccia ,Reach
+1996,puoi raggiungere quella cuccia ,Reach
+1997,potresti raggiungere quella cuccia ,Reach
+1998,raggiungi la cuccia ,Reach
+1999,vai dove sta la cuccia ,Reach
+2000,vai dove si trova la cuccia ,Reach
+2001,vai in corrispondenza di la cuccia ,Reach
+2002,recati dove sta la cuccia ,Reach
+2003,recati dove si trova la cuccia ,Reach
+2004,recati in corrispondenza di la cuccia ,Reach
+2005,andresti dove sta la cuccia ,Reach
+2006,andresti dove si trova la cuccia ,Reach
+2007,andresti in corrispondenza di la cuccia ,Reach
+2008,ti recheresti dove sta la cuccia ,Reach
+2009,ti recheresti dove si trova la cuccia ,Reach
+2010,ti recheresti in corrispondenza di la cuccia ,Reach
+2011,puoi andare dove sta la cuccia ,Reach
+2012,puoi andare dove si trova la cuccia ,Reach
+2013,puoi andare in corrispondenza di la cuccia ,Reach
+2014,potresti andare dove sta la cuccia ,Reach
+2015,potresti andare dove si trova la cuccia ,Reach
+2016,potresti andare in corrispondenza di la cuccia ,Reach
+2017,puoi recarti dove sta la cuccia ,Reach
+2018,puoi recarti dove si trova la cuccia ,Reach
+2019,puoi recarti in corrispondenza di la cuccia ,Reach
+2020,potresti recarti dove sta la cuccia ,Reach
+2021,potresti recarti dove si trova la cuccia ,Reach
+2022,potresti recarti in corrispondenza di la cuccia ,Reach
+2023,puoi raggiungere la cuccia ,Reach
+2024,potresti raggiungere la cuccia ,Reach
+2025,raggiungi questa casetta ,Reach
+2026,vai dove sta questa casetta ,Reach
+2027,vai dove si trova questa casetta ,Reach
+2028,vai in corrispondenza di questa casetta ,Reach
+2029,recati dove sta questa casetta ,Reach
+2030,recati dove si trova questa casetta ,Reach
+2031,recati in corrispondenza di questa casetta ,Reach
+2032,andresti dove sta questa casetta ,Reach
+2033,andresti dove si trova questa casetta ,Reach
+2034,andresti in corrispondenza di questa casetta ,Reach
+2035,ti recheresti dove sta questa casetta ,Reach
+2036,ti recheresti dove si trova questa casetta ,Reach
+2037,ti recheresti in corrispondenza di questa casetta ,Reach
+2038,puoi andare dove sta questa casetta ,Reach
+2039,puoi andare dove si trova questa casetta ,Reach
+2040,puoi andare in corrispondenza di questa casetta ,Reach
+2041,potresti andare dove sta questa casetta ,Reach
+2042,potresti andare dove si trova questa casetta ,Reach
+2043,potresti andare in corrispondenza di questa casetta ,Reach
+2044,puoi recarti dove sta questa casetta ,Reach
+2045,puoi recarti dove si trova questa casetta ,Reach
+2046,puoi recarti in corrispondenza di questa casetta ,Reach
+2047,potresti recarti dove sta questa casetta ,Reach
+2048,potresti recarti dove si trova questa casetta ,Reach
+2049,potresti recarti in corrispondenza di questa casetta ,Reach
+2050,puoi raggiungere questa casetta ,Reach
+2051,potresti raggiungere questa casetta ,Reach
+2052,raggiungi quella casetta ,Reach
+2053,vai dove sta quella casetta ,Reach
+2054,vai dove si trova quella casetta ,Reach
+2055,vai in corrispondenza di quella casetta ,Reach
+2056,recati dove sta quella casetta ,Reach
+2057,recati dove si trova quella casetta ,Reach
+2058,recati in corrispondenza di quella casetta ,Reach
+2059,andresti dove sta quella casetta ,Reach
+2060,andresti dove si trova quella casetta ,Reach
+2061,andresti in corrispondenza di quella casetta ,Reach
+2062,ti recheresti dove sta quella casetta ,Reach
+2063,ti recheresti dove si trova quella casetta ,Reach
+2064,ti recheresti in corrispondenza di quella casetta ,Reach
+2065,puoi andare dove sta quella casetta ,Reach
+2066,puoi andare dove si trova quella casetta ,Reach
+2067,puoi andare in corrispondenza di quella casetta ,Reach
+2068,potresti andare dove sta quella casetta ,Reach
+2069,potresti andare dove si trova quella casetta ,Reach
+2070,potresti andare in corrispondenza di quella casetta ,Reach
+2071,puoi recarti dove sta quella casetta ,Reach
+2072,puoi recarti dove si trova quella casetta ,Reach
+2073,puoi recarti in corrispondenza di quella casetta ,Reach
+2074,potresti recarti dove sta quella casetta ,Reach
+2075,potresti recarti dove si trova quella casetta ,Reach
+2076,potresti recarti in corrispondenza di quella casetta ,Reach
+2077,puoi raggiungere quella casetta ,Reach
+2078,potresti raggiungere quella casetta ,Reach
+2079,raggiungi la casetta ,Reach
+2080,vai dove sta la casetta ,Reach
+2081,vai dove si trova la casetta ,Reach
+2082,vai in corrispondenza di la casetta ,Reach
+2083,recati dove sta la casetta ,Reach
+2084,recati dove si trova la casetta ,Reach
+2085,recati in corrispondenza di la casetta ,Reach
+2086,andresti dove sta la casetta ,Reach
+2087,andresti dove si trova la casetta ,Reach
+2088,andresti in corrispondenza di la casetta ,Reach
+2089,ti recheresti dove sta la casetta ,Reach
+2090,ti recheresti dove si trova la casetta ,Reach
+2091,ti recheresti in corrispondenza di la casetta ,Reach
+2092,puoi andare dove sta la casetta ,Reach
+2093,puoi andare dove si trova la casetta ,Reach
+2094,puoi andare in corrispondenza di la casetta ,Reach
+2095,potresti andare dove sta la casetta ,Reach
+2096,potresti andare dove si trova la casetta ,Reach
+2097,potresti andare in corrispondenza di la casetta ,Reach
+2098,puoi recarti dove sta la casetta ,Reach
+2099,puoi recarti dove si trova la casetta ,Reach
+2100,puoi recarti in corrispondenza di la casetta ,Reach
+2101,potresti recarti dove sta la casetta ,Reach
+2102,potresti recarti dove si trova la casetta ,Reach
+2103,potresti recarti in corrispondenza di la casetta ,Reach
+2104,puoi raggiungere la casetta ,Reach
+2105,potresti raggiungere la casetta ,Reach
+2106,vai vicino a questo cespuglio ,Reach
+2107,andresti vicino a questo cespuglio ,Reach
+2108,vai vicino a quel cespuglio ,Reach
+2109,andresti vicino a quel cespuglio ,Reach
+2110,vai vicino al cespuglio ,Reach
+2111,andresti vicino al cespuglio ,Reach
+2112,vai vicino a questo cespo ,Reach
+2113,andresti vicino a questo cespo ,Reach
+2114,vai vicino a quel cespo ,Reach
+2115,andresti vicino a quel cespo ,Reach
+2116,vai vicino al cespo ,Reach
+2117,andresti vicino al cespo ,Reach
+2118,vai vicino a questa palla ,Reach
+2119,andresti vicino a questa palla ,Reach
+2120,vai vicino a quella palla ,Reach
+2121,andresti vicino a quella palla ,Reach
+2122,vai vicino alla palla ,Reach
+2123,andresti vicino alla palla ,Reach
+2124,vai vicino a questa sfera ,Reach
+2125,andresti vicino a questa sfera ,Reach
+2126,vai vicino a quella sfera ,Reach
+2127,andresti vicino a quella sfera ,Reach
+2128,vai vicino alla sfera ,Reach
+2129,andresti vicino alla sfera ,Reach
+2130,vai vicino a questo pallone ,Reach
+2131,andresti vicino a questo pallone ,Reach
+2132,vai vicino a quel pallone ,Reach
+2133,andresti vicino a quel pallone ,Reach
+2134,vai vicino al pallone ,Reach
+2135,andresti vicino al pallone ,Reach
+2136,vai vicino a questo fuoco ,Reach
+2137,andresti vicino a questo fuoco ,Reach
+2138,vai vicino a quel fuoco ,Reach
+2139,andresti vicino a quel fuoco ,Reach
+2140,vai vicino al fuoco ,Reach
+2141,andresti vicino al fuoco ,Reach
+2142,vai vicino a questo falò ,Reach
+2143,andresti vicino a questo falò ,Reach
+2144,vai vicino a quel falò ,Reach
+2145,andresti vicino a quel falò ,Reach
+2146,vai vicino al falò ,Reach
+2147,andresti vicino al falò ,Reach
+2148,vai vicino a questo falo ,Reach
+2149,andresti vicino a questo falo ,Reach
+2150,vai vicino a quel falo ,Reach
+2151,andresti vicino a quel falo ,Reach
+2152,vai vicino al falo ,Reach
+2153,andresti vicino al falo ,Reach
+2154,vai vicino a questo fuocherello ,Reach
+2155,andresti vicino a questo fuocherello ,Reach
+2156,vai vicino a quel fuocherello ,Reach
+2157,andresti vicino a quel fuocherello ,Reach
+2158,vai vicino al fuocherello ,Reach
+2159,andresti vicino al fuocherello ,Reach
+2160,vai vicino a questa fiamma ,Reach
+2161,andresti vicino a questa fiamma ,Reach
+2162,vai vicino a quella fiamma ,Reach
+2163,andresti vicino a quella fiamma ,Reach
+2164,vai vicino alla fiamma ,Reach
+2165,andresti vicino alla fiamma ,Reach
+2166,vai vicino a questa chiave ,Reach
+2167,andresti vicino a questa chiave ,Reach
+2168,vai vicino a quella chiave ,Reach
+2169,andresti vicino a quella chiave ,Reach
+2170,vai vicino alla chiave ,Reach
+2171,andresti vicino alla chiave ,Reach
+2172,vai vicino a queste chiavi ,Reach
+2173,andresti vicino a queste chiavi ,Reach
+2174,vai vicino a quelle chiavi ,Reach
+2175,andresti vicino a quelle chiavi ,Reach
+2176,vai vicino alle chiavi ,Reach
+2177,andresti vicino alle chiavi ,Reach
+2178,vai vicino a questo ramo ,Reach
+2179,andresti vicino a questo ramo ,Reach
+2180,vai vicino a quel ramo ,Reach
+2181,andresti vicino a quel ramo ,Reach
+2182,vai vicino al ramo ,Reach
+2183,andresti vicino al ramo ,Reach
+2184,vai vicino a questo ramoscello ,Reach
+2185,andresti vicino a questo ramoscello ,Reach
+2186,vai vicino a quel ramoscello ,Reach
+2187,andresti vicino a quel ramoscello ,Reach
+2188,vai vicino al ramoscello ,Reach
+2189,andresti vicino al ramoscello ,Reach
+2190,vai vicino a questo rametto ,Reach
+2191,andresti vicino a questo rametto ,Reach
+2192,vai vicino a quel rametto ,Reach
+2193,andresti vicino a quel rametto ,Reach
+2194,vai vicino al rametto ,Reach
+2195,andresti vicino al rametto ,Reach
+2196,vai vicino a questo bastone ,Reach
+2197,andresti vicino a questo bastone ,Reach
+2198,vai vicino a quel bastone ,Reach
+2199,andresti vicino a quel bastone ,Reach
+2200,vai vicino al bastone ,Reach
+2201,andresti vicino al bastone ,Reach
+2202,vai vicino a questa bacchetta ,Reach
+2203,andresti vicino a questa bacchetta ,Reach
+2204,vai vicino a quella bacchetta ,Reach
+2205,andresti vicino a quella bacchetta ,Reach
+2206,vai vicino alla bacchetta ,Reach
+2207,andresti vicino alla bacchetta ,Reach
+2208,vai vicino a questo vaso ,Reach
+2209,andresti vicino a questo vaso ,Reach
+2210,vai vicino a quel vaso ,Reach
+2211,andresti vicino a quel vaso ,Reach
+2212,vai vicino al vaso ,Reach
+2213,andresti vicino al vaso ,Reach
+2214,vai vicino a questa pianta ,Reach
+2215,andresti vicino a questa pianta ,Reach
+2216,vai vicino a quella pianta ,Reach
+2217,andresti vicino a quella pianta ,Reach
+2218,vai vicino alla pianta ,Reach
+2219,andresti vicino alla pianta ,Reach
+2220,vai vicino a questa pianta nel vaso ,Reach
+2221,andresti vicino a questa pianta nel vaso ,Reach
+2222,vai vicino a quella pianta nel vaso ,Reach
+2223,andresti vicino a quella pianta nel vaso ,Reach
+2224,vai vicino alla pianta nel vaso ,Reach
+2225,andresti vicino alla pianta nel vaso ,Reach
+2226,vai vicino a questo osso ,Reach
+2227,andresti vicino a questo osso ,Reach
+2228,vai vicino a quell osso ,Reach
+2229,andresti vicino a quell osso ,Reach
+2230,vai vicino all osso ,Reach
+2231,andresti vicino all osso ,Reach
+2232,vai vicino a questo gioco ,Reach
+2233,andresti vicino a questo gioco ,Reach
+2234,vai vicino a quel gioco ,Reach
+2235,andresti vicino a quel gioco ,Reach
+2236,vai vicino al gioco ,Reach
+2237,andresti vicino al gioco ,Reach
+2238,vai vicino a questo giochino ,Reach
+2239,andresti vicino a questo giochino ,Reach
+2240,vai vicino a quel giochino ,Reach
+2241,andresti vicino a quel giochino ,Reach
+2242,vai vicino al giochino ,Reach
+2243,andresti vicino al giochino ,Reach
+2244,vai vicino a questo giochetto ,Reach
+2245,andresti vicino a questo giochetto ,Reach
+2246,vai vicino a quel giochetto ,Reach
+2247,andresti vicino a quel giochetto ,Reach
+2248,vai vicino al giochetto ,Reach
+2249,andresti vicino al giochetto ,Reach
+2250,vai vicino a questa cuccia ,Reach
+2251,andresti vicino a questa cuccia ,Reach
+2252,vai vicino a quella cuccia ,Reach
+2253,andresti vicino a quella cuccia ,Reach
+2254,vai vicino alla cuccia ,Reach
+2255,andresti vicino alla cuccia ,Reach
+2256,vai vicino a questa casetta ,Reach
+2257,andresti vicino a questa casetta ,Reach
+2258,vai vicino a quella casetta ,Reach
+2259,andresti vicino a quella casetta ,Reach
+2260,vai vicino alla casetta ,Reach
+2261,andresti vicino alla casetta ,Reach
+2901,potresti agguantare questo giochetto ,Pick
+2902,raccogli quel giochetto ,Pick
+2903,raccoglieresti quel giochetto ,Pick
+2904,puoi raccogliere quel giochetto ,Pick
+2905,potresti raccogliere quel giochetto ,Pick
+2906,prendi quel giochetto ,Pick
+2907,prenderesti quel giochetto ,Pick
+2908,puoi prendere quel giochetto ,Pick
+2909,potresti prendere quel giochetto ,Pick
+2910,afferra quel giochetto ,Pick
+2911,affereresti quel giochetto ,Pick
+2912,puoi afferrare quel giochetto ,Pick
+2913,potresti afferrare quel giochetto ,Pick
+2914,agguanta quel giochetto ,Pick
+2915,agguanteresti quel giochetto ,Pick
+2916,puoi agguantare quel giochetto ,Pick
+2917,potresti agguantare quel giochetto ,Pick
+2918,raccogli il giochetto ,Pick
+2919,raccoglieresti il giochetto ,Pick
+2920,puoi raccogliere il giochetto ,Pick
+2921,potresti raccogliere il giochetto ,Pick
+2922,prendi il giochetto ,Pick
+2923,prenderesti il giochetto ,Pick
+2924,puoi prendere il giochetto ,Pick
+2925,potresti prendere il giochetto ,Pick
+2926,afferra il giochetto ,Pick
+2927,affereresti il giochetto ,Pick
+2928,puoi afferrare il giochetto ,Pick
+2929,potresti afferrare il giochetto ,Pick
+2930,agguanta il giochetto ,Pick
+2931,agguanteresti il giochetto ,Pick
+2932,puoi agguantare il giochetto ,Pick
+2933,potresti agguantare il giochetto ,Pick
+3635,potresti rilasciare il giochino ,Leave
+3636,lascia questo giochetto ,Leave
+3637,lasceresti questo giochetto ,Leave
+3638,puoi lasciare questo giochetto ,Leave
+3639,potresti lasciare questo giochetto ,Leave
+3640,molla questo giochetto ,Leave
+3641,molleresti questo giochetto ,Leave
+3642,puoi mollare questo giochetto ,Leave
+3643,potresti mollare questo giochetto ,Leave
+3644,getta questo giochetto ,Leave
+3645,butta questo giochetto ,Leave
+3646,getteresti questo giochetto ,Leave
+3647,butteresti questo giochetto ,Leave
+3648,puoi gettare questo giochetto ,Leave
+3649,potresti gettare questo giochetto ,Leave
+3650,rilascia questo giochetto ,Leave
+3651,rilasceresti questo giochetto ,Leave
+3652,puoi rilasciare questo giochetto ,Leave
+3653,potresti rilasciare questo giochetto ,Leave
+3654,lascia quel giochetto ,Leave
+3655,lasceresti quel giochetto ,Leave
+3656,puoi lasciare quel giochetto ,Leave
+3657,potresti lasciare quel giochetto ,Leave
+3658,molla quel giochetto ,Leave
+3659,molleresti quel giochetto ,Leave
+3660,puoi mollare quel giochetto ,Leave
+3661,potresti mollare quel giochetto ,Leave
+3662,getta quel giochetto ,Leave
+3663,butta quel giochetto ,Leave
+3664,getteresti quel giochetto ,Leave
+3665,butteresti quel giochetto ,Leave
+3666,puoi gettare quel giochetto ,Leave
+3667,potresti gettare quel giochetto ,Leave
+3668,rilascia quel giochetto ,Leave
+3669,rilasceresti quel giochetto ,Leave
+3670,puoi rilasciare quel giochetto ,Leave
+3671,potresti rilasciare quel giochetto ,Leave
+3672,lascia il giochetto ,Leave
+3673,lasceresti il giochetto ,Leave
+3674,puoi lasciare il giochetto ,Leave
+3675,potresti lasciare il giochetto ,Leave
+3676,molla il giochetto ,Leave
+3677,molleresti il giochetto ,Leave
+3678,puoi mollare il giochetto ,Leave
+3679,potresti mollare il giochetto ,Leave
+3680,getta il giochetto ,Leave
+3681,butta il giochetto ,Leave
+3682,getteresti il giochetto ,Leave
+3683,butteresti il giochetto ,Leave
+3684,puoi gettare il giochetto ,Leave
+3685,potresti gettare il giochetto ,Leave
+3686,rilascia il giochetto ,Leave
+3687,rilasceresti il giochetto ,Leave
+3688,puoi rilasciare il giochetto ,Leave
+3689,potresti rilasciare il giochetto ,Leave
+4591,scaraventeresti questa palla contro quella pianta ,Throw
+4592,colpisci la pianta ,Throw
+4593,colpisci la pianta con questa palla ,Throw
+4594,colpisci la pianta usando questa palla ,Throw
+4595,lancia questa palla contro la pianta ,Throw
+4596,scaglia questa palla contro la pianta ,Throw
+4597,scaraventa questa palla contro la pianta ,Throw
+4598,puoi colpire la pianta ,Throw
+4599,puoi colpire la pianta con questa palla ,Throw
+4600,puoi colpire la pianta usando questa palla ,Throw
+4601,puoi lanciare questa palla contro la pianta ,Throw
+4602,puoi scagliare questa palla contro la pianta ,Throw
+4603,puoi scaraventare questa palla contro la pianta ,Throw
+4604,potresti colpire la pianta ,Throw
+4605,potresti colpire la pianta con questa palla ,Throw
+4606,potresti colpire la pianta usando questa palla ,Throw
+4607,potresti lanciare questa palla contro la pianta ,Throw
+4608,potresti scagliare questa palla contro la pianta ,Throw
+4609,potresti scaraventare questa palla contro la pianta ,Throw
+4610,colpiresti la pianta ,Throw
+4611,lanceresti questa palla contro la pianta ,Throw
+4612,scaglieresti questa palla contro la pianta ,Throw
+4613,scaraventeresti questa palla contro la pianta ,Throw
+4614,colpisci questa pianta nel vaso ,Throw
+4615,colpisci questa pianta nel vaso con questa palla ,Throw
+4616,colpisci questa pianta nel vaso usando questa palla ,Throw
+4617,lancia questa palla contro questa pianta nel vaso ,Throw
+4618,scaglia questa palla contro questa pianta nel vaso ,Throw
+4619,scaraventa questa palla contro questa pianta nel vaso ,Throw
+4620,puoi colpire questa pianta nel vaso ,Throw
+4621,puoi colpire questa pianta nel vaso con questa palla ,Throw
+4622,puoi colpire questa pianta nel vaso usando questa palla ,Throw
+4623,puoi lanciare questa palla contro questa pianta nel vaso ,Throw
+4624,puoi scagliare questa palla contro questa pianta nel vaso ,Throw
+4625,puoi scaraventare questa palla contro questa pianta nel vaso ,Throw
+4626,potresti colpire questa pianta nel vaso ,Throw
+4627,potresti colpire questa pianta nel vaso con questa palla ,Throw
+4628,potresti colpire questa pianta nel vaso usando questa palla ,Throw
+4629,potresti lanciare questa palla contro questa pianta nel vaso ,Throw
+4630,potresti scagliare questa palla contro questa pianta nel vaso ,Throw
+4631,potresti scaraventare questa palla contro questa pianta nel vaso ,Throw
+4632,colpiresti questa pianta nel vaso ,Throw
+4633,lanceresti questa palla contro questa pianta nel vaso ,Throw
+4634,scaglieresti questa palla contro questa pianta nel vaso ,Throw
+4635,scaraventeresti questa palla contro questa pianta nel vaso ,Throw
+4636,colpisci quella pianta nel vaso ,Throw
+4637,colpisci quella pianta nel vaso con questa palla ,Throw
+4638,colpisci quella pianta nel vaso usando questa palla ,Throw
+4639,lancia questa palla contro quella pianta nel vaso ,Throw
+4640,scaglia questa palla contro quella pianta nel vaso ,Throw
+4641,scaraventa questa palla contro quella pianta nel vaso ,Throw
+4642,puoi colpire quella pianta nel vaso ,Throw
+4643,puoi colpire quella pianta nel vaso con questa palla ,Throw
+4644,puoi colpire quella pianta nel vaso usando questa palla ,Throw
+4645,puoi lanciare questa palla contro quella pianta nel vaso ,Throw
+4646,puoi scagliare questa palla contro quella pianta nel vaso ,Throw
+4647,puoi scaraventare questa palla contro quella pianta nel vaso ,Throw
+4648,potresti colpire quella pianta nel vaso ,Throw
+4649,potresti colpire quella pianta nel vaso con questa palla ,Throw
+4650,potresti colpire quella pianta nel vaso usando questa palla ,Throw
+4651,potresti lanciare questa palla contro quella pianta nel vaso ,Throw
+4652,potresti scagliare questa palla contro quella pianta nel vaso ,Throw
+4653,potresti scaraventare questa palla contro quella pianta nel vaso ,Throw
+4654,colpiresti quella pianta nel vaso ,Throw
+4655,lanceresti questa palla contro quella pianta nel vaso ,Throw
+4656,scaglieresti questa palla contro quella pianta nel vaso ,Throw
+4657,scaraventeresti questa palla contro quella pianta nel vaso ,Throw
+4658,colpisci la pianta nel vaso ,Throw
+4659,colpisci la pianta nel vaso con questa palla ,Throw
+4660,colpisci la pianta nel vaso usando questa palla ,Throw
+4661,lancia questa palla contro la pianta nel vaso ,Throw
+4662,scaglia questa palla contro la pianta nel vaso ,Throw
+4663,scaraventa questa palla contro la pianta nel vaso ,Throw
+4664,puoi colpire la pianta nel vaso ,Throw
+4665,puoi colpire la pianta nel vaso con questa palla ,Throw
+4666,puoi colpire la pianta nel vaso usando questa palla ,Throw
+4667,puoi lanciare questa palla contro la pianta nel vaso ,Throw
+4668,puoi scagliare questa palla contro la pianta nel vaso ,Throw
+4669,puoi scaraventare questa palla contro la pianta nel vaso ,Throw
+4670,potresti colpire la pianta nel vaso ,Throw
+4671,potresti colpire la pianta nel vaso con questa palla ,Throw
+4672,potresti colpire la pianta nel vaso usando questa palla ,Throw
+4673,potresti lanciare questa palla contro la pianta nel vaso ,Throw
+4674,potresti scagliare questa palla contro la pianta nel vaso ,Throw
+4675,potresti scaraventare questa palla contro la pianta nel vaso ,Throw
+4676,colpiresti la pianta nel vaso ,Throw
+4677,lanceresti questa palla contro la pianta nel vaso ,Throw
+4678,scaglieresti questa palla contro la pianta nel vaso ,Throw
+4679,scaraventeresti questa palla contro la pianta nel vaso ,Throw
+4680,colpisci questo osso ,Throw
+4681,colpisci questo osso con questa palla ,Throw
+4682,colpisci questo osso usando questa palla ,Throw
+4683,lancia questa palla contro questo osso ,Throw
+4684,scaglia questa palla contro questo osso ,Throw
+4685,scaraventa questa palla contro questo osso ,Throw
+4686,puoi colpire questo osso ,Throw
+4687,puoi colpire questo osso con questa palla ,Throw
+4688,puoi colpire questo osso usando questa palla ,Throw
+4689,puoi lanciare questa palla contro questo osso ,Throw
+4690,puoi scagliare questa palla contro questo osso ,Throw
+4691,puoi scaraventare questa palla contro questo osso ,Throw
+4692,potresti colpire questo osso ,Throw
+4693,potresti colpire questo osso con questa palla ,Throw
+4694,potresti colpire questo osso usando questa palla ,Throw
+4695,potresti lanciare questa palla contro questo osso ,Throw
+4696,potresti scagliare questa palla contro questo osso ,Throw
+4697,potresti scaraventare questa palla contro questo osso ,Throw
+4698,colpiresti questo osso ,Throw
+4699,lanceresti questa palla contro questo osso ,Throw
+4700,scaglieresti questa palla contro questo osso ,Throw
+4701,scaraventeresti questa palla contro questo osso ,Throw
+4702,colpisci quell osso ,Throw
+4703,colpisci quell osso con questa palla ,Throw
+4704,colpisci quell osso usando questa palla ,Throw
+4705,lancia questa palla contro quell osso ,Throw
+4706,scaglia questa palla contro quell osso ,Throw
+4707,scaraventa questa palla contro quell osso ,Throw
+4708,puoi colpire quell osso ,Throw
+4709,puoi colpire quell osso con questa palla ,Throw
+4710,puoi colpire quell osso usando questa palla ,Throw
+4711,puoi lanciare questa palla contro quell osso ,Throw
+4712,puoi scagliare questa palla contro quell osso ,Throw
+4713,puoi scaraventare questa palla contro quell osso ,Throw
+4714,potresti colpire quell osso ,Throw
+4715,potresti colpire quell osso con questa palla ,Throw
+4716,potresti colpire quell osso usando questa palla ,Throw
+4717,potresti lanciare questa palla contro quell osso ,Throw
+4718,potresti scagliare questa palla contro quell osso ,Throw
+4719,potresti scaraventare questa palla contro quell osso ,Throw
+4720,colpiresti quell osso ,Throw
+4721,lanceresti questa palla contro quell osso ,Throw
+4722,scaglieresti questa palla contro quell osso ,Throw
+4723,scaraventeresti questa palla contro quell osso ,Throw
+4724,colpisci l osso ,Throw
+4725,colpisci l osso con questa palla ,Throw
+4726,colpisci l osso usando questa palla ,Throw
+4727,lancia questa palla contro l osso ,Throw
+4728,scaglia questa palla contro l osso ,Throw
+4729,scaraventa questa palla contro l osso ,Throw
+4730,puoi colpire l osso ,Throw
+4731,puoi colpire l osso con questa palla ,Throw
+4732,puoi colpire l osso usando questa palla ,Throw
+4733,puoi lanciare questa palla contro l osso ,Throw
+4734,puoi scagliare questa palla contro l osso ,Throw
+4735,puoi scaraventare questa palla contro l osso ,Throw
+4736,potresti colpire l osso ,Throw
+4737,potresti colpire l osso con questa palla ,Throw
+4738,potresti colpire l osso usando questa palla ,Throw
+4739,potresti lanciare questa palla contro l osso ,Throw
+4740,potresti scagliare questa palla contro l osso ,Throw
+4741,potresti scaraventare questa palla contro l osso ,Throw
+4742,colpiresti l osso ,Throw
+4743,lanceresti questa palla contro l osso ,Throw
+4744,scaglieresti questa palla contro l osso ,Throw
+4745,scaraventeresti questa palla contro l osso ,Throw
+4746,colpisci questo gioco ,Throw
+4747,colpisci questo gioco con questa palla ,Throw
+4748,colpisci questo gioco usando questa palla ,Throw
+4749,lancia questa palla contro questo gioco ,Throw
+4750,scaglia questa palla contro questo gioco ,Throw
+4751,scaraventa questa palla contro questo gioco ,Throw
+4752,puoi colpire questo gioco ,Throw
+4753,puoi colpire questo gioco con questa palla ,Throw
+4754,puoi colpire questo gioco usando questa palla ,Throw
+4755,puoi lanciare questa palla contro questo gioco ,Throw
+4756,puoi scagliare questa palla contro questo gioco ,Throw
+4757,puoi scaraventare questa palla contro questo gioco ,Throw
+4758,potresti colpire questo gioco ,Throw
+4759,potresti colpire questo gioco con questa palla ,Throw
+4760,potresti colpire questo gioco usando questa palla ,Throw
+4761,potresti lanciare questa palla contro questo gioco ,Throw
+4762,potresti scagliare questa palla contro questo gioco ,Throw
+4763,potresti scaraventare questa palla contro questo gioco ,Throw
+4764,colpiresti questo gioco ,Throw
+4765,lanceresti questa palla contro questo gioco ,Throw
+4766,scaglieresti questa palla contro questo gioco ,Throw
+4767,scaraventeresti questa palla contro questo gioco ,Throw
+4768,colpisci quel gioco ,Throw
+4769,colpisci quel gioco con questa palla ,Throw
+4770,colpisci quel gioco usando questa palla ,Throw
+4771,lancia questa palla contro quel gioco ,Throw
+4772,scaglia questa palla contro quel gioco ,Throw
+4773,scaraventa questa palla contro quel gioco ,Throw
+4774,puoi colpire quel gioco ,Throw
+4775,puoi colpire quel gioco con questa palla ,Throw
+4776,puoi colpire quel gioco usando questa palla ,Throw
+4777,puoi lanciare questa palla contro quel gioco ,Throw
+4778,puoi scagliare questa palla contro quel gioco ,Throw
+4779,puoi scaraventare questa palla contro quel gioco ,Throw
+4780,potresti colpire quel gioco ,Throw
+4781,potresti colpire quel gioco con questa palla ,Throw
+4782,potresti colpire quel gioco usando questa palla ,Throw
+4783,potresti lanciare questa palla contro quel gioco ,Throw
+4784,potresti scagliare questa palla contro quel gioco ,Throw
+4785,potresti scaraventare questa palla contro quel gioco ,Throw
+4786,colpiresti quel gioco ,Throw
+4787,lanceresti questa palla contro quel gioco ,Throw
+4788,scaglieresti questa palla contro quel gioco ,Throw
+4789,scaraventeresti questa palla contro quel gioco ,Throw
+4790,colpisci il gioco ,Throw
+4791,colpisci il gioco con questa palla ,Throw
+4792,colpisci il gioco usando questa palla ,Throw
+4793,lancia questa palla contro il gioco ,Throw
+4794,scaglia questa palla contro il gioco ,Throw
+4795,scaraventa questa palla contro il gioco ,Throw
+4796,puoi colpire il gioco ,Throw
+4797,puoi colpire il gioco con questa palla ,Throw
+4798,puoi colpire il gioco usando questa palla ,Throw
+4799,puoi lanciare questa palla contro il gioco ,Throw
+4800,puoi scagliare questa palla contro il gioco ,Throw
+4801,puoi scaraventare questa palla contro il gioco ,Throw
+4802,potresti colpire il gioco ,Throw
+4803,potresti colpire il gioco con questa palla ,Throw
+4804,potresti colpire il gioco usando questa palla ,Throw
+4805,potresti lanciare questa palla contro il gioco ,Throw
+4806,potresti scagliare questa palla contro il gioco ,Throw
+4807,potresti scaraventare questa palla contro il gioco ,Throw
+4808,colpiresti il gioco ,Throw
+4809,lanceresti questa palla contro il gioco ,Throw
+4810,scaglieresti questa palla contro il gioco ,Throw
+4811,scaraventeresti questa palla contro il gioco ,Throw
+4812,colpisci questo giochino ,Throw
+4813,colpisci questo giochino con questa palla ,Throw
+4814,colpisci questo giochino usando questa palla ,Throw
+4815,lancia questa palla contro questo giochino ,Throw
+4816,scaglia questa palla contro questo giochino ,Throw
+4817,scaraventa questa palla contro questo giochino ,Throw
+4818,puoi colpire questo giochino ,Throw
+4819,puoi colpire questo giochino con questa palla ,Throw
+4820,puoi colpire questo giochino usando questa palla ,Throw
+4821,puoi lanciare questa palla contro questo giochino ,Throw
+4822,puoi scagliare questa palla contro questo giochino ,Throw
+4823,puoi scaraventare questa palla contro questo giochino ,Throw
+4824,potresti colpire questo giochino ,Throw
+4825,potresti colpire questo giochino con questa palla ,Throw
+4826,potresti colpire questo giochino usando questa palla ,Throw
+4827,potresti lanciare questa palla contro questo giochino ,Throw
+4828,potresti scagliare questa palla contro questo giochino ,Throw
+4829,potresti scaraventare questa palla contro questo giochino ,Throw
+4830,colpiresti questo giochino ,Throw
+4831,lanceresti questa palla contro questo giochino ,Throw
+4832,scaglieresti questa palla contro questo giochino ,Throw
+4833,scaraventeresti questa palla contro questo giochino ,Throw
+4834,colpisci quel giochino ,Throw
+4835,colpisci quel giochino con questa palla ,Throw
+4836,colpisci quel giochino usando questa palla ,Throw
+4837,lancia questa palla contro quel giochino ,Throw
+4838,scaglia questa palla contro quel giochino ,Throw
+4839,scaraventa questa palla contro quel giochino ,Throw
+4840,puoi colpire quel giochino ,Throw
+4841,puoi colpire quel giochino con questa palla ,Throw
+4842,puoi colpire quel giochino usando questa palla ,Throw
+4843,puoi lanciare questa palla contro quel giochino ,Throw
+4844,puoi scagliare questa palla contro quel giochino ,Throw
+4845,puoi scaraventare questa palla contro quel giochino ,Throw
+4846,potresti colpire quel giochino ,Throw
+4847,potresti colpire quel giochino con questa palla ,Throw
+4848,potresti colpire quel giochino usando questa palla ,Throw
+4849,potresti lanciare questa palla contro quel giochino ,Throw
+4850,potresti scagliare questa palla contro quel giochino ,Throw
+4851,potresti scaraventare questa palla contro quel giochino ,Throw
+4852,colpiresti quel giochino ,Throw
+4853,lanceresti questa palla contro quel giochino ,Throw
+4854,scaglieresti questa palla contro quel giochino ,Throw
+4855,scaraventeresti questa palla contro quel giochino ,Throw
+4856,colpisci il giochino ,Throw
+4857,colpisci il giochino con questa palla ,Throw
+4858,colpisci il giochino usando questa palla ,Throw
+4859,lancia questa palla contro il giochino ,Throw
+4860,scaglia questa palla contro il giochino ,Throw
+4861,scaraventa questa palla contro il giochino ,Throw
+4862,puoi colpire il giochino ,Throw
+4863,puoi colpire il giochino con questa palla ,Throw
+4864,puoi colpire il giochino usando questa palla ,Throw
+4865,puoi lanciare questa palla contro il giochino ,Throw
+4866,puoi scagliare questa palla contro il giochino ,Throw
+4867,puoi scaraventare questa palla contro il giochino ,Throw
+4868,potresti colpire il giochino ,Throw
+4869,potresti colpire il giochino con questa palla ,Throw
+4870,potresti colpire il giochino usando questa palla ,Throw
+4871,potresti lanciare questa palla contro il giochino ,Throw
+4872,potresti scagliare questa palla contro il giochino ,Throw
+4873,potresti scaraventare questa palla contro il giochino ,Throw
+4874,colpiresti il giochino ,Throw
+4875,lanceresti questa palla contro il giochino ,Throw
+4876,scaglieresti questa palla contro il giochino ,Throw
+4877,scaraventeresti questa palla contro il giochino ,Throw
+4878,colpisci questo giochetto ,Throw
+4879,colpisci questo giochetto con questa palla ,Throw
+4880,colpisci questo giochetto usando questa palla ,Throw
+4881,lancia questa palla contro questo giochetto ,Throw
+4882,scaglia questa palla contro questo giochetto ,Throw
+4883,scaraventa questa palla contro questo giochetto ,Throw
+4884,puoi colpire questo giochetto ,Throw
+4885,puoi colpire questo giochetto con questa palla ,Throw
+4886,puoi colpire questo giochetto usando questa palla ,Throw
+4887,puoi lanciare questa palla contro questo giochetto ,Throw
+4888,puoi scagliare questa palla contro questo giochetto ,Throw
+4889,puoi scaraventare questa palla contro questo giochetto ,Throw
+4890,potresti colpire questo giochetto ,Throw
+4891,daresti una controllatina alla casetta ,Inspect

@@ -1,0 +1,2566 @@
+,text,intent
+0,raggiungi questo cespuglio ,Reach
+1,vai dove sta questo cespuglio ,Reach
+2,vai dove si trova questo cespuglio ,Reach
+3,vai in corrispondenza di questo cespuglio ,Reach
+4,recati dove sta questo cespuglio ,Reach
+5,recati dove si trova questo cespuglio ,Reach
+6,recati in corrispondenza di questo cespuglio ,Reach
+7,andresti dove sta questo cespuglio ,Reach
+8,andresti dove si trova questo cespuglio ,Reach
+9,andresti in corrispondenza di questo cespuglio ,Reach
+10,ti recheresti dove sta questo cespuglio ,Reach
+11,ti recheresti dove si trova questo cespuglio ,Reach
+12,ti recheresti in corrispondenza di questo cespuglio ,Reach
+13,puoi andare dove sta questo cespuglio ,Reach
+14,puoi andare dove si trova questo cespuglio ,Reach
+15,puoi andare in corrispondenza di questo cespuglio ,Reach
+16,potresti andare dove sta questo cespuglio ,Reach
+17,potresti andare dove si trova questo cespuglio ,Reach
+18,potresti andare in corrispondenza di questo cespuglio ,Reach
+19,puoi recarti dove sta questo cespuglio ,Reach
+20,puoi recarti dove si trova questo cespuglio ,Reach
+21,puoi recarti in corrispondenza di questo cespuglio ,Reach
+22,potresti recarti dove sta questo cespuglio ,Reach
+23,potresti recarti dove si trova questo cespuglio ,Reach
+24,potresti recarti in corrispondenza di questo cespuglio ,Reach
+25,puoi raggiungere questo cespuglio ,Reach
+26,potresti raggiungere questo cespuglio ,Reach
+27,raggiungi quel cespuglio ,Reach
+28,vai dove sta quel cespuglio ,Reach
+29,vai dove si trova quel cespuglio ,Reach
+30,vai in corrispondenza di quel cespuglio ,Reach
+31,recati dove sta quel cespuglio ,Reach
+32,recati dove si trova quel cespuglio ,Reach
+33,recati in corrispondenza di quel cespuglio ,Reach
+34,andresti dove sta quel cespuglio ,Reach
+35,andresti dove si trova quel cespuglio ,Reach
+36,andresti in corrispondenza di quel cespuglio ,Reach
+37,ti recheresti dove sta quel cespuglio ,Reach
+38,ti recheresti dove si trova quel cespuglio ,Reach
+39,ti recheresti in corrispondenza di quel cespuglio ,Reach
+40,puoi andare dove sta quel cespuglio ,Reach
+41,puoi andare dove si trova quel cespuglio ,Reach
+42,puoi andare in corrispondenza di quel cespuglio ,Reach
+43,potresti andare dove sta quel cespuglio ,Reach
+44,potresti andare dove si trova quel cespuglio ,Reach
+45,potresti andare in corrispondenza di quel cespuglio ,Reach
+46,puoi recarti dove sta quel cespuglio ,Reach
+47,puoi recarti dove si trova quel cespuglio ,Reach
+48,puoi recarti in corrispondenza di quel cespuglio ,Reach
+49,potresti recarti dove sta quel cespuglio ,Reach
+50,potresti recarti dove si trova quel cespuglio ,Reach
+51,potresti recarti in corrispondenza di quel cespuglio ,Reach
+52,puoi raggiungere quel cespuglio ,Reach
+53,potresti raggiungere quel cespuglio ,Reach
+54,raggiungi il cespuglio ,Reach
+55,vai dove sta il cespuglio ,Reach
+56,vai dove si trova il cespuglio ,Reach
+57,vai in corrispondenza di il cespuglio ,Reach
+58,recati dove sta il cespuglio ,Reach
+59,recati dove si trova il cespuglio ,Reach
+60,recati in corrispondenza di il cespuglio ,Reach
+61,andresti dove sta il cespuglio ,Reach
+62,andresti dove si trova il cespuglio ,Reach
+63,andresti in corrispondenza di il cespuglio ,Reach
+64,ti recheresti dove sta il cespuglio ,Reach
+65,ti recheresti dove si trova il cespuglio ,Reach
+66,ti recheresti in corrispondenza di il cespuglio ,Reach
+67,puoi andare dove sta il cespuglio ,Reach
+68,puoi andare dove si trova il cespuglio ,Reach
+69,puoi andare in corrispondenza di il cespuglio ,Reach
+70,potresti andare dove sta il cespuglio ,Reach
+71,potresti andare dove si trova il cespuglio ,Reach
+72,potresti andare in corrispondenza di il cespuglio ,Reach
+73,puoi recarti dove sta il cespuglio ,Reach
+74,puoi recarti dove si trova il cespuglio ,Reach
+75,puoi recarti in corrispondenza di il cespuglio ,Reach
+76,potresti recarti dove sta il cespuglio ,Reach
+77,potresti recarti dove si trova il cespuglio ,Reach
+78,potresti recarti in corrispondenza di il cespuglio ,Reach
+79,puoi raggiungere il cespuglio ,Reach
+80,potresti raggiungere il cespuglio ,Reach
+81,raggiungi questo cespo ,Reach
+82,vai dove sta questo cespo ,Reach
+83,vai dove si trova questo cespo ,Reach
+84,vai in corrispondenza di questo cespo ,Reach
+85,recati dove sta questo cespo ,Reach
+86,recati dove si trova questo cespo ,Reach
+87,recati in corrispondenza di questo cespo ,Reach
+88,andresti dove sta questo cespo ,Reach
+89,andresti dove si trova questo cespo ,Reach
+90,andresti in corrispondenza di questo cespo ,Reach
+91,ti recheresti dove sta questo cespo ,Reach
+92,ti recheresti dove si trova questo cespo ,Reach
+93,ti recheresti in corrispondenza di questo cespo ,Reach
+94,puoi andare dove sta questo cespo ,Reach
+95,puoi andare dove si trova questo cespo ,Reach
+96,puoi andare in corrispondenza di questo cespo ,Reach
+97,potresti andare dove sta questo cespo ,Reach
+98,potresti andare dove si trova questo cespo ,Reach
+99,potresti andare in corrispondenza di questo cespo ,Reach
+100,puoi recarti dove sta questo cespo ,Reach
+101,puoi recarti dove si trova questo cespo ,Reach
+102,puoi recarti in corrispondenza di questo cespo ,Reach
+103,potresti recarti dove sta questo cespo ,Reach
+104,potresti recarti dove si trova questo cespo ,Reach
+105,potresti recarti in corrispondenza di questo cespo ,Reach
+106,puoi raggiungere questo cespo ,Reach
+107,potresti raggiungere questo cespo ,Reach
+108,raggiungi quel cespo ,Reach
+109,vai dove sta quel cespo ,Reach
+110,vai dove si trova quel cespo ,Reach
+111,vai in corrispondenza di quel cespo ,Reach
+112,recati dove sta quel cespo ,Reach
+113,recati dove si trova quel cespo ,Reach
+114,recati in corrispondenza di quel cespo ,Reach
+115,andresti dove sta quel cespo ,Reach
+116,andresti dove si trova quel cespo ,Reach
+117,andresti in corrispondenza di quel cespo ,Reach
+118,ti recheresti dove sta quel cespo ,Reach
+119,ti recheresti dove si trova quel cespo ,Reach
+120,ti recheresti in corrispondenza di quel cespo ,Reach
+121,puoi andare dove sta quel cespo ,Reach
+122,puoi andare dove si trova quel cespo ,Reach
+123,puoi andare in corrispondenza di quel cespo ,Reach
+124,potresti andare dove sta quel cespo ,Reach
+125,potresti andare dove si trova quel cespo ,Reach
+126,potresti andare in corrispondenza di quel cespo ,Reach
+127,puoi recarti dove sta quel cespo ,Reach
+128,puoi recarti dove si trova quel cespo ,Reach
+129,puoi recarti in corrispondenza di quel cespo ,Reach
+130,potresti recarti dove sta quel cespo ,Reach
+131,potresti recarti dove si trova quel cespo ,Reach
+132,potresti recarti in corrispondenza di quel cespo ,Reach
+133,puoi raggiungere quel cespo ,Reach
+134,potresti raggiungere quel cespo ,Reach
+135,raggiungi il cespo ,Reach
+136,vai dove sta il cespo ,Reach
+137,vai dove si trova il cespo ,Reach
+138,vai in corrispondenza di il cespo ,Reach
+139,recati dove sta il cespo ,Reach
+140,recati dove si trova il cespo ,Reach
+141,recati in corrispondenza di il cespo ,Reach
+142,andresti dove sta il cespo ,Reach
+143,andresti dove si trova il cespo ,Reach
+144,andresti in corrispondenza di il cespo ,Reach
+145,ti recheresti dove sta il cespo ,Reach
+146,ti recheresti dove si trova il cespo ,Reach
+147,ti recheresti in corrispondenza di il cespo ,Reach
+148,puoi andare dove sta il cespo ,Reach
+149,puoi andare dove si trova il cespo ,Reach
+150,puoi andare in corrispondenza di il cespo ,Reach
+151,potresti andare dove sta il cespo ,Reach
+152,potresti andare dove si trova il cespo ,Reach
+153,potresti andare in corrispondenza di il cespo ,Reach
+154,puoi recarti dove sta il cespo ,Reach
+155,puoi recarti dove si trova il cespo ,Reach
+156,puoi recarti in corrispondenza di il cespo ,Reach
+157,potresti recarti dove sta il cespo ,Reach
+158,potresti recarti dove si trova il cespo ,Reach
+159,potresti recarti in corrispondenza di il cespo ,Reach
+160,puoi raggiungere il cespo ,Reach
+161,potresti raggiungere il cespo ,Reach
+162,raggiungi questa palla ,Reach
+163,vai dove sta questa palla ,Reach
+164,vai dove si trova questa palla ,Reach
+165,vai in corrispondenza di questa palla ,Reach
+166,recati dove sta questa palla ,Reach
+167,recati dove si trova questa palla ,Reach
+168,recati in corrispondenza di questa palla ,Reach
+169,andresti dove sta questa palla ,Reach
+170,andresti dove si trova questa palla ,Reach
+171,andresti in corrispondenza di questa palla ,Reach
+172,ti recheresti dove sta questa palla ,Reach
+173,ti recheresti dove si trova questa palla ,Reach
+174,ti recheresti in corrispondenza di questa palla ,Reach
+175,puoi andare dove sta questa palla ,Reach
+176,puoi andare dove si trova questa palla ,Reach
+177,puoi andare in corrispondenza di questa palla ,Reach
+178,potresti andare dove sta questa palla ,Reach
+179,potresti andare dove si trova questa palla ,Reach
+180,potresti andare in corrispondenza di questa palla ,Reach
+181,puoi recarti dove sta questa palla ,Reach
+182,puoi recarti dove si trova questa palla ,Reach
+183,puoi recarti in corrispondenza di questa palla ,Reach
+184,potresti recarti dove sta questa palla ,Reach
+185,potresti recarti dove si trova questa palla ,Reach
+186,potresti recarti in corrispondenza di questa palla ,Reach
+187,puoi raggiungere questa palla ,Reach
+188,potresti raggiungere questa palla ,Reach
+189,raggiungi quella palla ,Reach
+190,vai dove sta quella palla ,Reach
+191,vai dove si trova quella palla ,Reach
+192,vai in corrispondenza di quella palla ,Reach
+193,recati dove sta quella palla ,Reach
+194,recati dove si trova quella palla ,Reach
+195,recati in corrispondenza di quella palla ,Reach
+196,andresti dove sta quella palla ,Reach
+197,andresti dove si trova quella palla ,Reach
+198,andresti in corrispondenza di quella palla ,Reach
+199,ti recheresti dove sta quella palla ,Reach
+200,ti recheresti dove si trova quella palla ,Reach
+201,ti recheresti in corrispondenza di quella palla ,Reach
+202,puoi andare dove sta quella palla ,Reach
+203,puoi andare dove si trova quella palla ,Reach
+204,puoi andare in corrispondenza di quella palla ,Reach
+205,potresti andare dove sta quella palla ,Reach
+206,potresti andare dove si trova quella palla ,Reach
+207,potresti andare in corrispondenza di quella palla ,Reach
+208,puoi recarti dove sta quella palla ,Reach
+209,puoi recarti dove si trova quella palla ,Reach
+210,puoi recarti in corrispondenza di quella palla ,Reach
+211,potresti recarti dove sta quella palla ,Reach
+212,potresti recarti dove si trova quella palla ,Reach
+213,potresti recarti in corrispondenza di quella palla ,Reach
+214,puoi raggiungere quella palla ,Reach
+215,potresti raggiungere quella palla ,Reach
+216,raggiungi la palla ,Reach
+217,vai dove sta la palla ,Reach
+218,vai dove si trova la palla ,Reach
+219,vai in corrispondenza di la palla ,Reach
+220,recati dove sta la palla ,Reach
+221,recati dove si trova la palla ,Reach
+222,recati in corrispondenza di la palla ,Reach
+223,andresti dove sta la palla ,Reach
+224,andresti dove si trova la palla ,Reach
+225,andresti in corrispondenza di la palla ,Reach
+226,ti recheresti dove sta la palla ,Reach
+227,ti recheresti dove si trova la palla ,Reach
+228,ti recheresti in corrispondenza di la palla ,Reach
+229,puoi andare dove sta la palla ,Reach
+230,puoi andare dove si trova la palla ,Reach
+231,puoi andare in corrispondenza di la palla ,Reach
+232,potresti andare dove sta la palla ,Reach
+233,potresti andare dove si trova la palla ,Reach
+234,potresti andare in corrispondenza di la palla ,Reach
+235,puoi recarti dove sta la palla ,Reach
+236,puoi recarti dove si trova la palla ,Reach
+237,puoi recarti in corrispondenza di la palla ,Reach
+238,potresti recarti dove sta la palla ,Reach
+239,potresti recarti dove si trova la palla ,Reach
+240,potresti recarti in corrispondenza di la palla ,Reach
+241,puoi raggiungere la palla ,Reach
+242,potresti raggiungere la palla ,Reach
+243,raggiungi questa sfera ,Reach
+244,vai dove sta questa sfera ,Reach
+245,vai dove si trova questa sfera ,Reach
+246,vai in corrispondenza di questa sfera ,Reach
+247,recati dove sta questa sfera ,Reach
+248,recati dove si trova questa sfera ,Reach
+249,recati in corrispondenza di questa sfera ,Reach
+250,andresti dove sta questa sfera ,Reach
+251,andresti dove si trova questa sfera ,Reach
+252,andresti in corrispondenza di questa sfera ,Reach
+253,ti recheresti dove sta questa sfera ,Reach
+254,ti recheresti dove si trova questa sfera ,Reach
+255,ti recheresti in corrispondenza di questa sfera ,Reach
+256,puoi andare dove sta questa sfera ,Reach
+257,puoi andare dove si trova questa sfera ,Reach
+258,puoi andare in corrispondenza di questa sfera ,Reach
+259,potresti andare dove sta questa sfera ,Reach
+260,potresti andare dove si trova questa sfera ,Reach
+261,potresti andare in corrispondenza di questa sfera ,Reach
+262,puoi recarti dove sta questa sfera ,Reach
+263,puoi recarti dove si trova questa sfera ,Reach
+264,puoi recarti in corrispondenza di questa sfera ,Reach
+265,potresti recarti dove sta questa sfera ,Reach
+266,potresti recarti dove si trova questa sfera ,Reach
+267,potresti recarti in corrispondenza di questa sfera ,Reach
+268,puoi raggiungere questa sfera ,Reach
+269,potresti raggiungere questa sfera ,Reach
+270,raggiungi quella sfera ,Reach
+271,vai dove sta quella sfera ,Reach
+272,vai dove si trova quella sfera ,Reach
+273,vai in corrispondenza di quella sfera ,Reach
+274,recati dove sta quella sfera ,Reach
+275,recati dove si trova quella sfera ,Reach
+276,recati in corrispondenza di quella sfera ,Reach
+277,andresti dove sta quella sfera ,Reach
+278,andresti dove si trova quella sfera ,Reach
+279,andresti in corrispondenza di quella sfera ,Reach
+280,ti recheresti dove sta quella sfera ,Reach
+281,ti recheresti dove si trova quella sfera ,Reach
+282,ti recheresti in corrispondenza di quella sfera ,Reach
+283,puoi andare dove sta quella sfera ,Reach
+284,puoi andare dove si trova quella sfera ,Reach
+285,puoi andare in corrispondenza di quella sfera ,Reach
+286,potresti andare dove sta quella sfera ,Reach
+287,potresti andare dove si trova quella sfera ,Reach
+288,potresti andare in corrispondenza di quella sfera ,Reach
+289,puoi recarti dove sta quella sfera ,Reach
+290,puoi recarti dove si trova quella sfera ,Reach
+291,puoi recarti in corrispondenza di quella sfera ,Reach
+292,potresti recarti dove sta quella sfera ,Reach
+293,potresti recarti dove si trova quella sfera ,Reach
+294,potresti recarti in corrispondenza di quella sfera ,Reach
+295,puoi raggiungere quella sfera ,Reach
+296,potresti raggiungere quella sfera ,Reach
+297,raggiungi la sfera ,Reach
+298,vai dove sta la sfera ,Reach
+299,vai dove si trova la sfera ,Reach
+300,vai in corrispondenza di la sfera ,Reach
+301,recati dove sta la sfera ,Reach
+302,recati dove si trova la sfera ,Reach
+303,recati in corrispondenza di la sfera ,Reach
+304,andresti dove sta la sfera ,Reach
+305,andresti dove si trova la sfera ,Reach
+306,andresti in corrispondenza di la sfera ,Reach
+307,ti recheresti dove sta la sfera ,Reach
+308,ti recheresti dove si trova la sfera ,Reach
+309,ti recheresti in corrispondenza di la sfera ,Reach
+310,puoi andare dove sta la sfera ,Reach
+311,puoi andare dove si trova la sfera ,Reach
+312,puoi andare in corrispondenza di la sfera ,Reach
+313,potresti andare dove sta la sfera ,Reach
+314,potresti andare dove si trova la sfera ,Reach
+315,potresti andare in corrispondenza di la sfera ,Reach
+316,puoi recarti dove sta la sfera ,Reach
+317,puoi recarti dove si trova la sfera ,Reach
+318,puoi recarti in corrispondenza di la sfera ,Reach
+319,potresti recarti dove sta la sfera ,Reach
+320,potresti recarti dove si trova la sfera ,Reach
+321,potresti recarti in corrispondenza di la sfera ,Reach
+322,puoi raggiungere la sfera ,Reach
+323,potresti raggiungere la sfera ,Reach
+324,raggiungi questo pallone ,Reach
+325,vai dove sta questo pallone ,Reach
+326,vai dove si trova questo pallone ,Reach
+327,vai in corrispondenza di questo pallone ,Reach
+328,recati dove sta questo pallone ,Reach
+329,recati dove si trova questo pallone ,Reach
+330,recati in corrispondenza di questo pallone ,Reach
+331,andresti dove sta questo pallone ,Reach
+332,andresti dove si trova questo pallone ,Reach
+333,andresti in corrispondenza di questo pallone ,Reach
+334,ti recheresti dove sta questo pallone ,Reach
+335,ti recheresti dove si trova questo pallone ,Reach
+336,ti recheresti in corrispondenza di questo pallone ,Reach
+337,puoi andare dove sta questo pallone ,Reach
+338,puoi andare dove si trova questo pallone ,Reach
+339,puoi andare in corrispondenza di questo pallone ,Reach
+340,potresti andare dove sta questo pallone ,Reach
+341,potresti andare dove si trova questo pallone ,Reach
+342,potresti andare in corrispondenza di questo pallone ,Reach
+343,puoi recarti dove sta questo pallone ,Reach
+344,puoi recarti dove si trova questo pallone ,Reach
+345,puoi recarti in corrispondenza di questo pallone ,Reach
+346,potresti recarti dove sta questo pallone ,Reach
+347,potresti recarti dove si trova questo pallone ,Reach
+348,potresti recarti in corrispondenza di questo pallone ,Reach
+349,puoi raggiungere questo pallone ,Reach
+350,potresti raggiungere questo pallone ,Reach
+351,raggiungi quel pallone ,Reach
+352,vai dove sta quel pallone ,Reach
+353,vai dove si trova quel pallone ,Reach
+354,vai in corrispondenza di quel pallone ,Reach
+355,recati dove sta quel pallone ,Reach
+356,recati dove si trova quel pallone ,Reach
+357,recati in corrispondenza di quel pallone ,Reach
+358,andresti dove sta quel pallone ,Reach
+359,andresti dove si trova quel pallone ,Reach
+360,andresti in corrispondenza di quel pallone ,Reach
+361,ti recheresti dove sta quel pallone ,Reach
+362,ti recheresti dove si trova quel pallone ,Reach
+363,ti recheresti in corrispondenza di quel pallone ,Reach
+364,puoi andare dove sta quel pallone ,Reach
+365,puoi andare dove si trova quel pallone ,Reach
+366,puoi andare in corrispondenza di quel pallone ,Reach
+367,potresti andare dove sta quel pallone ,Reach
+368,potresti andare dove si trova quel pallone ,Reach
+369,potresti andare in corrispondenza di quel pallone ,Reach
+370,puoi recarti dove sta quel pallone ,Reach
+371,puoi recarti dove si trova quel pallone ,Reach
+372,puoi recarti in corrispondenza di quel pallone ,Reach
+373,potresti recarti dove sta quel pallone ,Reach
+374,potresti recarti dove si trova quel pallone ,Reach
+375,potresti recarti in corrispondenza di quel pallone ,Reach
+376,puoi raggiungere quel pallone ,Reach
+377,potresti raggiungere quel pallone ,Reach
+378,raggiungi il pallone ,Reach
+379,vai dove sta il pallone ,Reach
+380,vai dove si trova il pallone ,Reach
+381,vai in corrispondenza di il pallone ,Reach
+382,recati dove sta il pallone ,Reach
+383,recati dove si trova il pallone ,Reach
+384,recati in corrispondenza di il pallone ,Reach
+385,andresti dove sta il pallone ,Reach
+386,andresti dove si trova il pallone ,Reach
+387,andresti in corrispondenza di il pallone ,Reach
+388,ti recheresti dove sta il pallone ,Reach
+389,ti recheresti dove si trova il pallone ,Reach
+390,ti recheresti in corrispondenza di il pallone ,Reach
+391,puoi andare dove sta il pallone ,Reach
+392,puoi andare dove si trova il pallone ,Reach
+393,puoi andare in corrispondenza di il pallone ,Reach
+394,potresti andare dove sta il pallone ,Reach
+395,potresti andare dove si trova il pallone ,Reach
+396,potresti andare in corrispondenza di il pallone ,Reach
+397,puoi recarti dove sta il pallone ,Reach
+398,puoi recarti dove si trova il pallone ,Reach
+399,puoi recarti in corrispondenza di il pallone ,Reach
+400,potresti recarti dove sta il pallone ,Reach
+401,potresti recarti dove si trova il pallone ,Reach
+402,potresti recarti in corrispondenza di il pallone ,Reach
+403,puoi raggiungere il pallone ,Reach
+404,potresti raggiungere il pallone ,Reach
+405,raggiungi questo fuoco ,Reach
+406,vai dove sta questo fuoco ,Reach
+407,vai dove si trova questo fuoco ,Reach
+408,vai in corrispondenza di questo fuoco ,Reach
+409,recati dove sta questo fuoco ,Reach
+410,recati dove si trova questo fuoco ,Reach
+411,recati in corrispondenza di questo fuoco ,Reach
+412,andresti dove sta questo fuoco ,Reach
+413,andresti dove si trova questo fuoco ,Reach
+414,andresti in corrispondenza di questo fuoco ,Reach
+415,ti recheresti dove sta questo fuoco ,Reach
+416,ti recheresti dove si trova questo fuoco ,Reach
+417,ti recheresti in corrispondenza di questo fuoco ,Reach
+418,puoi andare dove sta questo fuoco ,Reach
+419,puoi andare dove si trova questo fuoco ,Reach
+420,puoi andare in corrispondenza di questo fuoco ,Reach
+421,potresti andare dove sta questo fuoco ,Reach
+422,potresti andare dove si trova questo fuoco ,Reach
+423,potresti andare in corrispondenza di questo fuoco ,Reach
+424,puoi recarti dove sta questo fuoco ,Reach
+425,puoi recarti dove si trova questo fuoco ,Reach
+426,puoi recarti in corrispondenza di questo fuoco ,Reach
+427,potresti recarti dove sta questo fuoco ,Reach
+428,potresti recarti dove si trova questo fuoco ,Reach
+429,potresti recarti in corrispondenza di questo fuoco ,Reach
+430,puoi raggiungere questo fuoco ,Reach
+431,potresti raggiungere questo fuoco ,Reach
+432,raggiungi quel fuoco ,Reach
+433,vai dove sta quel fuoco ,Reach
+434,vai dove si trova quel fuoco ,Reach
+435,vai in corrispondenza di quel fuoco ,Reach
+436,recati dove sta quel fuoco ,Reach
+437,recati dove si trova quel fuoco ,Reach
+438,recati in corrispondenza di quel fuoco ,Reach
+439,andresti dove sta quel fuoco ,Reach
+440,andresti dove si trova quel fuoco ,Reach
+441,andresti in corrispondenza di quel fuoco ,Reach
+442,ti recheresti dove sta quel fuoco ,Reach
+443,ti recheresti dove si trova quel fuoco ,Reach
+444,ti recheresti in corrispondenza di quel fuoco ,Reach
+445,puoi andare dove sta quel fuoco ,Reach
+446,puoi andare dove si trova quel fuoco ,Reach
+447,puoi andare in corrispondenza di quel fuoco ,Reach
+448,potresti andare dove sta quel fuoco ,Reach
+449,potresti andare dove si trova quel fuoco ,Reach
+450,potresti andare in corrispondenza di quel fuoco ,Reach
+451,puoi recarti dove sta quel fuoco ,Reach
+452,puoi recarti dove si trova quel fuoco ,Reach
+453,puoi recarti in corrispondenza di quel fuoco ,Reach
+454,potresti recarti dove sta quel fuoco ,Reach
+455,potresti recarti dove si trova quel fuoco ,Reach
+456,potresti recarti in corrispondenza di quel fuoco ,Reach
+457,puoi raggiungere quel fuoco ,Reach
+458,potresti raggiungere quel fuoco ,Reach
+459,raggiungi il fuoco ,Reach
+460,vai dove sta il fuoco ,Reach
+461,vai dove si trova il fuoco ,Reach
+462,vai in corrispondenza di il fuoco ,Reach
+463,recati dove sta il fuoco ,Reach
+464,recati dove si trova il fuoco ,Reach
+465,recati in corrispondenza di il fuoco ,Reach
+466,andresti dove sta il fuoco ,Reach
+467,andresti dove si trova il fuoco ,Reach
+468,andresti in corrispondenza di il fuoco ,Reach
+469,ti recheresti dove sta il fuoco ,Reach
+470,ti recheresti dove si trova il fuoco ,Reach
+471,ti recheresti in corrispondenza di il fuoco ,Reach
+472,puoi andare dove sta il fuoco ,Reach
+473,puoi andare dove si trova il fuoco ,Reach
+474,puoi andare in corrispondenza di il fuoco ,Reach
+475,potresti andare dove sta il fuoco ,Reach
+476,potresti andare dove si trova il fuoco ,Reach
+477,potresti andare in corrispondenza di il fuoco ,Reach
+478,puoi recarti dove sta il fuoco ,Reach
+479,puoi recarti dove si trova il fuoco ,Reach
+480,puoi recarti in corrispondenza di il fuoco ,Reach
+481,potresti recarti dove sta il fuoco ,Reach
+482,potresti recarti dove si trova il fuoco ,Reach
+483,potresti recarti in corrispondenza di il fuoco ,Reach
+484,puoi raggiungere il fuoco ,Reach
+485,potresti raggiungere il fuoco ,Reach
+486,raggiungi questo falò ,Reach
+487,vai dove sta questo falò ,Reach
+488,vai dove si trova questo falò ,Reach
+489,vai in corrispondenza di questo falò ,Reach
+490,recati dove sta questo falò ,Reach
+491,recati dove si trova questo falò ,Reach
+492,recati in corrispondenza di questo falò ,Reach
+493,andresti dove sta questo falò ,Reach
+494,andresti dove si trova questo falò ,Reach
+495,andresti in corrispondenza di questo falò ,Reach
+496,ti recheresti dove sta questo falò ,Reach
+497,ti recheresti dove si trova questo falò ,Reach
+498,ti recheresti in corrispondenza di questo falò ,Reach
+499,puoi andare dove sta questo falò ,Reach
+500,puoi andare dove si trova questo falò ,Reach
+501,puoi andare in corrispondenza di questo falò ,Reach
+502,potresti andare dove sta questo falò ,Reach
+503,potresti andare dove si trova questo falò ,Reach
+504,potresti andare in corrispondenza di questo falò ,Reach
+505,puoi recarti dove sta questo falò ,Reach
+506,puoi recarti dove si trova questo falò ,Reach
+507,puoi recarti in corrispondenza di questo falò ,Reach
+508,potresti recarti dove sta questo falò ,Reach
+509,potresti recarti dove si trova questo falò ,Reach
+510,potresti recarti in corrispondenza di questo falò ,Reach
+511,puoi raggiungere questo falò ,Reach
+512,potresti raggiungere questo falò ,Reach
+513,raggiungi quel falò ,Reach
+514,vai dove sta quel falò ,Reach
+515,vai dove si trova quel falò ,Reach
+516,vai in corrispondenza di quel falò ,Reach
+517,recati dove sta quel falò ,Reach
+518,recati dove si trova quel falò ,Reach
+519,recati in corrispondenza di quel falò ,Reach
+520,andresti dove sta quel falò ,Reach
+521,andresti dove si trova quel falò ,Reach
+522,andresti in corrispondenza di quel falò ,Reach
+523,ti recheresti dove sta quel falò ,Reach
+524,ti recheresti dove si trova quel falò ,Reach
+525,ti recheresti in corrispondenza di quel falò ,Reach
+526,puoi andare dove sta quel falò ,Reach
+527,puoi andare dove si trova quel falò ,Reach
+528,puoi andare in corrispondenza di quel falò ,Reach
+529,potresti andare dove sta quel falò ,Reach
+530,potresti andare dove si trova quel falò ,Reach
+531,potresti andare in corrispondenza di quel falò ,Reach
+532,puoi recarti dove sta quel falò ,Reach
+533,puoi recarti dove si trova quel falò ,Reach
+534,puoi recarti in corrispondenza di quel falò ,Reach
+535,potresti recarti dove sta quel falò ,Reach
+536,potresti recarti dove si trova quel falò ,Reach
+537,potresti recarti in corrispondenza di quel falò ,Reach
+538,puoi raggiungere quel falò ,Reach
+539,potresti raggiungere quel falò ,Reach
+540,raggiungi il falò ,Reach
+541,vai dove sta il falò ,Reach
+542,vai dove si trova il falò ,Reach
+543,vai in corrispondenza di il falò ,Reach
+544,recati dove sta il falò ,Reach
+545,recati dove si trova il falò ,Reach
+546,recati in corrispondenza di il falò ,Reach
+547,andresti dove sta il falò ,Reach
+548,andresti dove si trova il falò ,Reach
+549,andresti in corrispondenza di il falò ,Reach
+550,ti recheresti dove sta il falò ,Reach
+551,ti recheresti dove si trova il falò ,Reach
+552,ti recheresti in corrispondenza di il falò ,Reach
+553,puoi andare dove sta il falò ,Reach
+554,puoi andare dove si trova il falò ,Reach
+555,puoi andare in corrispondenza di il falò ,Reach
+556,potresti andare dove sta il falò ,Reach
+557,potresti andare dove si trova il falò ,Reach
+558,potresti andare in corrispondenza di il falò ,Reach
+559,puoi recarti dove sta il falò ,Reach
+560,puoi recarti dove si trova il falò ,Reach
+561,puoi recarti in corrispondenza di il falò ,Reach
+562,potresti recarti dove sta il falò ,Reach
+563,potresti recarti dove si trova il falò ,Reach
+564,potresti recarti in corrispondenza di il falò ,Reach
+565,puoi raggiungere il falò ,Reach
+566,potresti raggiungere il falò ,Reach
+567,raggiungi questo falo ,Reach
+568,vai dove sta questo falo ,Reach
+569,vai dove si trova questo falo ,Reach
+570,vai in corrispondenza di questo falo ,Reach
+571,recati dove sta questo falo ,Reach
+572,recati dove si trova questo falo ,Reach
+573,recati in corrispondenza di questo falo ,Reach
+574,andresti dove sta questo falo ,Reach
+575,andresti dove si trova questo falo ,Reach
+576,andresti in corrispondenza di questo falo ,Reach
+577,ti recheresti dove sta questo falo ,Reach
+578,ti recheresti dove si trova questo falo ,Reach
+579,ti recheresti in corrispondenza di questo falo ,Reach
+580,puoi andare dove sta questo falo ,Reach
+581,puoi andare dove si trova questo falo ,Reach
+582,puoi andare in corrispondenza di questo falo ,Reach
+583,potresti andare dove sta questo falo ,Reach
+584,potresti andare dove si trova questo falo ,Reach
+585,potresti andare in corrispondenza di questo falo ,Reach
+586,puoi recarti dove sta questo falo ,Reach
+587,puoi recarti dove si trova questo falo ,Reach
+588,puoi recarti in corrispondenza di questo falo ,Reach
+589,potresti recarti dove sta questo falo ,Reach
+590,potresti recarti dove si trova questo falo ,Reach
+591,potresti recarti in corrispondenza di questo falo ,Reach
+592,puoi raggiungere questo falo ,Reach
+593,potresti raggiungere questo falo ,Reach
+594,raggiungi quel falo ,Reach
+595,vai dove sta quel falo ,Reach
+596,vai dove si trova quel falo ,Reach
+597,vai in corrispondenza di quel falo ,Reach
+598,recati dove sta quel falo ,Reach
+599,recati dove si trova quel falo ,Reach
+600,recati in corrispondenza di quel falo ,Reach
+601,andresti dove sta quel falo ,Reach
+602,andresti dove si trova quel falo ,Reach
+603,andresti in corrispondenza di quel falo ,Reach
+604,ti recheresti dove sta quel falo ,Reach
+605,ti recheresti dove si trova quel falo ,Reach
+606,ti recheresti in corrispondenza di quel falo ,Reach
+607,puoi andare dove sta quel falo ,Reach
+608,puoi andare dove si trova quel falo ,Reach
+609,puoi andare in corrispondenza di quel falo ,Reach
+610,potresti andare dove sta quel falo ,Reach
+611,potresti andare dove si trova quel falo ,Reach
+612,potresti andare in corrispondenza di quel falo ,Reach
+613,puoi recarti dove sta quel falo ,Reach
+614,puoi recarti dove si trova quel falo ,Reach
+615,puoi recarti in corrispondenza di quel falo ,Reach
+616,potresti recarti dove sta quel falo ,Reach
+617,potresti recarti dove si trova quel falo ,Reach
+618,potresti recarti in corrispondenza di quel falo ,Reach
+619,puoi raggiungere quel falo ,Reach
+620,potresti raggiungere quel falo ,Reach
+621,raggiungi il falo ,Reach
+622,vai dove sta il falo ,Reach
+623,vai dove si trova il falo ,Reach
+624,vai in corrispondenza di il falo ,Reach
+625,recati dove sta il falo ,Reach
+626,recati dove si trova il falo ,Reach
+627,recati in corrispondenza di il falo ,Reach
+628,andresti dove sta il falo ,Reach
+629,andresti dove si trova il falo ,Reach
+630,andresti in corrispondenza di il falo ,Reach
+631,ti recheresti dove sta il falo ,Reach
+632,ti recheresti dove si trova il falo ,Reach
+633,ti recheresti in corrispondenza di il falo ,Reach
+634,puoi andare dove sta il falo ,Reach
+635,puoi andare dove si trova il falo ,Reach
+636,puoi andare in corrispondenza di il falo ,Reach
+637,potresti andare dove sta il falo ,Reach
+638,potresti andare dove si trova il falo ,Reach
+639,potresti andare in corrispondenza di il falo ,Reach
+640,puoi recarti dove sta il falo ,Reach
+641,puoi recarti dove si trova il falo ,Reach
+642,puoi recarti in corrispondenza di il falo ,Reach
+643,potresti recarti dove sta il falo ,Reach
+644,potresti recarti dove si trova il falo ,Reach
+645,potresti recarti in corrispondenza di il falo ,Reach
+646,puoi raggiungere il falo ,Reach
+647,potresti raggiungere il falo ,Reach
+648,raggiungi questo fuocherello ,Reach
+649,vai dove sta questo fuocherello ,Reach
+650,vai dove si trova questo fuocherello ,Reach
+651,vai in corrispondenza di questo fuocherello ,Reach
+652,recati dove sta questo fuocherello ,Reach
+653,recati dove si trova questo fuocherello ,Reach
+654,recati in corrispondenza di questo fuocherello ,Reach
+655,andresti dove sta questo fuocherello ,Reach
+656,andresti dove si trova questo fuocherello ,Reach
+657,andresti in corrispondenza di questo fuocherello ,Reach
+658,ti recheresti dove sta questo fuocherello ,Reach
+659,ti recheresti dove si trova questo fuocherello ,Reach
+660,ti recheresti in corrispondenza di questo fuocherello ,Reach
+661,puoi andare dove sta questo fuocherello ,Reach
+662,puoi andare dove si trova questo fuocherello ,Reach
+663,puoi andare in corrispondenza di questo fuocherello ,Reach
+664,potresti andare dove sta questo fuocherello ,Reach
+665,potresti andare dove si trova questo fuocherello ,Reach
+666,potresti andare in corrispondenza di questo fuocherello ,Reach
+667,puoi recarti dove sta questo fuocherello ,Reach
+668,puoi recarti dove si trova questo fuocherello ,Reach
+669,puoi recarti in corrispondenza di questo fuocherello ,Reach
+670,potresti recarti dove sta questo fuocherello ,Reach
+671,potresti recarti dove si trova questo fuocherello ,Reach
+672,potresti recarti in corrispondenza di questo fuocherello ,Reach
+673,puoi raggiungere questo fuocherello ,Reach
+674,potresti raggiungere questo fuocherello ,Reach
+675,raggiungi quel fuocherello ,Reach
+676,vai dove sta quel fuocherello ,Reach
+677,vai dove si trova quel fuocherello ,Reach
+678,vai in corrispondenza di quel fuocherello ,Reach
+679,recati dove sta quel fuocherello ,Reach
+680,recati dove si trova quel fuocherello ,Reach
+681,recati in corrispondenza di quel fuocherello ,Reach
+682,andresti dove sta quel fuocherello ,Reach
+683,andresti dove si trova quel fuocherello ,Reach
+684,andresti in corrispondenza di quel fuocherello ,Reach
+685,ti recheresti dove sta quel fuocherello ,Reach
+686,ti recheresti dove si trova quel fuocherello ,Reach
+687,ti recheresti in corrispondenza di quel fuocherello ,Reach
+688,puoi andare dove sta quel fuocherello ,Reach
+689,puoi andare dove si trova quel fuocherello ,Reach
+690,puoi andare in corrispondenza di quel fuocherello ,Reach
+691,potresti andare dove sta quel fuocherello ,Reach
+692,potresti andare dove si trova quel fuocherello ,Reach
+693,potresti andare in corrispondenza di quel fuocherello ,Reach
+694,puoi recarti dove sta quel fuocherello ,Reach
+695,puoi recarti dove si trova quel fuocherello ,Reach
+696,puoi recarti in corrispondenza di quel fuocherello ,Reach
+697,potresti recarti dove sta quel fuocherello ,Reach
+698,potresti recarti dove si trova quel fuocherello ,Reach
+699,potresti recarti in corrispondenza di quel fuocherello ,Reach
+700,puoi raggiungere quel fuocherello ,Reach
+2262,raccogli questa palla ,Pick
+2263,raccoglieresti questa palla ,Pick
+2264,puoi raccogliere questa palla ,Pick
+2265,potresti raccogliere questa palla ,Pick
+2266,prendi questa palla ,Pick
+2267,prenderesti questa palla ,Pick
+2268,puoi prendere questa palla ,Pick
+2269,potresti prendere questa palla ,Pick
+2270,afferra questa palla ,Pick
+2271,affereresti questa palla ,Pick
+2272,puoi afferrare questa palla ,Pick
+2273,potresti afferrare questa palla ,Pick
+2274,agguanta questa palla ,Pick
+2275,agguanteresti questa palla ,Pick
+2276,puoi agguantare questa palla ,Pick
+2277,potresti agguantare questa palla ,Pick
+2278,raccogli quella palla ,Pick
+2279,raccoglieresti quella palla ,Pick
+2280,puoi raccogliere quella palla ,Pick
+2281,potresti raccogliere quella palla ,Pick
+2282,prendi quella palla ,Pick
+2283,prenderesti quella palla ,Pick
+2284,puoi prendere quella palla ,Pick
+2285,potresti prendere quella palla ,Pick
+2286,afferra quella palla ,Pick
+2287,affereresti quella palla ,Pick
+2288,puoi afferrare quella palla ,Pick
+2289,potresti afferrare quella palla ,Pick
+2290,agguanta quella palla ,Pick
+2291,agguanteresti quella palla ,Pick
+2292,puoi agguantare quella palla ,Pick
+2293,potresti agguantare quella palla ,Pick
+2294,raccogli la palla ,Pick
+2295,raccoglieresti la palla ,Pick
+2296,puoi raccogliere la palla ,Pick
+2297,potresti raccogliere la palla ,Pick
+2298,prendi la palla ,Pick
+2299,prenderesti la palla ,Pick
+2300,puoi prendere la palla ,Pick
+2301,potresti prendere la palla ,Pick
+2302,afferra la palla ,Pick
+2303,affereresti la palla ,Pick
+2304,puoi afferrare la palla ,Pick
+2305,potresti afferrare la palla ,Pick
+2306,agguanta la palla ,Pick
+2307,agguanteresti la palla ,Pick
+2308,puoi agguantare la palla ,Pick
+2309,potresti agguantare la palla ,Pick
+2310,raccogli questa sfera ,Pick
+2311,raccoglieresti questa sfera ,Pick
+2312,puoi raccogliere questa sfera ,Pick
+2313,potresti raccogliere questa sfera ,Pick
+2314,prendi questa sfera ,Pick
+2315,prenderesti questa sfera ,Pick
+2316,puoi prendere questa sfera ,Pick
+2317,potresti prendere questa sfera ,Pick
+2318,afferra questa sfera ,Pick
+2319,affereresti questa sfera ,Pick
+2320,puoi afferrare questa sfera ,Pick
+2321,potresti afferrare questa sfera ,Pick
+2322,agguanta questa sfera ,Pick
+2323,agguanteresti questa sfera ,Pick
+2324,puoi agguantare questa sfera ,Pick
+2325,potresti agguantare questa sfera ,Pick
+2326,raccogli quella sfera ,Pick
+2327,raccoglieresti quella sfera ,Pick
+2328,puoi raccogliere quella sfera ,Pick
+2329,potresti raccogliere quella sfera ,Pick
+2330,prendi quella sfera ,Pick
+2331,prenderesti quella sfera ,Pick
+2332,puoi prendere quella sfera ,Pick
+2333,potresti prendere quella sfera ,Pick
+2334,afferra quella sfera ,Pick
+2335,affereresti quella sfera ,Pick
+2336,puoi afferrare quella sfera ,Pick
+2337,potresti afferrare quella sfera ,Pick
+2338,agguanta quella sfera ,Pick
+2339,agguanteresti quella sfera ,Pick
+2340,puoi agguantare quella sfera ,Pick
+2341,potresti agguantare quella sfera ,Pick
+2342,raccogli la sfera ,Pick
+2343,raccoglieresti la sfera ,Pick
+2344,puoi raccogliere la sfera ,Pick
+2345,potresti raccogliere la sfera ,Pick
+2346,prendi la sfera ,Pick
+2347,prenderesti la sfera ,Pick
+2348,puoi prendere la sfera ,Pick
+2349,potresti prendere la sfera ,Pick
+2350,afferra la sfera ,Pick
+2351,affereresti la sfera ,Pick
+2352,puoi afferrare la sfera ,Pick
+2353,potresti afferrare la sfera ,Pick
+2354,agguanta la sfera ,Pick
+2355,agguanteresti la sfera ,Pick
+2356,puoi agguantare la sfera ,Pick
+2357,potresti agguantare la sfera ,Pick
+2358,raccogli questo pallone ,Pick
+2359,raccoglieresti questo pallone ,Pick
+2360,puoi raccogliere questo pallone ,Pick
+2361,potresti raccogliere questo pallone ,Pick
+2362,prendi questo pallone ,Pick
+2363,prenderesti questo pallone ,Pick
+2364,puoi prendere questo pallone ,Pick
+2365,potresti prendere questo pallone ,Pick
+2366,afferra questo pallone ,Pick
+2367,affereresti questo pallone ,Pick
+2368,puoi afferrare questo pallone ,Pick
+2369,potresti afferrare questo pallone ,Pick
+2370,agguanta questo pallone ,Pick
+2371,agguanteresti questo pallone ,Pick
+2372,puoi agguantare questo pallone ,Pick
+2373,potresti agguantare questo pallone ,Pick
+2374,raccogli quel pallone ,Pick
+2375,raccoglieresti quel pallone ,Pick
+2376,puoi raccogliere quel pallone ,Pick
+2377,potresti raccogliere quel pallone ,Pick
+2378,prendi quel pallone ,Pick
+2379,prenderesti quel pallone ,Pick
+2380,puoi prendere quel pallone ,Pick
+2381,potresti prendere quel pallone ,Pick
+2382,afferra quel pallone ,Pick
+2383,affereresti quel pallone ,Pick
+2384,puoi afferrare quel pallone ,Pick
+2385,potresti afferrare quel pallone ,Pick
+2386,agguanta quel pallone ,Pick
+2387,agguanteresti quel pallone ,Pick
+2388,puoi agguantare quel pallone ,Pick
+2389,potresti agguantare quel pallone ,Pick
+2390,raccogli il pallone ,Pick
+2391,raccoglieresti il pallone ,Pick
+2392,puoi raccogliere il pallone ,Pick
+2393,potresti raccogliere il pallone ,Pick
+2394,prendi il pallone ,Pick
+2395,prenderesti il pallone ,Pick
+2396,puoi prendere il pallone ,Pick
+2397,potresti prendere il pallone ,Pick
+2398,afferra il pallone ,Pick
+2399,affereresti il pallone ,Pick
+2400,puoi afferrare il pallone ,Pick
+2401,potresti afferrare il pallone ,Pick
+2402,agguanta il pallone ,Pick
+2403,agguanteresti il pallone ,Pick
+2404,puoi agguantare il pallone ,Pick
+2405,potresti agguantare il pallone ,Pick
+2406,raccogli questa chiave ,Pick
+2407,raccoglieresti questa chiave ,Pick
+2408,puoi raccogliere questa chiave ,Pick
+2409,potresti raccogliere questa chiave ,Pick
+2410,prendi questa chiave ,Pick
+2411,prenderesti questa chiave ,Pick
+2412,puoi prendere questa chiave ,Pick
+2413,potresti prendere questa chiave ,Pick
+2414,afferra questa chiave ,Pick
+2415,affereresti questa chiave ,Pick
+2416,puoi afferrare questa chiave ,Pick
+2417,potresti afferrare questa chiave ,Pick
+2418,agguanta questa chiave ,Pick
+2419,agguanteresti questa chiave ,Pick
+2420,puoi agguantare questa chiave ,Pick
+2421,potresti agguantare questa chiave ,Pick
+2422,raccogli quella chiave ,Pick
+2423,raccoglieresti quella chiave ,Pick
+2424,puoi raccogliere quella chiave ,Pick
+2425,potresti raccogliere quella chiave ,Pick
+2426,prendi quella chiave ,Pick
+2427,prenderesti quella chiave ,Pick
+2428,puoi prendere quella chiave ,Pick
+2429,potresti prendere quella chiave ,Pick
+2430,afferra quella chiave ,Pick
+2431,affereresti quella chiave ,Pick
+2432,puoi afferrare quella chiave ,Pick
+2433,potresti afferrare quella chiave ,Pick
+2434,agguanta quella chiave ,Pick
+2435,agguanteresti quella chiave ,Pick
+2436,puoi agguantare quella chiave ,Pick
+2437,potresti agguantare quella chiave ,Pick
+2438,raccogli la chiave ,Pick
+2439,raccoglieresti la chiave ,Pick
+2440,puoi raccogliere la chiave ,Pick
+2441,potresti raccogliere la chiave ,Pick
+2442,prendi la chiave ,Pick
+2443,prenderesti la chiave ,Pick
+2444,puoi prendere la chiave ,Pick
+2445,potresti prendere la chiave ,Pick
+2446,afferra la chiave ,Pick
+2447,affereresti la chiave ,Pick
+2448,puoi afferrare la chiave ,Pick
+2449,potresti afferrare la chiave ,Pick
+2450,agguanta la chiave ,Pick
+2451,agguanteresti la chiave ,Pick
+2452,puoi agguantare la chiave ,Pick
+2453,potresti agguantare la chiave ,Pick
+2454,raccogli queste chiavi ,Pick
+2455,raccoglieresti queste chiavi ,Pick
+2456,puoi raccogliere queste chiavi ,Pick
+2457,potresti raccogliere queste chiavi ,Pick
+2458,prendi queste chiavi ,Pick
+2459,prenderesti queste chiavi ,Pick
+2460,puoi prendere queste chiavi ,Pick
+2461,potresti prendere queste chiavi ,Pick
+2462,afferra queste chiavi ,Pick
+2463,affereresti queste chiavi ,Pick
+2464,puoi afferrare queste chiavi ,Pick
+2465,potresti afferrare queste chiavi ,Pick
+2466,agguanta queste chiavi ,Pick
+2467,agguanteresti queste chiavi ,Pick
+2468,puoi agguantare queste chiavi ,Pick
+2469,potresti agguantare queste chiavi ,Pick
+2470,raccogli quelle chiavi ,Pick
+2471,raccoglieresti quelle chiavi ,Pick
+2472,puoi raccogliere quelle chiavi ,Pick
+2473,potresti raccogliere quelle chiavi ,Pick
+2474,prendi quelle chiavi ,Pick
+2475,prenderesti quelle chiavi ,Pick
+2476,puoi prendere quelle chiavi ,Pick
+2477,potresti prendere quelle chiavi ,Pick
+2478,afferra quelle chiavi ,Pick
+2479,affereresti quelle chiavi ,Pick
+2480,puoi afferrare quelle chiavi ,Pick
+2481,potresti afferrare quelle chiavi ,Pick
+2482,agguanta quelle chiavi ,Pick
+2483,agguanteresti quelle chiavi ,Pick
+2484,puoi agguantare quelle chiavi ,Pick
+2485,potresti agguantare quelle chiavi ,Pick
+2486,raccogli le chiavi ,Pick
+2487,raccoglieresti le chiavi ,Pick
+2488,puoi raccogliere le chiavi ,Pick
+2489,potresti raccogliere le chiavi ,Pick
+2490,prendi le chiavi ,Pick
+2491,prenderesti le chiavi ,Pick
+2492,puoi prendere le chiavi ,Pick
+2493,potresti prendere le chiavi ,Pick
+2494,afferra le chiavi ,Pick
+2495,affereresti le chiavi ,Pick
+2496,puoi afferrare le chiavi ,Pick
+2497,potresti afferrare le chiavi ,Pick
+2498,agguanta le chiavi ,Pick
+2499,agguanteresti le chiavi ,Pick
+2500,puoi agguantare le chiavi ,Pick
+2501,potresti agguantare le chiavi ,Pick
+2502,raccogli questo ramo ,Pick
+2503,raccoglieresti questo ramo ,Pick
+2504,puoi raccogliere questo ramo ,Pick
+2505,potresti raccogliere questo ramo ,Pick
+2506,prendi questo ramo ,Pick
+2507,prenderesti questo ramo ,Pick
+2508,puoi prendere questo ramo ,Pick
+2509,potresti prendere questo ramo ,Pick
+2510,afferra questo ramo ,Pick
+2511,affereresti questo ramo ,Pick
+2512,puoi afferrare questo ramo ,Pick
+2513,potresti afferrare questo ramo ,Pick
+2514,agguanta questo ramo ,Pick
+2515,agguanteresti questo ramo ,Pick
+2516,puoi agguantare questo ramo ,Pick
+2517,potresti agguantare questo ramo ,Pick
+2518,raccogli quel ramo ,Pick
+2519,raccoglieresti quel ramo ,Pick
+2520,puoi raccogliere quel ramo ,Pick
+2521,potresti raccogliere quel ramo ,Pick
+2522,prendi quel ramo ,Pick
+2523,prenderesti quel ramo ,Pick
+2524,puoi prendere quel ramo ,Pick
+2525,potresti prendere quel ramo ,Pick
+2526,afferra quel ramo ,Pick
+2527,affereresti quel ramo ,Pick
+2528,puoi afferrare quel ramo ,Pick
+2529,potresti afferrare quel ramo ,Pick
+2530,agguanta quel ramo ,Pick
+2531,agguanteresti quel ramo ,Pick
+2532,puoi agguantare quel ramo ,Pick
+2533,potresti agguantare quel ramo ,Pick
+2534,raccogli il ramo ,Pick
+2535,raccoglieresti il ramo ,Pick
+2536,puoi raccogliere il ramo ,Pick
+2537,potresti raccogliere il ramo ,Pick
+2538,prendi il ramo ,Pick
+2539,prenderesti il ramo ,Pick
+2540,puoi prendere il ramo ,Pick
+2541,potresti prendere il ramo ,Pick
+2542,afferra il ramo ,Pick
+2543,affereresti il ramo ,Pick
+2544,puoi afferrare il ramo ,Pick
+2545,potresti afferrare il ramo ,Pick
+2546,agguanta il ramo ,Pick
+2547,agguanteresti il ramo ,Pick
+2548,puoi agguantare il ramo ,Pick
+2549,potresti agguantare il ramo ,Pick
+2550,raccogli questo ramoscello ,Pick
+2551,raccoglieresti questo ramoscello ,Pick
+2552,puoi raccogliere questo ramoscello ,Pick
+2553,potresti raccogliere questo ramoscello ,Pick
+2554,prendi questo ramoscello ,Pick
+2555,prenderesti questo ramoscello ,Pick
+2556,puoi prendere questo ramoscello ,Pick
+2557,potresti prendere questo ramoscello ,Pick
+2558,afferra questo ramoscello ,Pick
+2559,affereresti questo ramoscello ,Pick
+2560,puoi afferrare questo ramoscello ,Pick
+2561,potresti afferrare questo ramoscello ,Pick
+2562,agguanta questo ramoscello ,Pick
+2563,agguanteresti questo ramoscello ,Pick
+2564,puoi agguantare questo ramoscello ,Pick
+2565,potresti agguantare questo ramoscello ,Pick
+2566,raccogli quel ramoscello ,Pick
+2567,raccoglieresti quel ramoscello ,Pick
+2568,puoi raccogliere quel ramoscello ,Pick
+2569,potresti raccogliere quel ramoscello ,Pick
+2570,prendi quel ramoscello ,Pick
+2571,prenderesti quel ramoscello ,Pick
+2572,puoi prendere quel ramoscello ,Pick
+2573,potresti prendere quel ramoscello ,Pick
+2574,afferra quel ramoscello ,Pick
+2575,affereresti quel ramoscello ,Pick
+2576,puoi afferrare quel ramoscello ,Pick
+2577,potresti afferrare quel ramoscello ,Pick
+2578,agguanta quel ramoscello ,Pick
+2579,agguanteresti quel ramoscello ,Pick
+2580,puoi agguantare quel ramoscello ,Pick
+2581,potresti agguantare quel ramoscello ,Pick
+2582,raccogli il ramoscello ,Pick
+2583,raccoglieresti il ramoscello ,Pick
+2584,puoi raccogliere il ramoscello ,Pick
+2585,potresti raccogliere il ramoscello ,Pick
+2586,prendi il ramoscello ,Pick
+2587,prenderesti il ramoscello ,Pick
+2588,puoi prendere il ramoscello ,Pick
+2589,potresti prendere il ramoscello ,Pick
+2590,afferra il ramoscello ,Pick
+2591,affereresti il ramoscello ,Pick
+2592,puoi afferrare il ramoscello ,Pick
+2593,potresti afferrare il ramoscello ,Pick
+2594,agguanta il ramoscello ,Pick
+2595,agguanteresti il ramoscello ,Pick
+2596,puoi agguantare il ramoscello ,Pick
+2597,potresti agguantare il ramoscello ,Pick
+2598,raccogli questo rametto ,Pick
+2599,raccoglieresti questo rametto ,Pick
+2600,puoi raccogliere questo rametto ,Pick
+2601,potresti raccogliere questo rametto ,Pick
+2602,prendi questo rametto ,Pick
+2603,prenderesti questo rametto ,Pick
+2604,puoi prendere questo rametto ,Pick
+2605,potresti prendere questo rametto ,Pick
+2606,afferra questo rametto ,Pick
+2607,affereresti questo rametto ,Pick
+2608,puoi afferrare questo rametto ,Pick
+2609,potresti afferrare questo rametto ,Pick
+2610,agguanta questo rametto ,Pick
+2611,agguanteresti questo rametto ,Pick
+2612,puoi agguantare questo rametto ,Pick
+2613,potresti agguantare questo rametto ,Pick
+2614,raccogli quel rametto ,Pick
+2615,raccoglieresti quel rametto ,Pick
+2616,puoi raccogliere quel rametto ,Pick
+2617,potresti raccogliere quel rametto ,Pick
+2618,prendi quel rametto ,Pick
+2619,prenderesti quel rametto ,Pick
+2620,puoi prendere quel rametto ,Pick
+2621,potresti prendere quel rametto ,Pick
+2622,afferra quel rametto ,Pick
+2623,affereresti quel rametto ,Pick
+2624,puoi afferrare quel rametto ,Pick
+2625,potresti afferrare quel rametto ,Pick
+2626,agguanta quel rametto ,Pick
+2627,agguanteresti quel rametto ,Pick
+2628,puoi agguantare quel rametto ,Pick
+2629,potresti agguantare quel rametto ,Pick
+2630,raccogli il rametto ,Pick
+2631,raccoglieresti il rametto ,Pick
+2632,puoi raccogliere il rametto ,Pick
+2633,potresti raccogliere il rametto ,Pick
+2634,prendi il rametto ,Pick
+2635,prenderesti il rametto ,Pick
+2636,puoi prendere il rametto ,Pick
+2637,potresti prendere il rametto ,Pick
+2638,afferra il rametto ,Pick
+2639,affereresti il rametto ,Pick
+2640,puoi afferrare il rametto ,Pick
+2641,potresti afferrare il rametto ,Pick
+2642,agguanta il rametto ,Pick
+2643,agguanteresti il rametto ,Pick
+2644,puoi agguantare il rametto ,Pick
+2645,potresti agguantare il rametto ,Pick
+2646,raccogli questo bastone ,Pick
+2647,raccoglieresti questo bastone ,Pick
+2648,puoi raccogliere questo bastone ,Pick
+2649,potresti raccogliere questo bastone ,Pick
+2650,prendi questo bastone ,Pick
+2651,prenderesti questo bastone ,Pick
+2652,puoi prendere questo bastone ,Pick
+2653,potresti prendere questo bastone ,Pick
+2654,afferra questo bastone ,Pick
+2655,affereresti questo bastone ,Pick
+2656,puoi afferrare questo bastone ,Pick
+2657,potresti afferrare questo bastone ,Pick
+2658,agguanta questo bastone ,Pick
+2659,agguanteresti questo bastone ,Pick
+2660,puoi agguantare questo bastone ,Pick
+2661,potresti agguantare questo bastone ,Pick
+2662,raccogli quel bastone ,Pick
+2663,raccoglieresti quel bastone ,Pick
+2664,puoi raccogliere quel bastone ,Pick
+2665,potresti raccogliere quel bastone ,Pick
+2666,prendi quel bastone ,Pick
+2667,prenderesti quel bastone ,Pick
+2668,puoi prendere quel bastone ,Pick
+2669,potresti prendere quel bastone ,Pick
+2670,afferra quel bastone ,Pick
+2671,affereresti quel bastone ,Pick
+2672,puoi afferrare quel bastone ,Pick
+2673,potresti afferrare quel bastone ,Pick
+2674,agguanta quel bastone ,Pick
+2675,agguanteresti quel bastone ,Pick
+2676,puoi agguantare quel bastone ,Pick
+2677,potresti agguantare quel bastone ,Pick
+2678,raccogli il bastone ,Pick
+2679,raccoglieresti il bastone ,Pick
+2680,puoi raccogliere il bastone ,Pick
+2681,potresti raccogliere il bastone ,Pick
+2682,prendi il bastone ,Pick
+2683,prenderesti il bastone ,Pick
+2684,puoi prendere il bastone ,Pick
+2685,potresti prendere il bastone ,Pick
+2686,afferra il bastone ,Pick
+2687,affereresti il bastone ,Pick
+2688,puoi afferrare il bastone ,Pick
+2689,potresti afferrare il bastone ,Pick
+2690,agguanta il bastone ,Pick
+2691,agguanteresti il bastone ,Pick
+2692,puoi agguantare il bastone ,Pick
+2693,potresti agguantare il bastone ,Pick
+2694,raccogli questa bacchetta ,Pick
+2695,raccoglieresti questa bacchetta ,Pick
+2696,puoi raccogliere questa bacchetta ,Pick
+2697,potresti raccogliere questa bacchetta ,Pick
+2698,prendi questa bacchetta ,Pick
+2699,prenderesti questa bacchetta ,Pick
+2700,puoi prendere questa bacchetta ,Pick
+2701,potresti prendere questa bacchetta ,Pick
+2702,afferra questa bacchetta ,Pick
+2703,affereresti questa bacchetta ,Pick
+2704,puoi afferrare questa bacchetta ,Pick
+2705,potresti afferrare questa bacchetta ,Pick
+2706,agguanta questa bacchetta ,Pick
+2707,agguanteresti questa bacchetta ,Pick
+2708,puoi agguantare questa bacchetta ,Pick
+2709,potresti agguantare questa bacchetta ,Pick
+2710,raccogli quella bacchetta ,Pick
+2711,raccoglieresti quella bacchetta ,Pick
+2712,puoi raccogliere quella bacchetta ,Pick
+2713,potresti raccogliere quella bacchetta ,Pick
+2714,prendi quella bacchetta ,Pick
+2715,prenderesti quella bacchetta ,Pick
+2716,puoi prendere quella bacchetta ,Pick
+2717,potresti prendere quella bacchetta ,Pick
+2718,afferra quella bacchetta ,Pick
+2719,affereresti quella bacchetta ,Pick
+2720,puoi afferrare quella bacchetta ,Pick
+2721,potresti afferrare quella bacchetta ,Pick
+2722,agguanta quella bacchetta ,Pick
+2723,agguanteresti quella bacchetta ,Pick
+2724,puoi agguantare quella bacchetta ,Pick
+2725,potresti agguantare quella bacchetta ,Pick
+2726,raccogli la bacchetta ,Pick
+2727,raccoglieresti la bacchetta ,Pick
+2728,puoi raccogliere la bacchetta ,Pick
+2729,potresti raccogliere la bacchetta ,Pick
+2730,prendi la bacchetta ,Pick
+2731,prenderesti la bacchetta ,Pick
+2732,puoi prendere la bacchetta ,Pick
+2733,potresti prendere la bacchetta ,Pick
+2734,afferra la bacchetta ,Pick
+2735,affereresti la bacchetta ,Pick
+2736,puoi afferrare la bacchetta ,Pick
+2737,potresti afferrare la bacchetta ,Pick
+2738,agguanta la bacchetta ,Pick
+2739,agguanteresti la bacchetta ,Pick
+2740,puoi agguantare la bacchetta ,Pick
+2741,potresti agguantare la bacchetta ,Pick
+2742,raccogli questo osso ,Pick
+2743,raccoglieresti questo osso ,Pick
+2744,puoi raccogliere questo osso ,Pick
+2745,potresti raccogliere questo osso ,Pick
+2746,prendi questo osso ,Pick
+2747,prenderesti questo osso ,Pick
+2748,puoi prendere questo osso ,Pick
+2749,potresti prendere questo osso ,Pick
+2750,afferra questo osso ,Pick
+2751,affereresti questo osso ,Pick
+2752,puoi afferrare questo osso ,Pick
+2753,potresti afferrare questo osso ,Pick
+2754,agguanta questo osso ,Pick
+2755,agguanteresti questo osso ,Pick
+2756,puoi agguantare questo osso ,Pick
+2757,potresti agguantare questo osso ,Pick
+2758,raccogli quell osso ,Pick
+2759,raccoglieresti quell osso ,Pick
+2760,puoi raccogliere quell osso ,Pick
+2761,potresti raccogliere quell osso ,Pick
+2762,prendi quell osso ,Pick
+2934,lascia questa palla ,Leave
+2935,lasceresti questa palla ,Leave
+2936,puoi lasciare questa palla ,Leave
+2937,potresti lasciare questa palla ,Leave
+2938,molla questa palla ,Leave
+2939,molleresti questa palla ,Leave
+2940,puoi mollare questa palla ,Leave
+2941,potresti mollare questa palla ,Leave
+2942,getta questa palla ,Leave
+2943,butta questa palla ,Leave
+2944,getteresti questa palla ,Leave
+2945,butteresti questa palla ,Leave
+2946,puoi gettare questa palla ,Leave
+2947,potresti gettare questa palla ,Leave
+2948,rilascia questa palla ,Leave
+2949,rilasceresti questa palla ,Leave
+2950,puoi rilasciare questa palla ,Leave
+2951,potresti rilasciare questa palla ,Leave
+2952,lascia quella palla ,Leave
+2953,lasceresti quella palla ,Leave
+2954,puoi lasciare quella palla ,Leave
+2955,potresti lasciare quella palla ,Leave
+2956,molla quella palla ,Leave
+2957,molleresti quella palla ,Leave
+2958,puoi mollare quella palla ,Leave
+2959,potresti mollare quella palla ,Leave
+2960,getta quella palla ,Leave
+2961,butta quella palla ,Leave
+2962,getteresti quella palla ,Leave
+2963,butteresti quella palla ,Leave
+2964,puoi gettare quella palla ,Leave
+2965,potresti gettare quella palla ,Leave
+2966,rilascia quella palla ,Leave
+2967,rilasceresti quella palla ,Leave
+2968,puoi rilasciare quella palla ,Leave
+2969,potresti rilasciare quella palla ,Leave
+2970,lascia la palla ,Leave
+2971,lasceresti la palla ,Leave
+2972,puoi lasciare la palla ,Leave
+2973,potresti lasciare la palla ,Leave
+2974,molla la palla ,Leave
+2975,molleresti la palla ,Leave
+2976,puoi mollare la palla ,Leave
+2977,potresti mollare la palla ,Leave
+2978,getta la palla ,Leave
+2979,butta la palla ,Leave
+2980,getteresti la palla ,Leave
+2981,butteresti la palla ,Leave
+2982,puoi gettare la palla ,Leave
+2983,potresti gettare la palla ,Leave
+2984,rilascia la palla ,Leave
+2985,rilasceresti la palla ,Leave
+2986,puoi rilasciare la palla ,Leave
+2987,potresti rilasciare la palla ,Leave
+2988,lascia questa sfera ,Leave
+2989,lasceresti questa sfera ,Leave
+2990,puoi lasciare questa sfera ,Leave
+2991,potresti lasciare questa sfera ,Leave
+2992,molla questa sfera ,Leave
+2993,molleresti questa sfera ,Leave
+2994,puoi mollare questa sfera ,Leave
+2995,potresti mollare questa sfera ,Leave
+2996,getta questa sfera ,Leave
+2997,butta questa sfera ,Leave
+2998,getteresti questa sfera ,Leave
+2999,butteresti questa sfera ,Leave
+3000,puoi gettare questa sfera ,Leave
+3001,potresti gettare questa sfera ,Leave
+3002,rilascia questa sfera ,Leave
+3003,rilasceresti questa sfera ,Leave
+3004,puoi rilasciare questa sfera ,Leave
+3005,potresti rilasciare questa sfera ,Leave
+3006,lascia quella sfera ,Leave
+3007,lasceresti quella sfera ,Leave
+3008,puoi lasciare quella sfera ,Leave
+3009,potresti lasciare quella sfera ,Leave
+3010,molla quella sfera ,Leave
+3011,molleresti quella sfera ,Leave
+3012,puoi mollare quella sfera ,Leave
+3013,potresti mollare quella sfera ,Leave
+3014,getta quella sfera ,Leave
+3015,butta quella sfera ,Leave
+3016,getteresti quella sfera ,Leave
+3017,butteresti quella sfera ,Leave
+3018,puoi gettare quella sfera ,Leave
+3019,potresti gettare quella sfera ,Leave
+3020,rilascia quella sfera ,Leave
+3021,rilasceresti quella sfera ,Leave
+3022,puoi rilasciare quella sfera ,Leave
+3023,potresti rilasciare quella sfera ,Leave
+3024,lascia la sfera ,Leave
+3025,lasceresti la sfera ,Leave
+3026,puoi lasciare la sfera ,Leave
+3027,potresti lasciare la sfera ,Leave
+3028,molla la sfera ,Leave
+3029,molleresti la sfera ,Leave
+3030,puoi mollare la sfera ,Leave
+3031,potresti mollare la sfera ,Leave
+3032,getta la sfera ,Leave
+3033,butta la sfera ,Leave
+3034,getteresti la sfera ,Leave
+3035,butteresti la sfera ,Leave
+3036,puoi gettare la sfera ,Leave
+3037,potresti gettare la sfera ,Leave
+3038,rilascia la sfera ,Leave
+3039,rilasceresti la sfera ,Leave
+3040,puoi rilasciare la sfera ,Leave
+3041,potresti rilasciare la sfera ,Leave
+3042,lascia questo pallone ,Leave
+3043,lasceresti questo pallone ,Leave
+3044,puoi lasciare questo pallone ,Leave
+3045,potresti lasciare questo pallone ,Leave
+3046,molla questo pallone ,Leave
+3047,molleresti questo pallone ,Leave
+3048,puoi mollare questo pallone ,Leave
+3049,potresti mollare questo pallone ,Leave
+3050,getta questo pallone ,Leave
+3051,butta questo pallone ,Leave
+3052,getteresti questo pallone ,Leave
+3053,butteresti questo pallone ,Leave
+3054,puoi gettare questo pallone ,Leave
+3055,potresti gettare questo pallone ,Leave
+3056,rilascia questo pallone ,Leave
+3057,rilasceresti questo pallone ,Leave
+3058,puoi rilasciare questo pallone ,Leave
+3059,potresti rilasciare questo pallone ,Leave
+3060,lascia quel pallone ,Leave
+3061,lasceresti quel pallone ,Leave
+3062,puoi lasciare quel pallone ,Leave
+3063,potresti lasciare quel pallone ,Leave
+3064,molla quel pallone ,Leave
+3065,molleresti quel pallone ,Leave
+3066,puoi mollare quel pallone ,Leave
+3067,potresti mollare quel pallone ,Leave
+3068,getta quel pallone ,Leave
+3069,butta quel pallone ,Leave
+3070,getteresti quel pallone ,Leave
+3071,butteresti quel pallone ,Leave
+3072,puoi gettare quel pallone ,Leave
+3073,potresti gettare quel pallone ,Leave
+3074,rilascia quel pallone ,Leave
+3075,rilasceresti quel pallone ,Leave
+3076,puoi rilasciare quel pallone ,Leave
+3077,potresti rilasciare quel pallone ,Leave
+3078,lascia il pallone ,Leave
+3079,lasceresti il pallone ,Leave
+3080,puoi lasciare il pallone ,Leave
+3081,potresti lasciare il pallone ,Leave
+3082,molla il pallone ,Leave
+3083,molleresti il pallone ,Leave
+3084,puoi mollare il pallone ,Leave
+3085,potresti mollare il pallone ,Leave
+3086,getta il pallone ,Leave
+3087,butta il pallone ,Leave
+3088,getteresti il pallone ,Leave
+3089,butteresti il pallone ,Leave
+3090,puoi gettare il pallone ,Leave
+3091,potresti gettare il pallone ,Leave
+3092,rilascia il pallone ,Leave
+3093,rilasceresti il pallone ,Leave
+3094,puoi rilasciare il pallone ,Leave
+3095,potresti rilasciare il pallone ,Leave
+3096,lascia questa chiave ,Leave
+3097,lasceresti questa chiave ,Leave
+3098,puoi lasciare questa chiave ,Leave
+3099,potresti lasciare questa chiave ,Leave
+3100,molla questa chiave ,Leave
+3101,molleresti questa chiave ,Leave
+3102,puoi mollare questa chiave ,Leave
+3103,potresti mollare questa chiave ,Leave
+3104,getta questa chiave ,Leave
+3105,butta questa chiave ,Leave
+3106,getteresti questa chiave ,Leave
+3107,butteresti questa chiave ,Leave
+3108,puoi gettare questa chiave ,Leave
+3109,potresti gettare questa chiave ,Leave
+3110,rilascia questa chiave ,Leave
+3111,rilasceresti questa chiave ,Leave
+3112,puoi rilasciare questa chiave ,Leave
+3113,potresti rilasciare questa chiave ,Leave
+3114,lascia quella chiave ,Leave
+3115,lasceresti quella chiave ,Leave
+3116,puoi lasciare quella chiave ,Leave
+3117,potresti lasciare quella chiave ,Leave
+3118,molla quella chiave ,Leave
+3119,molleresti quella chiave ,Leave
+3120,puoi mollare quella chiave ,Leave
+3121,potresti mollare quella chiave ,Leave
+3122,getta quella chiave ,Leave
+3123,butta quella chiave ,Leave
+3124,getteresti quella chiave ,Leave
+3125,butteresti quella chiave ,Leave
+3126,puoi gettare quella chiave ,Leave
+3127,potresti gettare quella chiave ,Leave
+3128,rilascia quella chiave ,Leave
+3129,rilasceresti quella chiave ,Leave
+3130,puoi rilasciare quella chiave ,Leave
+3131,potresti rilasciare quella chiave ,Leave
+3132,lascia la chiave ,Leave
+3133,lasceresti la chiave ,Leave
+3134,puoi lasciare la chiave ,Leave
+3135,potresti lasciare la chiave ,Leave
+3136,molla la chiave ,Leave
+3137,molleresti la chiave ,Leave
+3138,puoi mollare la chiave ,Leave
+3139,potresti mollare la chiave ,Leave
+3140,getta la chiave ,Leave
+3141,butta la chiave ,Leave
+3142,getteresti la chiave ,Leave
+3143,butteresti la chiave ,Leave
+3144,puoi gettare la chiave ,Leave
+3145,potresti gettare la chiave ,Leave
+3146,rilascia la chiave ,Leave
+3147,rilasceresti la chiave ,Leave
+3148,puoi rilasciare la chiave ,Leave
+3149,potresti rilasciare la chiave ,Leave
+3150,lascia queste chiavi ,Leave
+3151,lasceresti queste chiavi ,Leave
+3152,puoi lasciare queste chiavi ,Leave
+3153,potresti lasciare queste chiavi ,Leave
+3154,molla queste chiavi ,Leave
+3155,molleresti queste chiavi ,Leave
+3156,puoi mollare queste chiavi ,Leave
+3157,potresti mollare queste chiavi ,Leave
+3158,getta queste chiavi ,Leave
+3159,butta queste chiavi ,Leave
+3160,getteresti queste chiavi ,Leave
+3161,butteresti queste chiavi ,Leave
+3162,puoi gettare queste chiavi ,Leave
+3163,potresti gettare queste chiavi ,Leave
+3164,rilascia queste chiavi ,Leave
+3165,rilasceresti queste chiavi ,Leave
+3166,puoi rilasciare queste chiavi ,Leave
+3167,potresti rilasciare queste chiavi ,Leave
+3168,lascia quelle chiavi ,Leave
+3169,lasceresti quelle chiavi ,Leave
+3170,puoi lasciare quelle chiavi ,Leave
+3171,potresti lasciare quelle chiavi ,Leave
+3172,molla quelle chiavi ,Leave
+3173,molleresti quelle chiavi ,Leave
+3174,puoi mollare quelle chiavi ,Leave
+3175,potresti mollare quelle chiavi ,Leave
+3176,getta quelle chiavi ,Leave
+3177,butta quelle chiavi ,Leave
+3178,getteresti quelle chiavi ,Leave
+3179,butteresti quelle chiavi ,Leave
+3180,puoi gettare quelle chiavi ,Leave
+3181,potresti gettare quelle chiavi ,Leave
+3182,rilascia quelle chiavi ,Leave
+3183,rilasceresti quelle chiavi ,Leave
+3184,puoi rilasciare quelle chiavi ,Leave
+3185,potresti rilasciare quelle chiavi ,Leave
+3186,lascia le chiavi ,Leave
+3187,lasceresti le chiavi ,Leave
+3188,puoi lasciare le chiavi ,Leave
+3189,potresti lasciare le chiavi ,Leave
+3190,molla le chiavi ,Leave
+3191,molleresti le chiavi ,Leave
+3192,puoi mollare le chiavi ,Leave
+3193,potresti mollare le chiavi ,Leave
+3194,getta le chiavi ,Leave
+3195,butta le chiavi ,Leave
+3196,getteresti le chiavi ,Leave
+3197,butteresti le chiavi ,Leave
+3198,puoi gettare le chiavi ,Leave
+3199,potresti gettare le chiavi ,Leave
+3200,rilascia le chiavi ,Leave
+3201,rilasceresti le chiavi ,Leave
+3202,puoi rilasciare le chiavi ,Leave
+3203,potresti rilasciare le chiavi ,Leave
+3204,lascia questo ramo ,Leave
+3205,lasceresti questo ramo ,Leave
+3206,puoi lasciare questo ramo ,Leave
+3207,potresti lasciare questo ramo ,Leave
+3208,molla questo ramo ,Leave
+3209,molleresti questo ramo ,Leave
+3210,puoi mollare questo ramo ,Leave
+3211,potresti mollare questo ramo ,Leave
+3212,getta questo ramo ,Leave
+3213,butta questo ramo ,Leave
+3214,getteresti questo ramo ,Leave
+3215,butteresti questo ramo ,Leave
+3216,puoi gettare questo ramo ,Leave
+3217,potresti gettare questo ramo ,Leave
+3218,rilascia questo ramo ,Leave
+3219,rilasceresti questo ramo ,Leave
+3220,puoi rilasciare questo ramo ,Leave
+3221,potresti rilasciare questo ramo ,Leave
+3222,lascia quel ramo ,Leave
+3223,lasceresti quel ramo ,Leave
+3224,puoi lasciare quel ramo ,Leave
+3225,potresti lasciare quel ramo ,Leave
+3226,molla quel ramo ,Leave
+3227,molleresti quel ramo ,Leave
+3228,puoi mollare quel ramo ,Leave
+3229,potresti mollare quel ramo ,Leave
+3230,getta quel ramo ,Leave
+3231,butta quel ramo ,Leave
+3232,getteresti quel ramo ,Leave
+3233,butteresti quel ramo ,Leave
+3234,puoi gettare quel ramo ,Leave
+3235,potresti gettare quel ramo ,Leave
+3236,rilascia quel ramo ,Leave
+3237,rilasceresti quel ramo ,Leave
+3238,puoi rilasciare quel ramo ,Leave
+3239,potresti rilasciare quel ramo ,Leave
+3240,lascia il ramo ,Leave
+3241,lasceresti il ramo ,Leave
+3242,puoi lasciare il ramo ,Leave
+3243,potresti lasciare il ramo ,Leave
+3244,molla il ramo ,Leave
+3245,molleresti il ramo ,Leave
+3246,puoi mollare il ramo ,Leave
+3247,potresti mollare il ramo ,Leave
+3248,getta il ramo ,Leave
+3249,butta il ramo ,Leave
+3250,getteresti il ramo ,Leave
+3251,butteresti il ramo ,Leave
+3252,puoi gettare il ramo ,Leave
+3253,potresti gettare il ramo ,Leave
+3254,rilascia il ramo ,Leave
+3255,rilasceresti il ramo ,Leave
+3256,puoi rilasciare il ramo ,Leave
+3257,potresti rilasciare il ramo ,Leave
+3258,lascia questo ramoscello ,Leave
+3259,lasceresti questo ramoscello ,Leave
+3260,puoi lasciare questo ramoscello ,Leave
+3261,potresti lasciare questo ramoscello ,Leave
+3262,molla questo ramoscello ,Leave
+3263,molleresti questo ramoscello ,Leave
+3264,puoi mollare questo ramoscello ,Leave
+3265,potresti mollare questo ramoscello ,Leave
+3266,getta questo ramoscello ,Leave
+3267,butta questo ramoscello ,Leave
+3268,getteresti questo ramoscello ,Leave
+3269,butteresti questo ramoscello ,Leave
+3270,puoi gettare questo ramoscello ,Leave
+3271,potresti gettare questo ramoscello ,Leave
+3272,rilascia questo ramoscello ,Leave
+3273,rilasceresti questo ramoscello ,Leave
+3274,puoi rilasciare questo ramoscello ,Leave
+3275,potresti rilasciare questo ramoscello ,Leave
+3276,lascia quel ramoscello ,Leave
+3277,lasceresti quel ramoscello ,Leave
+3278,puoi lasciare quel ramoscello ,Leave
+3279,potresti lasciare quel ramoscello ,Leave
+3280,molla quel ramoscello ,Leave
+3281,molleresti quel ramoscello ,Leave
+3282,puoi mollare quel ramoscello ,Leave
+3283,potresti mollare quel ramoscello ,Leave
+3284,getta quel ramoscello ,Leave
+3285,butta quel ramoscello ,Leave
+3286,getteresti quel ramoscello ,Leave
+3287,butteresti quel ramoscello ,Leave
+3288,puoi gettare quel ramoscello ,Leave
+3289,potresti gettare quel ramoscello ,Leave
+3290,rilascia quel ramoscello ,Leave
+3291,rilasceresti quel ramoscello ,Leave
+3292,puoi rilasciare quel ramoscello ,Leave
+3293,potresti rilasciare quel ramoscello ,Leave
+3294,lascia il ramoscello ,Leave
+3295,lasceresti il ramoscello ,Leave
+3296,puoi lasciare il ramoscello ,Leave
+3297,potresti lasciare il ramoscello ,Leave
+3298,molla il ramoscello ,Leave
+3299,molleresti il ramoscello ,Leave
+3300,puoi mollare il ramoscello ,Leave
+3301,potresti mollare il ramoscello ,Leave
+3302,getta il ramoscello ,Leave
+3303,butta il ramoscello ,Leave
+3304,getteresti il ramoscello ,Leave
+3305,butteresti il ramoscello ,Leave
+3306,puoi gettare il ramoscello ,Leave
+3307,potresti gettare il ramoscello ,Leave
+3308,rilascia il ramoscello ,Leave
+3309,rilasceresti il ramoscello ,Leave
+3310,puoi rilasciare il ramoscello ,Leave
+3311,potresti rilasciare il ramoscello ,Leave
+3312,lascia questo rametto ,Leave
+3313,lasceresti questo rametto ,Leave
+3314,puoi lasciare questo rametto ,Leave
+3315,potresti lasciare questo rametto ,Leave
+3316,molla questo rametto ,Leave
+3317,molleresti questo rametto ,Leave
+3318,puoi mollare questo rametto ,Leave
+3319,potresti mollare questo rametto ,Leave
+3320,getta questo rametto ,Leave
+3321,butta questo rametto ,Leave
+3322,getteresti questo rametto ,Leave
+3323,butteresti questo rametto ,Leave
+3324,puoi gettare questo rametto ,Leave
+3325,potresti gettare questo rametto ,Leave
+3326,rilascia questo rametto ,Leave
+3327,rilasceresti questo rametto ,Leave
+3328,puoi rilasciare questo rametto ,Leave
+3329,potresti rilasciare questo rametto ,Leave
+3330,lascia quel rametto ,Leave
+3331,lasceresti quel rametto ,Leave
+3332,puoi lasciare quel rametto ,Leave
+3333,potresti lasciare quel rametto ,Leave
+3334,molla quel rametto ,Leave
+3335,molleresti quel rametto ,Leave
+3336,puoi mollare quel rametto ,Leave
+3337,potresti mollare quel rametto ,Leave
+3338,getta quel rametto ,Leave
+3339,butta quel rametto ,Leave
+3340,getteresti quel rametto ,Leave
+3341,butteresti quel rametto ,Leave
+3342,puoi gettare quel rametto ,Leave
+3343,potresti gettare quel rametto ,Leave
+3344,rilascia quel rametto ,Leave
+3345,rilasceresti quel rametto ,Leave
+3346,puoi rilasciare quel rametto ,Leave
+3347,potresti rilasciare quel rametto ,Leave
+3348,lascia il rametto ,Leave
+3349,lasceresti il rametto ,Leave
+3350,puoi lasciare il rametto ,Leave
+3351,potresti lasciare il rametto ,Leave
+3352,molla il rametto ,Leave
+3353,molleresti il rametto ,Leave
+3354,puoi mollare il rametto ,Leave
+3355,potresti mollare il rametto ,Leave
+3356,getta il rametto ,Leave
+3357,butta il rametto ,Leave
+3358,getteresti il rametto ,Leave
+3359,butteresti il rametto ,Leave
+3360,puoi gettare il rametto ,Leave
+3361,potresti gettare il rametto ,Leave
+3362,rilascia il rametto ,Leave
+3363,rilasceresti il rametto ,Leave
+3364,puoi rilasciare il rametto ,Leave
+3365,potresti rilasciare il rametto ,Leave
+3366,lascia questo bastone ,Leave
+3367,lasceresti questo bastone ,Leave
+3368,puoi lasciare questo bastone ,Leave
+3369,potresti lasciare questo bastone ,Leave
+3370,molla questo bastone ,Leave
+3371,molleresti questo bastone ,Leave
+3372,puoi mollare questo bastone ,Leave
+3373,potresti mollare questo bastone ,Leave
+3374,getta questo bastone ,Leave
+3375,butta questo bastone ,Leave
+3376,getteresti questo bastone ,Leave
+3377,butteresti questo bastone ,Leave
+3378,puoi gettare questo bastone ,Leave
+3379,potresti gettare questo bastone ,Leave
+3380,rilascia questo bastone ,Leave
+3381,rilasceresti questo bastone ,Leave
+3382,puoi rilasciare questo bastone ,Leave
+3383,potresti rilasciare questo bastone ,Leave
+3384,lascia quel bastone ,Leave
+3385,lasceresti quel bastone ,Leave
+3386,puoi lasciare quel bastone ,Leave
+3387,potresti lasciare quel bastone ,Leave
+3388,molla quel bastone ,Leave
+3389,molleresti quel bastone ,Leave
+3390,puoi mollare quel bastone ,Leave
+3391,potresti mollare quel bastone ,Leave
+3392,getta quel bastone ,Leave
+3393,butta quel bastone ,Leave
+3394,getteresti quel bastone ,Leave
+3395,butteresti quel bastone ,Leave
+3396,puoi gettare quel bastone ,Leave
+3397,potresti gettare quel bastone ,Leave
+3398,rilascia quel bastone ,Leave
+3399,rilasceresti quel bastone ,Leave
+3400,puoi rilasciare quel bastone ,Leave
+3401,potresti rilasciare quel bastone ,Leave
+3402,lascia il bastone ,Leave
+3403,lasceresti il bastone ,Leave
+3404,puoi lasciare il bastone ,Leave
+3405,potresti lasciare il bastone ,Leave
+3406,molla il bastone ,Leave
+3407,molleresti il bastone ,Leave
+3408,puoi mollare il bastone ,Leave
+3409,potresti mollare il bastone ,Leave
+3410,getta il bastone ,Leave
+3411,butta il bastone ,Leave
+3412,getteresti il bastone ,Leave
+3413,butteresti il bastone ,Leave
+3414,puoi gettare il bastone ,Leave
+3415,potresti gettare il bastone ,Leave
+3416,rilascia il bastone ,Leave
+3417,rilasceresti il bastone ,Leave
+3418,puoi rilasciare il bastone ,Leave
+3419,potresti rilasciare il bastone ,Leave
+3420,lascia questa bacchetta ,Leave
+3421,lasceresti questa bacchetta ,Leave
+3422,puoi lasciare questa bacchetta ,Leave
+3423,potresti lasciare questa bacchetta ,Leave
+3424,molla questa bacchetta ,Leave
+3425,molleresti questa bacchetta ,Leave
+3426,puoi mollare questa bacchetta ,Leave
+3427,potresti mollare questa bacchetta ,Leave
+3428,getta questa bacchetta ,Leave
+3429,butta questa bacchetta ,Leave
+3430,getteresti questa bacchetta ,Leave
+3431,butteresti questa bacchetta ,Leave
+3432,puoi gettare questa bacchetta ,Leave
+3433,potresti gettare questa bacchetta ,Leave
+3434,rilascia questa bacchetta ,Leave
+3690,colpisci questo cespuglio ,Throw
+3691,colpisci questo cespuglio con questa palla ,Throw
+3692,colpisci questo cespuglio usando questa palla ,Throw
+3693,lancia questa palla contro questo cespuglio ,Throw
+3694,scaglia questa palla contro questo cespuglio ,Throw
+3695,scaraventa questa palla contro questo cespuglio ,Throw
+3696,puoi colpire questo cespuglio ,Throw
+3697,puoi colpire questo cespuglio con questa palla ,Throw
+3698,puoi colpire questo cespuglio usando questa palla ,Throw
+3699,puoi lanciare questa palla contro questo cespuglio ,Throw
+3700,puoi scagliare questa palla contro questo cespuglio ,Throw
+3701,puoi scaraventare questa palla contro questo cespuglio ,Throw
+3702,potresti colpire questo cespuglio ,Throw
+3703,potresti colpire questo cespuglio con questa palla ,Throw
+3704,potresti colpire questo cespuglio usando questa palla ,Throw
+3705,potresti lanciare questa palla contro questo cespuglio ,Throw
+3706,potresti scagliare questa palla contro questo cespuglio ,Throw
+3707,potresti scaraventare questa palla contro questo cespuglio ,Throw
+3708,colpiresti questo cespuglio ,Throw
+3709,lanceresti questa palla contro questo cespuglio ,Throw
+3710,scaglieresti questa palla contro questo cespuglio ,Throw
+3711,scaraventeresti questa palla contro questo cespuglio ,Throw
+3712,colpisci quel cespuglio ,Throw
+3713,colpisci quel cespuglio con questa palla ,Throw
+3714,colpisci quel cespuglio usando questa palla ,Throw
+3715,lancia questa palla contro quel cespuglio ,Throw
+3716,scaglia questa palla contro quel cespuglio ,Throw
+3717,scaraventa questa palla contro quel cespuglio ,Throw
+3718,puoi colpire quel cespuglio ,Throw
+3719,puoi colpire quel cespuglio con questa palla ,Throw
+3720,puoi colpire quel cespuglio usando questa palla ,Throw
+3721,puoi lanciare questa palla contro quel cespuglio ,Throw
+3722,puoi scagliare questa palla contro quel cespuglio ,Throw
+3723,puoi scaraventare questa palla contro quel cespuglio ,Throw
+3724,potresti colpire quel cespuglio ,Throw
+3725,potresti colpire quel cespuglio con questa palla ,Throw
+3726,potresti colpire quel cespuglio usando questa palla ,Throw
+3727,potresti lanciare questa palla contro quel cespuglio ,Throw
+3728,potresti scagliare questa palla contro quel cespuglio ,Throw
+3729,potresti scaraventare questa palla contro quel cespuglio ,Throw
+3730,colpiresti quel cespuglio ,Throw
+3731,lanceresti questa palla contro quel cespuglio ,Throw
+3732,scaglieresti questa palla contro quel cespuglio ,Throw
+3733,scaraventeresti questa palla contro quel cespuglio ,Throw
+3734,colpisci il cespuglio ,Throw
+3735,colpisci il cespuglio con questa palla ,Throw
+3736,colpisci il cespuglio usando questa palla ,Throw
+3737,lancia questa palla contro il cespuglio ,Throw
+3738,scaglia questa palla contro il cespuglio ,Throw
+3739,scaraventa questa palla contro il cespuglio ,Throw
+3740,puoi colpire il cespuglio ,Throw
+3741,puoi colpire il cespuglio con questa palla ,Throw
+3742,puoi colpire il cespuglio usando questa palla ,Throw
+3743,puoi lanciare questa palla contro il cespuglio ,Throw
+3744,puoi scagliare questa palla contro il cespuglio ,Throw
+3745,puoi scaraventare questa palla contro il cespuglio ,Throw
+3746,potresti colpire il cespuglio ,Throw
+3747,potresti colpire il cespuglio con questa palla ,Throw
+3748,potresti colpire il cespuglio usando questa palla ,Throw
+3749,potresti lanciare questa palla contro il cespuglio ,Throw
+3750,potresti scagliare questa palla contro il cespuglio ,Throw
+3751,potresti scaraventare questa palla contro il cespuglio ,Throw
+3752,colpiresti il cespuglio ,Throw
+3753,lanceresti questa palla contro il cespuglio ,Throw
+3754,scaglieresti questa palla contro il cespuglio ,Throw
+3755,scaraventeresti questa palla contro il cespuglio ,Throw
+3756,colpisci questo cespo ,Throw
+3757,colpisci questo cespo con questa palla ,Throw
+3758,colpisci questo cespo usando questa palla ,Throw
+3759,lancia questa palla contro questo cespo ,Throw
+3760,scaglia questa palla contro questo cespo ,Throw
+3761,scaraventa questa palla contro questo cespo ,Throw
+3762,puoi colpire questo cespo ,Throw
+3763,puoi colpire questo cespo con questa palla ,Throw
+3764,puoi colpire questo cespo usando questa palla ,Throw
+3765,puoi lanciare questa palla contro questo cespo ,Throw
+3766,puoi scagliare questa palla contro questo cespo ,Throw
+3767,puoi scaraventare questa palla contro questo cespo ,Throw
+3768,potresti colpire questo cespo ,Throw
+3769,potresti colpire questo cespo con questa palla ,Throw
+3770,potresti colpire questo cespo usando questa palla ,Throw
+3771,potresti lanciare questa palla contro questo cespo ,Throw
+3772,potresti scagliare questa palla contro questo cespo ,Throw
+3773,potresti scaraventare questa palla contro questo cespo ,Throw
+3774,colpiresti questo cespo ,Throw
+3775,lanceresti questa palla contro questo cespo ,Throw
+3776,scaglieresti questa palla contro questo cespo ,Throw
+3777,scaraventeresti questa palla contro questo cespo ,Throw
+3778,colpisci quel cespo ,Throw
+3779,colpisci quel cespo con questa palla ,Throw
+3780,colpisci quel cespo usando questa palla ,Throw
+3781,lancia questa palla contro quel cespo ,Throw
+3782,scaglia questa palla contro quel cespo ,Throw
+3783,scaraventa questa palla contro quel cespo ,Throw
+3784,puoi colpire quel cespo ,Throw
+3785,puoi colpire quel cespo con questa palla ,Throw
+3786,puoi colpire quel cespo usando questa palla ,Throw
+3787,puoi lanciare questa palla contro quel cespo ,Throw
+3788,puoi scagliare questa palla contro quel cespo ,Throw
+3789,puoi scaraventare questa palla contro quel cespo ,Throw
+3790,potresti colpire quel cespo ,Throw
+3791,potresti colpire quel cespo con questa palla ,Throw
+3792,potresti colpire quel cespo usando questa palla ,Throw
+3793,potresti lanciare questa palla contro quel cespo ,Throw
+3794,potresti scagliare questa palla contro quel cespo ,Throw
+3795,potresti scaraventare questa palla contro quel cespo ,Throw
+3796,colpiresti quel cespo ,Throw
+3797,lanceresti questa palla contro quel cespo ,Throw
+3798,scaglieresti questa palla contro quel cespo ,Throw
+3799,scaraventeresti questa palla contro quel cespo ,Throw
+3800,colpisci il cespo ,Throw
+3801,colpisci il cespo con questa palla ,Throw
+3802,colpisci il cespo usando questa palla ,Throw
+3803,lancia questa palla contro il cespo ,Throw
+3804,scaglia questa palla contro il cespo ,Throw
+3805,scaraventa questa palla contro il cespo ,Throw
+3806,puoi colpire il cespo ,Throw
+3807,puoi colpire il cespo con questa palla ,Throw
+3808,puoi colpire il cespo usando questa palla ,Throw
+3809,puoi lanciare questa palla contro il cespo ,Throw
+3810,puoi scagliare questa palla contro il cespo ,Throw
+3811,puoi scaraventare questa palla contro il cespo ,Throw
+3812,potresti colpire il cespo ,Throw
+3813,potresti colpire il cespo con questa palla ,Throw
+3814,potresti colpire il cespo usando questa palla ,Throw
+3815,potresti lanciare questa palla contro il cespo ,Throw
+3816,potresti scagliare questa palla contro il cespo ,Throw
+3817,potresti scaraventare questa palla contro il cespo ,Throw
+3818,colpiresti il cespo ,Throw
+3819,lanceresti questa palla contro il cespo ,Throw
+3820,scaglieresti questa palla contro il cespo ,Throw
+3821,scaraventeresti questa palla contro il cespo ,Throw
+3822,colpisci questa palla ,Throw
+3823,colpisci questa palla con questa palla ,Throw
+3824,colpisci questa palla usando questa palla ,Throw
+3825,lancia questa palla contro questa palla ,Throw
+3826,scaglia questa palla contro questa palla ,Throw
+3827,scaraventa questa palla contro questa palla ,Throw
+3828,puoi colpire questa palla ,Throw
+3829,puoi colpire questa palla con questa palla ,Throw
+3830,puoi colpire questa palla usando questa palla ,Throw
+3831,puoi lanciare questa palla contro questa palla ,Throw
+3832,puoi scagliare questa palla contro questa palla ,Throw
+3833,puoi scaraventare questa palla contro questa palla ,Throw
+3834,potresti colpire questa palla ,Throw
+3835,potresti colpire questa palla con questa palla ,Throw
+3836,potresti colpire questa palla usando questa palla ,Throw
+3837,potresti lanciare questa palla contro questa palla ,Throw
+3838,potresti scagliare questa palla contro questa palla ,Throw
+3839,potresti scaraventare questa palla contro questa palla ,Throw
+3840,colpiresti questa palla ,Throw
+3841,lanceresti questa palla contro questa palla ,Throw
+3842,scaglieresti questa palla contro questa palla ,Throw
+3843,scaraventeresti questa palla contro questa palla ,Throw
+3844,colpisci quella palla ,Throw
+3845,colpisci quella palla con questa palla ,Throw
+3846,colpisci quella palla usando questa palla ,Throw
+3847,lancia questa palla contro quella palla ,Throw
+3848,scaglia questa palla contro quella palla ,Throw
+3849,scaraventa questa palla contro quella palla ,Throw
+3850,puoi colpire quella palla ,Throw
+3851,puoi colpire quella palla con questa palla ,Throw
+3852,puoi colpire quella palla usando questa palla ,Throw
+3853,puoi lanciare questa palla contro quella palla ,Throw
+3854,puoi scagliare questa palla contro quella palla ,Throw
+3855,puoi scaraventare questa palla contro quella palla ,Throw
+3856,potresti colpire quella palla ,Throw
+3857,potresti colpire quella palla con questa palla ,Throw
+3858,potresti colpire quella palla usando questa palla ,Throw
+3859,potresti lanciare questa palla contro quella palla ,Throw
+3860,potresti scagliare questa palla contro quella palla ,Throw
+3861,potresti scaraventare questa palla contro quella palla ,Throw
+3862,colpiresti quella palla ,Throw
+3863,lanceresti questa palla contro quella palla ,Throw
+3864,scaglieresti questa palla contro quella palla ,Throw
+3865,scaraventeresti questa palla contro quella palla ,Throw
+3866,colpisci la palla ,Throw
+3867,colpisci la palla con questa palla ,Throw
+3868,colpisci la palla usando questa palla ,Throw
+3869,lancia questa palla contro la palla ,Throw
+3870,scaglia questa palla contro la palla ,Throw
+3871,scaraventa questa palla contro la palla ,Throw
+3872,puoi colpire la palla ,Throw
+3873,puoi colpire la palla con questa palla ,Throw
+3874,puoi colpire la palla usando questa palla ,Throw
+3875,puoi lanciare questa palla contro la palla ,Throw
+3876,puoi scagliare questa palla contro la palla ,Throw
+3877,puoi scaraventare questa palla contro la palla ,Throw
+3878,potresti colpire la palla ,Throw
+3879,potresti colpire la palla con questa palla ,Throw
+3880,potresti colpire la palla usando questa palla ,Throw
+3881,potresti lanciare questa palla contro la palla ,Throw
+3882,potresti scagliare questa palla contro la palla ,Throw
+3883,potresti scaraventare questa palla contro la palla ,Throw
+3884,colpiresti la palla ,Throw
+3885,lanceresti questa palla contro la palla ,Throw
+3886,scaglieresti questa palla contro la palla ,Throw
+3887,scaraventeresti questa palla contro la palla ,Throw
+3888,colpisci questa sfera ,Throw
+3889,colpisci questa sfera con questa palla ,Throw
+3890,colpisci questa sfera usando questa palla ,Throw
+3891,lancia questa palla contro questa sfera ,Throw
+3892,scaglia questa palla contro questa sfera ,Throw
+3893,scaraventa questa palla contro questa sfera ,Throw
+3894,puoi colpire questa sfera ,Throw
+3895,puoi colpire questa sfera con questa palla ,Throw
+3896,puoi colpire questa sfera usando questa palla ,Throw
+3897,puoi lanciare questa palla contro questa sfera ,Throw
+3898,puoi scagliare questa palla contro questa sfera ,Throw
+3899,puoi scaraventare questa palla contro questa sfera ,Throw
+3900,potresti colpire questa sfera ,Throw
+3901,potresti colpire questa sfera con questa palla ,Throw
+3902,potresti colpire questa sfera usando questa palla ,Throw
+3903,potresti lanciare questa palla contro questa sfera ,Throw
+3904,potresti scagliare questa palla contro questa sfera ,Throw
+3905,potresti scaraventare questa palla contro questa sfera ,Throw
+3906,colpiresti questa sfera ,Throw
+3907,lanceresti questa palla contro questa sfera ,Throw
+3908,scaglieresti questa palla contro questa sfera ,Throw
+3909,scaraventeresti questa palla contro questa sfera ,Throw
+3910,colpisci quella sfera ,Throw
+3911,colpisci quella sfera con questa palla ,Throw
+3912,colpisci quella sfera usando questa palla ,Throw
+3913,lancia questa palla contro quella sfera ,Throw
+3914,scaglia questa palla contro quella sfera ,Throw
+3915,scaraventa questa palla contro quella sfera ,Throw
+3916,puoi colpire quella sfera ,Throw
+3917,puoi colpire quella sfera con questa palla ,Throw
+3918,puoi colpire quella sfera usando questa palla ,Throw
+3919,puoi lanciare questa palla contro quella sfera ,Throw
+3920,puoi scagliare questa palla contro quella sfera ,Throw
+3921,puoi scaraventare questa palla contro quella sfera ,Throw
+3922,potresti colpire quella sfera ,Throw
+3923,potresti colpire quella sfera con questa palla ,Throw
+3924,potresti colpire quella sfera usando questa palla ,Throw
+3925,potresti lanciare questa palla contro quella sfera ,Throw
+3926,potresti scagliare questa palla contro quella sfera ,Throw
+3927,potresti scaraventare questa palla contro quella sfera ,Throw
+3928,colpiresti quella sfera ,Throw
+3929,lanceresti questa palla contro quella sfera ,Throw
+3930,scaglieresti questa palla contro quella sfera ,Throw
+3931,scaraventeresti questa palla contro quella sfera ,Throw
+3932,colpisci la sfera ,Throw
+3933,colpisci la sfera con questa palla ,Throw
+3934,colpisci la sfera usando questa palla ,Throw
+3935,lancia questa palla contro la sfera ,Throw
+3936,scaglia questa palla contro la sfera ,Throw
+3937,scaraventa questa palla contro la sfera ,Throw
+3938,puoi colpire la sfera ,Throw
+3939,puoi colpire la sfera con questa palla ,Throw
+3940,puoi colpire la sfera usando questa palla ,Throw
+3941,puoi lanciare questa palla contro la sfera ,Throw
+3942,puoi scagliare questa palla contro la sfera ,Throw
+3943,puoi scaraventare questa palla contro la sfera ,Throw
+3944,potresti colpire la sfera ,Throw
+3945,potresti colpire la sfera con questa palla ,Throw
+3946,potresti colpire la sfera usando questa palla ,Throw
+3947,potresti lanciare questa palla contro la sfera ,Throw
+3948,potresti scagliare questa palla contro la sfera ,Throw
+3949,potresti scaraventare questa palla contro la sfera ,Throw
+3950,colpiresti la sfera ,Throw
+3951,lanceresti questa palla contro la sfera ,Throw
+3952,scaglieresti questa palla contro la sfera ,Throw
+3953,scaraventeresti questa palla contro la sfera ,Throw
+3954,colpisci questo pallone ,Throw
+3955,colpisci questo pallone con questa palla ,Throw
+3956,colpisci questo pallone usando questa palla ,Throw
+3957,lancia questa palla contro questo pallone ,Throw
+3958,scaglia questa palla contro questo pallone ,Throw
+3959,scaraventa questa palla contro questo pallone ,Throw
+3960,puoi colpire questo pallone ,Throw
+3961,puoi colpire questo pallone con questa palla ,Throw
+3962,puoi colpire questo pallone usando questa palla ,Throw
+3963,puoi lanciare questa palla contro questo pallone ,Throw
+3964,puoi scagliare questa palla contro questo pallone ,Throw
+3965,puoi scaraventare questa palla contro questo pallone ,Throw
+3966,potresti colpire questo pallone ,Throw
+3967,potresti colpire questo pallone con questa palla ,Throw
+3968,potresti colpire questo pallone usando questa palla ,Throw
+3969,potresti lanciare questa palla contro questo pallone ,Throw
+3970,potresti scagliare questa palla contro questo pallone ,Throw
+3971,potresti scaraventare questa palla contro questo pallone ,Throw
+3972,colpiresti questo pallone ,Throw
+3973,lanceresti questa palla contro questo pallone ,Throw
+3974,scaglieresti questa palla contro questo pallone ,Throw
+3975,scaraventeresti questa palla contro questo pallone ,Throw
+3976,colpisci quel pallone ,Throw
+3977,colpisci quel pallone con questa palla ,Throw
+3978,colpisci quel pallone usando questa palla ,Throw
+3979,lancia questa palla contro quel pallone ,Throw
+3980,scaglia questa palla contro quel pallone ,Throw
+3981,scaraventa questa palla contro quel pallone ,Throw
+3982,puoi colpire quel pallone ,Throw
+3983,puoi colpire quel pallone con questa palla ,Throw
+3984,puoi colpire quel pallone usando questa palla ,Throw
+3985,puoi lanciare questa palla contro quel pallone ,Throw
+3986,puoi scagliare questa palla contro quel pallone ,Throw
+3987,puoi scaraventare questa palla contro quel pallone ,Throw
+3988,potresti colpire quel pallone ,Throw
+3989,potresti colpire quel pallone con questa palla ,Throw
+3990,potresti colpire quel pallone usando questa palla ,Throw
+3991,potresti lanciare questa palla contro quel pallone ,Throw
+3992,potresti scagliare questa palla contro quel pallone ,Throw
+3993,potresti scaraventare questa palla contro quel pallone ,Throw
+3994,colpiresti quel pallone ,Throw
+3995,lanceresti questa palla contro quel pallone ,Throw
+3996,scaglieresti questa palla contro quel pallone ,Throw
+3997,scaraventeresti questa palla contro quel pallone ,Throw
+3998,colpisci il pallone ,Throw
+3999,colpisci il pallone con questa palla ,Throw
+4000,colpisci il pallone usando questa palla ,Throw
+4001,lancia questa palla contro il pallone ,Throw
+4002,scaglia questa palla contro il pallone ,Throw
+4003,scaraventa questa palla contro il pallone ,Throw
+4004,puoi colpire il pallone ,Throw
+4005,puoi colpire il pallone con questa palla ,Throw
+4006,puoi colpire il pallone usando questa palla ,Throw
+4007,puoi lanciare questa palla contro il pallone ,Throw
+4008,puoi scagliare questa palla contro il pallone ,Throw
+4009,puoi scaraventare questa palla contro il pallone ,Throw
+4010,potresti colpire il pallone ,Throw
+4011,potresti colpire il pallone con questa palla ,Throw
+4012,potresti colpire il pallone usando questa palla ,Throw
+4013,potresti lanciare questa palla contro il pallone ,Throw
+4014,potresti scagliare questa palla contro il pallone ,Throw
+4015,potresti scaraventare questa palla contro il pallone ,Throw
+4016,colpiresti il pallone ,Throw
+4017,lanceresti questa palla contro il pallone ,Throw
+4018,scaglieresti questa palla contro il pallone ,Throw
+4019,scaraventeresti questa palla contro il pallone ,Throw
+4020,colpisci questa chiave ,Throw
+4021,colpisci questa chiave con questa palla ,Throw
+4022,colpisci questa chiave usando questa palla ,Throw
+4023,lancia questa palla contro questa chiave ,Throw
+4024,scaglia questa palla contro questa chiave ,Throw
+4025,scaraventa questa palla contro questa chiave ,Throw
+4026,puoi colpire questa chiave ,Throw
+4027,puoi colpire questa chiave con questa palla ,Throw
+4028,puoi colpire questa chiave usando questa palla ,Throw
+4029,puoi lanciare questa palla contro questa chiave ,Throw
+4030,puoi scagliare questa palla contro questa chiave ,Throw
+4031,puoi scaraventare questa palla contro questa chiave ,Throw
+4032,potresti colpire questa chiave ,Throw
+4033,potresti colpire questa chiave con questa palla ,Throw
+4034,potresti colpire questa chiave usando questa palla ,Throw
+4035,potresti lanciare questa palla contro questa chiave ,Throw
+4036,potresti scagliare questa palla contro questa chiave ,Throw
+4037,potresti scaraventare questa palla contro questa chiave ,Throw
+4038,colpiresti questa chiave ,Throw
+4039,lanceresti questa palla contro questa chiave ,Throw
+4040,scaglieresti questa palla contro questa chiave ,Throw
+4041,scaraventeresti questa palla contro questa chiave ,Throw
+4042,colpisci quella chiave ,Throw
+4043,colpisci quella chiave con questa palla ,Throw
+4044,colpisci quella chiave usando questa palla ,Throw
+4045,lancia questa palla contro quella chiave ,Throw
+4046,scaglia questa palla contro quella chiave ,Throw
+4047,scaraventa questa palla contro quella chiave ,Throw
+4048,puoi colpire quella chiave ,Throw
+4049,puoi colpire quella chiave con questa palla ,Throw
+4050,puoi colpire quella chiave usando questa palla ,Throw
+4051,puoi lanciare questa palla contro quella chiave ,Throw
+4052,puoi scagliare questa palla contro quella chiave ,Throw
+4053,puoi scaraventare questa palla contro quella chiave ,Throw
+4054,potresti colpire quella chiave ,Throw
+4055,potresti colpire quella chiave con questa palla ,Throw
+4056,potresti colpire quella chiave usando questa palla ,Throw
+4057,potresti lanciare questa palla contro quella chiave ,Throw
+4058,potresti scagliare questa palla contro quella chiave ,Throw
+4059,potresti scaraventare questa palla contro quella chiave ,Throw
+4060,colpiresti quella chiave ,Throw
+4061,lanceresti questa palla contro quella chiave ,Throw
+4062,scaglieresti questa palla contro quella chiave ,Throw
+4063,scaraventeresti questa palla contro quella chiave ,Throw
+4064,colpisci la chiave ,Throw
+4065,colpisci la chiave con questa palla ,Throw
+4066,colpisci la chiave usando questa palla ,Throw
+4067,lancia questa palla contro la chiave ,Throw
+4068,scaglia questa palla contro la chiave ,Throw
+4069,scaraventa questa palla contro la chiave ,Throw
+4070,puoi colpire la chiave ,Throw
+4071,puoi colpire la chiave con questa palla ,Throw
+4072,puoi colpire la chiave usando questa palla ,Throw
+4073,puoi lanciare questa palla contro la chiave ,Throw
+4074,puoi scagliare questa palla contro la chiave ,Throw
+4075,puoi scaraventare questa palla contro la chiave ,Throw
+4076,potresti colpire la chiave ,Throw
+4077,potresti colpire la chiave con questa palla ,Throw
+4078,potresti colpire la chiave usando questa palla ,Throw
+4079,potresti lanciare questa palla contro la chiave ,Throw
+4080,potresti scagliare questa palla contro la chiave ,Throw
+4081,potresti scaraventare questa palla contro la chiave ,Throw
+4082,colpiresti la chiave ,Throw
+4083,lanceresti questa palla contro la chiave ,Throw
+4084,scaglieresti questa palla contro la chiave ,Throw
+4085,scaraventeresti questa palla contro la chiave ,Throw
+4086,colpisci queste chiavi ,Throw
+4087,colpisci queste chiavi con questa palla ,Throw
+4088,colpisci queste chiavi usando questa palla ,Throw
+4089,lancia questa palla contro queste chiavi ,Throw
+4090,scaglia questa palla contro queste chiavi ,Throw
+4091,scaraventa questa palla contro queste chiavi ,Throw
+4092,puoi colpire queste chiavi ,Throw
+4093,puoi colpire queste chiavi con questa palla ,Throw
+4094,puoi colpire queste chiavi usando questa palla ,Throw
+4095,puoi lanciare questa palla contro queste chiavi ,Throw
+4096,puoi scagliare questa palla contro queste chiavi ,Throw
+4097,puoi scaraventare questa palla contro queste chiavi ,Throw
+4098,potresti colpire queste chiavi ,Throw
+4099,potresti colpire queste chiavi con questa palla ,Throw
+4100,potresti colpire queste chiavi usando questa palla ,Throw
+4101,potresti lanciare questa palla contro queste chiavi ,Throw
+4102,potresti scagliare questa palla contro queste chiavi ,Throw
+4103,potresti scaraventare questa palla contro queste chiavi ,Throw
+4104,colpiresti queste chiavi ,Throw
+4105,lanceresti questa palla contro queste chiavi ,Throw
+4106,scaglieresti questa palla contro queste chiavi ,Throw
+4107,scaraventeresti questa palla contro queste chiavi ,Throw
+4108,colpisci quelle chiavi ,Throw
+4109,colpisci quelle chiavi con questa palla ,Throw
+4110,colpisci quelle chiavi usando questa palla ,Throw
+4111,lancia questa palla contro quelle chiavi ,Throw
+4112,scaglia questa palla contro quelle chiavi ,Throw
+4113,scaraventa questa palla contro quelle chiavi ,Throw
+4114,puoi colpire quelle chiavi ,Throw
+4115,puoi colpire quelle chiavi con questa palla ,Throw
+4116,puoi colpire quelle chiavi usando questa palla ,Throw
+4117,puoi lanciare questa palla contro quelle chiavi ,Throw
+4118,puoi scagliare questa palla contro quelle chiavi ,Throw
+4119,puoi scaraventare questa palla contro quelle chiavi ,Throw
+4120,potresti colpire quelle chiavi ,Throw
+4121,potresti colpire quelle chiavi con questa palla ,Throw
+4122,potresti colpire quelle chiavi usando questa palla ,Throw
+4123,potresti lanciare questa palla contro quelle chiavi ,Throw
+4124,potresti scagliare questa palla contro quelle chiavi ,Throw
+4125,potresti scaraventare questa palla contro quelle chiavi ,Throw
+4126,colpiresti quelle chiavi ,Throw
+4127,lanceresti questa palla contro quelle chiavi ,Throw
+4128,scaglieresti questa palla contro quelle chiavi ,Throw
+4129,scaraventeresti questa palla contro quelle chiavi ,Throw
+4130,colpisci le chiavi ,Throw
+4131,colpisci le chiavi con questa palla ,Throw
+4132,colpisci le chiavi usando questa palla ,Throw
+4133,lancia questa palla contro le chiavi ,Throw
+4134,scaglia questa palla contro le chiavi ,Throw
+4135,scaraventa questa palla contro le chiavi ,Throw
+4136,puoi colpire le chiavi ,Throw
+4137,puoi colpire le chiavi con questa palla ,Throw
+4138,puoi colpire le chiavi usando questa palla ,Throw
+4139,puoi lanciare questa palla contro le chiavi ,Throw
+4140,puoi scagliare questa palla contro le chiavi ,Throw
+4141,puoi scaraventare questa palla contro le chiavi ,Throw
+4142,potresti colpire le chiavi ,Throw
+4143,potresti colpire le chiavi con questa palla ,Throw
+4144,potresti colpire le chiavi usando questa palla ,Throw
+4145,potresti lanciare questa palla contro le chiavi ,Throw
+4146,potresti scagliare questa palla contro le chiavi ,Throw
+4147,potresti scaraventare questa palla contro le chiavi ,Throw
+4148,colpiresti le chiavi ,Throw
+4149,lanceresti questa palla contro le chiavi ,Throw
+4150,scaglieresti questa palla contro le chiavi ,Throw
+4151,scaraventeresti questa palla contro le chiavi ,Throw
+4152,colpisci questo ramo ,Throw
+4153,colpisci questo ramo con questa palla ,Throw
+4154,colpisci questo ramo usando questa palla ,Throw
+4155,lancia questa palla contro questo ramo ,Throw
+4156,scaglia questa palla contro questo ramo ,Throw
+4157,scaraventa questa palla contro questo ramo ,Throw
+4158,puoi colpire questo ramo ,Throw
+4159,puoi colpire questo ramo con questa palla ,Throw
+4160,puoi colpire questo ramo usando questa palla ,Throw
+4161,puoi lanciare questa palla contro questo ramo ,Throw
+4162,puoi scagliare questa palla contro questo ramo ,Throw
+4163,puoi scaraventare questa palla contro questo ramo ,Throw
+4164,potresti colpire questo ramo ,Throw
+4165,potresti colpire questo ramo con questa palla ,Throw
+4166,potresti colpire questo ramo usando questa palla ,Throw
+4167,potresti lanciare questa palla contro questo ramo ,Throw
+4168,potresti scagliare questa palla contro questo ramo ,Throw
+4169,potresti scaraventare questa palla contro questo ramo ,Throw
+4170,colpiresti questo ramo ,Throw
+4171,lanceresti questa palla contro questo ramo ,Throw
+4172,scaglieresti questa palla contro questo ramo ,Throw
+4173,scaraventeresti questa palla contro questo ramo ,Throw
+4174,colpisci quel ramo ,Throw
+4175,colpisci quel ramo con questa palla ,Throw
+4176,colpisci quel ramo usando questa palla ,Throw
+4177,lancia questa palla contro quel ramo ,Throw
+4178,scaglia questa palla contro quel ramo ,Throw
+4179,scaraventa questa palla contro quel ramo ,Throw
+4180,puoi colpire quel ramo ,Throw
+4181,puoi colpire quel ramo con questa palla ,Throw
+4182,puoi colpire quel ramo usando questa palla ,Throw
+4183,puoi lanciare questa palla contro quel ramo ,Throw
+4184,puoi scagliare questa palla contro quel ramo ,Throw
+4185,puoi scaraventare questa palla contro quel ramo ,Throw
+4186,potresti colpire quel ramo ,Throw
+4187,potresti colpire quel ramo con questa palla ,Throw
+4188,potresti colpire quel ramo usando questa palla ,Throw
+4189,potresti lanciare questa palla contro quel ramo ,Throw
+4190,potresti scagliare questa palla contro quel ramo ,Throw
+4191,potresti scaraventare questa palla contro quel ramo ,Throw
+4192,colpiresti quel ramo ,Throw
+4193,lanceresti questa palla contro quel ramo ,Throw
+4194,scaglieresti questa palla contro quel ramo ,Throw
+4195,scaraventeresti questa palla contro quel ramo ,Throw
+4196,colpisci il ramo ,Throw
+4197,colpisci il ramo con questa palla ,Throw
+4198,colpisci il ramo usando questa palla ,Throw
+4199,lancia questa palla contro il ramo ,Throw
+4200,scaglia questa palla contro il ramo ,Throw
+4201,scaraventa questa palla contro il ramo ,Throw
+4202,puoi colpire il ramo ,Throw
+4203,puoi colpire il ramo con questa palla ,Throw
+4204,puoi colpire il ramo usando questa palla ,Throw
+4205,puoi lanciare questa palla contro il ramo ,Throw
+4206,puoi scagliare questa palla contro il ramo ,Throw
+4207,puoi scaraventare questa palla contro il ramo ,Throw
+4208,potresti colpire il ramo ,Throw
+4209,potresti colpire il ramo con questa palla ,Throw
+4210,potresti colpire il ramo usando questa palla ,Throw
+4211,potresti lanciare questa palla contro il ramo ,Throw
+4212,potresti scagliare questa palla contro il ramo ,Throw
+4213,potresti scaraventare questa palla contro il ramo ,Throw
+4214,colpiresti il ramo ,Throw
+4215,lanceresti questa palla contro il ramo ,Throw
+4216,scaglieresti questa palla contro il ramo ,Throw
+4217,scaraventeresti questa palla contro il ramo ,Throw
+4218,colpisci questo ramoscello ,Throw
+4219,colpisci questo ramoscello con questa palla ,Throw
+4220,colpisci questo ramoscello usando questa palla ,Throw
+4221,lancia questa palla contro questo ramoscello ,Throw
+4222,scaglia questa palla contro questo ramoscello ,Throw
+4223,scaraventa questa palla contro questo ramoscello ,Throw
+4224,puoi colpire questo ramoscello ,Throw
+4225,puoi colpire questo ramoscello con questa palla ,Throw
+4226,puoi colpire questo ramoscello usando questa palla ,Throw
+4227,puoi lanciare questa palla contro questo ramoscello ,Throw
+4228,puoi scagliare questa palla contro questo ramoscello ,Throw
+4229,puoi scaraventare questa palla contro questo ramoscello ,Throw
+4230,potresti colpire questo ramoscello ,Throw
+4231,potresti colpire questo ramoscello con questa palla ,Throw
+4232,potresti colpire questo ramoscello usando questa palla ,Throw
+4233,potresti lanciare questa palla contro questo ramoscello ,Throw
+4234,potresti scagliare questa palla contro questo ramoscello ,Throw
+4235,potresti scaraventare questa palla contro questo ramoscello ,Throw
+4236,colpiresti questo ramoscello ,Throw
+4237,lanceresti questa palla contro questo ramoscello ,Throw
+4238,scaglieresti questa palla contro questo ramoscello ,Throw
+4239,scaraventeresti questa palla contro questo ramoscello ,Throw
+4240,colpisci quel ramoscello ,Throw
+4241,colpisci quel ramoscello con questa palla ,Throw
+4242,colpisci quel ramoscello usando questa palla ,Throw
+4243,lancia questa palla contro quel ramoscello ,Throw
+4244,scaglia questa palla contro quel ramoscello ,Throw
+4245,scaraventa questa palla contro quel ramoscello ,Throw
+4246,puoi colpire quel ramoscello ,Throw
+4247,puoi colpire quel ramoscello con questa palla ,Throw
+4248,puoi colpire quel ramoscello usando questa palla ,Throw
+4249,puoi lanciare questa palla contro quel ramoscello ,Throw
+4250,puoi scagliare questa palla contro quel ramoscello ,Throw
+4251,puoi scaraventare questa palla contro quel ramoscello ,Throw
+4252,potresti colpire quel ramoscello ,Throw
+4253,potresti colpire quel ramoscello con questa palla ,Throw
+4254,potresti colpire quel ramoscello usando questa palla ,Throw
+4255,potresti lanciare questa palla contro quel ramoscello ,Throw
+4256,potresti scagliare questa palla contro quel ramoscello ,Throw
+4257,potresti scaraventare questa palla contro quel ramoscello ,Throw
+4258,colpiresti quel ramoscello ,Throw
+4259,lanceresti questa palla contro quel ramoscello ,Throw
+4260,scaglieresti questa palla contro quel ramoscello ,Throw
+4261,scaraventeresti questa palla contro quel ramoscello ,Throw
+4262,colpisci il ramoscello ,Throw
+4263,colpisci il ramoscello con questa palla ,Throw
+4264,colpisci il ramoscello usando questa palla ,Throw
+4265,lancia questa palla contro il ramoscello ,Throw
+4266,scaglia questa palla contro il ramoscello ,Throw
+4267,scaraventa questa palla contro il ramoscello ,Throw
+4268,puoi colpire il ramoscello ,Throw
+4269,puoi colpire il ramoscello con questa palla ,Throw
+4270,puoi colpire il ramoscello usando questa palla ,Throw
+4271,puoi lanciare questa palla contro il ramoscello ,Throw
+4272,puoi scagliare questa palla contro il ramoscello ,Throw
+4273,puoi scaraventare questa palla contro il ramoscello ,Throw
+4274,potresti colpire il ramoscello ,Throw
+4275,potresti colpire il ramoscello con questa palla ,Throw
+4276,potresti colpire il ramoscello usando questa palla ,Throw
+4277,potresti lanciare questa palla contro il ramoscello ,Throw
+4278,potresti scagliare questa palla contro il ramoscello ,Throw
+4279,potresti scaraventare questa palla contro il ramoscello ,Throw
+4280,colpiresti il ramoscello ,Throw
+4281,lanceresti questa palla contro il ramoscello ,Throw
+4282,scaglieresti questa palla contro il ramoscello ,Throw
+4283,scaraventeresti questa palla contro il ramoscello ,Throw
+4284,colpisci questo rametto ,Throw
+4285,colpisci questo rametto con questa palla ,Throw
+4286,colpisci questo rametto usando questa palla ,Throw
+4287,lancia questa palla contro questo rametto ,Throw
+4288,scaglia questa palla contro questo rametto ,Throw
+4289,scaraventa questa palla contro questo rametto ,Throw
+4290,puoi colpire questo rametto ,Throw
+61902,controlla questo cespuglio ,Inspect
+61903,ispeziona questo cespuglio ,Inspect
+61904,esamina questo cespuglio ,Inspect
+61905,vedi questo cespuglio ,Inspect
+61906,analizza questo cespuglio ,Inspect
+61907,puoi controllare questo cespuglio ,Inspect
+61908,puoi ispezionare questo cespuglio ,Inspect
+61909,puoi esaminare questo cespuglio ,Inspect
+61910,puoi vedere questo cespuglio ,Inspect
+61911,puoi analizzare questo cespuglio ,Inspect
+61912,potresti controllare questo cespuglio ,Inspect
+61913,potresti ispezionare questo cespuglio ,Inspect
+61914,potresti esaminare questo cespuglio ,Inspect
+61915,potresti vedere questo cespuglio ,Inspect
+61916,potresti analizzare questo cespuglio ,Inspect
+61917,controlleresti questo cespuglio ,Inspect
+61918,ispezioneresti questo cespuglio ,Inspect
+61919,esamineresti questo cespuglio ,Inspect
+61920,vedresti questo cespuglio ,Inspect
+61921,analizzerersti questo cespuglio ,Inspect
+61922,controlla quel cespuglio ,Inspect
+61923,ispeziona quel cespuglio ,Inspect
+61924,esamina quel cespuglio ,Inspect
+61925,vedi quel cespuglio ,Inspect
+61926,analizza quel cespuglio ,Inspect
+61927,puoi controllare quel cespuglio ,Inspect
+61928,puoi ispezionare quel cespuglio ,Inspect
+61929,puoi esaminare quel cespuglio ,Inspect
+61930,puoi vedere quel cespuglio ,Inspect
+61931,puoi analizzare quel cespuglio ,Inspect
+61932,potresti controllare quel cespuglio ,Inspect
+61933,potresti ispezionare quel cespuglio ,Inspect
+61934,potresti esaminare quel cespuglio ,Inspect
+61935,potresti vedere quel cespuglio ,Inspect
+61936,potresti analizzare quel cespuglio ,Inspect
+61937,controlleresti quel cespuglio ,Inspect
+61938,ispezioneresti quel cespuglio ,Inspect
+61939,esamineresti quel cespuglio ,Inspect
+61940,vedresti quel cespuglio ,Inspect
+61941,analizzerersti quel cespuglio ,Inspect
+61942,controlla il cespuglio ,Inspect
+61943,ispeziona il cespuglio ,Inspect
+61944,esamina il cespuglio ,Inspect
+61945,vedi il cespuglio ,Inspect
+61946,analizza il cespuglio ,Inspect
+61947,puoi controllare il cespuglio ,Inspect
+61948,puoi ispezionare il cespuglio ,Inspect
+61949,puoi esaminare il cespuglio ,Inspect
+61950,puoi vedere il cespuglio ,Inspect
+61951,puoi analizzare il cespuglio ,Inspect
+61952,potresti controllare il cespuglio ,Inspect
+61953,potresti ispezionare il cespuglio ,Inspect
+61954,potresti esaminare il cespuglio ,Inspect
+61955,potresti vedere il cespuglio ,Inspect
+61956,potresti analizzare il cespuglio ,Inspect
+61957,controlleresti il cespuglio ,Inspect
+61958,ispezioneresti il cespuglio ,Inspect
+61959,esamineresti il cespuglio ,Inspect
+61960,vedresti il cespuglio ,Inspect
+61961,analizzerersti il cespuglio ,Inspect
+61962,controlla questo cespo ,Inspect
+61963,ispeziona questo cespo ,Inspect
+61964,esamina questo cespo ,Inspect
+61965,vedi questo cespo ,Inspect
+61966,analizza questo cespo ,Inspect
+61967,puoi controllare questo cespo ,Inspect
+61968,puoi ispezionare questo cespo ,Inspect
+61969,puoi esaminare questo cespo ,Inspect
+61970,puoi vedere questo cespo ,Inspect
+61971,puoi analizzare questo cespo ,Inspect
+61972,potresti controllare questo cespo ,Inspect
+61973,potresti ispezionare questo cespo ,Inspect
+61974,potresti esaminare questo cespo ,Inspect
+61975,potresti vedere questo cespo ,Inspect
+61976,potresti analizzare questo cespo ,Inspect
+61977,controlleresti questo cespo ,Inspect
+61978,ispezioneresti questo cespo ,Inspect
+61979,esamineresti questo cespo ,Inspect
+61980,vedresti questo cespo ,Inspect
+61981,analizzerersti questo cespo ,Inspect
+61982,controlla quel cespo ,Inspect
+61983,ispeziona quel cespo ,Inspect
+61984,esamina quel cespo ,Inspect
+61985,vedi quel cespo ,Inspect
+61986,analizza quel cespo ,Inspect
+61987,puoi controllare quel cespo ,Inspect
+61988,puoi ispezionare quel cespo ,Inspect
+61989,puoi esaminare quel cespo ,Inspect
+61990,puoi vedere quel cespo ,Inspect
+61991,puoi analizzare quel cespo ,Inspect
+61992,potresti controllare quel cespo ,Inspect
+61993,potresti ispezionare quel cespo ,Inspect
+61994,potresti esaminare quel cespo ,Inspect
+61995,potresti vedere quel cespo ,Inspect
+61996,potresti analizzare quel cespo ,Inspect
+61997,controlleresti quel cespo ,Inspect
+61998,ispezioneresti quel cespo ,Inspect
+61999,esamineresti quel cespo ,Inspect
+62000,vedresti quel cespo ,Inspect
+62001,analizzerersti quel cespo ,Inspect
+62002,controlla il cespo ,Inspect
+62003,ispeziona il cespo ,Inspect
+62004,esamina il cespo ,Inspect
+62005,vedi il cespo ,Inspect
+62006,analizza il cespo ,Inspect
+62007,puoi controllare il cespo ,Inspect
+62008,puoi ispezionare il cespo ,Inspect
+62009,puoi esaminare il cespo ,Inspect
+62010,puoi vedere il cespo ,Inspect
+62011,puoi analizzare il cespo ,Inspect
+62012,potresti controllare il cespo ,Inspect
+62013,potresti ispezionare il cespo ,Inspect
+62014,potresti esaminare il cespo ,Inspect
+62015,potresti vedere il cespo ,Inspect
+62016,potresti analizzare il cespo ,Inspect
+62017,controlleresti il cespo ,Inspect
+62018,ispezioneresti il cespo ,Inspect
+62019,esamineresti il cespo ,Inspect
+62020,vedresti il cespo ,Inspect
+62021,analizzerersti il cespo ,Inspect
+62022,controlla questa cuccia ,Inspect
+62023,ispeziona questa cuccia ,Inspect
+62024,esamina questa cuccia ,Inspect
+62025,vedi questa cuccia ,Inspect
+62026,analizza questa cuccia ,Inspect
+62027,puoi controllare questa cuccia ,Inspect
+62028,puoi ispezionare questa cuccia ,Inspect
+62029,puoi esaminare questa cuccia ,Inspect
+62030,puoi vedere questa cuccia ,Inspect
+62031,puoi analizzare questa cuccia ,Inspect
+62032,potresti controllare questa cuccia ,Inspect
+62033,potresti ispezionare questa cuccia ,Inspect
+62034,potresti esaminare questa cuccia ,Inspect
+62035,potresti vedere questa cuccia ,Inspect
+62036,potresti analizzare questa cuccia ,Inspect
+62037,controlleresti questa cuccia ,Inspect
+62038,ispezioneresti questa cuccia ,Inspect
+62039,esamineresti questa cuccia ,Inspect
+62040,vedresti questa cuccia ,Inspect
+62041,analizzerersti questa cuccia ,Inspect
+62042,controlla quella cuccia ,Inspect
+62043,ispeziona quella cuccia ,Inspect
+62044,esamina quella cuccia ,Inspect
+62045,vedi quella cuccia ,Inspect
+62046,analizza quella cuccia ,Inspect
+62047,puoi controllare quella cuccia ,Inspect
+62048,puoi ispezionare quella cuccia ,Inspect
+62049,puoi esaminare quella cuccia ,Inspect
+62050,puoi vedere quella cuccia ,Inspect
+62051,puoi analizzare quella cuccia ,Inspect
+62052,potresti controllare quella cuccia ,Inspect
+62053,potresti ispezionare quella cuccia ,Inspect
+62054,potresti esaminare quella cuccia ,Inspect
+62055,potresti vedere quella cuccia ,Inspect
+62056,potresti analizzare quella cuccia ,Inspect
+62057,controlleresti quella cuccia ,Inspect
+62058,ispezioneresti quella cuccia ,Inspect
+62059,esamineresti quella cuccia ,Inspect
+62060,vedresti quella cuccia ,Inspect
+62061,analizzerersti quella cuccia ,Inspect
+62062,controlla la cuccia ,Inspect
+62063,ispeziona la cuccia ,Inspect
+62064,esamina la cuccia ,Inspect
+62065,vedi la cuccia ,Inspect
+62066,analizza la cuccia ,Inspect
+62067,puoi controllare la cuccia ,Inspect
+62068,puoi ispezionare la cuccia ,Inspect
+62069,puoi esaminare la cuccia ,Inspect
+62070,puoi vedere la cuccia ,Inspect
+62071,puoi analizzare la cuccia ,Inspect
+62072,potresti controllare la cuccia ,Inspect
+62073,potresti ispezionare la cuccia ,Inspect
+62074,potresti esaminare la cuccia ,Inspect
+62075,potresti vedere la cuccia ,Inspect
+62076,potresti analizzare la cuccia ,Inspect
+62077,controlleresti la cuccia ,Inspect
+62078,ispezioneresti la cuccia ,Inspect
+62079,esamineresti la cuccia ,Inspect
+62080,vedresti la cuccia ,Inspect
+62081,analizzerersti la cuccia ,Inspect
+62082,controlla questa casetta ,Inspect
+62083,ispeziona questa casetta ,Inspect
+62084,esamina questa casetta ,Inspect
+62085,vedi questa casetta ,Inspect
+62086,analizza questa casetta ,Inspect
+62087,puoi controllare questa casetta ,Inspect
+62088,puoi ispezionare questa casetta ,Inspect
+62089,puoi esaminare questa casetta ,Inspect
+62090,puoi vedere questa casetta ,Inspect
+62091,puoi analizzare questa casetta ,Inspect
+62092,potresti controllare questa casetta ,Inspect
+62093,potresti ispezionare questa casetta ,Inspect
+62094,potresti esaminare questa casetta ,Inspect
+62095,potresti vedere questa casetta ,Inspect
+62096,potresti analizzare questa casetta ,Inspect
+62097,controlleresti questa casetta ,Inspect
+62098,ispezioneresti questa casetta ,Inspect
+62099,esamineresti questa casetta ,Inspect
+62100,vedresti questa casetta ,Inspect
+62101,analizzerersti questa casetta ,Inspect
+62102,controlla quella casetta ,Inspect
+62103,ispeziona quella casetta ,Inspect
+62104,esamina quella casetta ,Inspect
+62105,vedi quella casetta ,Inspect
+62106,analizza quella casetta ,Inspect
+62107,puoi controllare quella casetta ,Inspect
+62108,puoi ispezionare quella casetta ,Inspect
+62109,puoi esaminare quella casetta ,Inspect
+62110,puoi vedere quella casetta ,Inspect
+62111,puoi analizzare quella casetta ,Inspect
+62112,potresti controllare quella casetta ,Inspect
+62113,potresti ispezionare quella casetta ,Inspect
+62114,potresti esaminare quella casetta ,Inspect
+62115,potresti vedere quella casetta ,Inspect
+62116,potresti analizzare quella casetta ,Inspect
+62117,controlleresti quella casetta ,Inspect
+62118,ispezioneresti quella casetta ,Inspect
+62119,esamineresti quella casetta ,Inspect
+62120,vedresti quella casetta ,Inspect
+62121,analizzerersti quella casetta ,Inspect
+62122,controlla la casetta ,Inspect
+62123,ispeziona la casetta ,Inspect
+62124,esamina la casetta ,Inspect
+62125,vedi la casetta ,Inspect
+62126,analizza la casetta ,Inspect
+62127,puoi controllare la casetta ,Inspect
+62128,puoi ispezionare la casetta ,Inspect
+62129,puoi esaminare la casetta ,Inspect
+62130,puoi vedere la casetta ,Inspect
+62131,puoi analizzare la casetta ,Inspect
+62132,potresti controllare la casetta ,Inspect
+62133,potresti ispezionare la casetta ,Inspect
+62134,potresti esaminare la casetta ,Inspect
+62135,potresti vedere la casetta ,Inspect
+62136,potresti analizzare la casetta ,Inspect
+62137,controlleresti la casetta ,Inspect
+62138,ispezioneresti la casetta ,Inspect
+62139,esamineresti la casetta ,Inspect
+62140,vedresti la casetta ,Inspect
+62141,analizzerersti la casetta ,Inspect
+62142,dai un occhiata a questo cespuglio ,Inspect
+62143,puoi dare un occhiata a questo cespuglio ,Inspect
+62144,potresti dare un occhiata a questo cespuglio ,Inspect
+62145,daresti un occhiata a questo cespuglio ,Inspect
+62146,dai un occhiata a quel cespuglio ,Inspect
+62147,puoi dare un occhiata a quel cespuglio ,Inspect
+62148,potresti dare un occhiata a quel cespuglio ,Inspect
+62149,daresti un occhiata a quel cespuglio ,Inspect
+62150,dai un occhiata al cespuglio ,Inspect
+62151,puoi dare un occhiata al cespuglio ,Inspect
+62152,potresti dare un occhiata al cespuglio ,Inspect
+62153,daresti un occhiata al cespuglio ,Inspect
+62154,dai un occhiata a questo cespo ,Inspect
+62155,puoi dare un occhiata a questo cespo ,Inspect
+62156,potresti dare un occhiata a questo cespo ,Inspect
+62157,daresti un occhiata a questo cespo ,Inspect
+62158,dai un occhiata a quel cespo ,Inspect
+62159,puoi dare un occhiata a quel cespo ,Inspect
+62160,potresti dare un occhiata a quel cespo ,Inspect
+62161,daresti un occhiata a quel cespo ,Inspect
+62162,dai un occhiata al cespo ,Inspect

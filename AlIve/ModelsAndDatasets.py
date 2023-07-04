@@ -749,7 +749,7 @@ class TokenLevelClassificationModel(NLPClassificationModel):
     
     def build(self, preprocess_model_link:str, encoder_model_link:str, output_shape:int, 
               encoder_trainable:bool=False, encoder_output_key:str="sequence_output", 
-              dropout_rate:float=0.3, final_output_activation=None, 
+              dropout_rate:float=0.3, final_output_activation="softmax", 
               optimizer_lr:float=1e-5, additional_metrics:list=None, run_eagerly:bool=True):
         
         text_input = tf.keras.layers.Input(shape=(), dtype=tf.string, name='text')
@@ -791,6 +791,8 @@ class TokenLevelClassificationModel(NLPClassificationModel):
         else:
             loss = "binary_crossentropy"
             metrics = ["accuracy"] + additional_metrics
+        
+        print("\nLoss used: {}\n".format(loss))
         
         self._model.compile(optimizer=optimizer, 
                             loss=loss, 
@@ -878,8 +880,8 @@ class TokenLevelClassificationModel(NLPClassificationModel):
         
         sentenceprediction = np.array( self._model(tf.constant([example]))[0] )
         
-        if sentenceprediction[0].shape[0] > 1:
-            sentenceprediction = tf.nn.softmax(sentenceprediction)
+        #if sentenceprediction[0].shape[0] > 1:
+        #    sentenceprediction = tf.nn.softmax(sentenceprediction)
         
         sentenceprediction = self._binarizer.inverse_transform(sentenceprediction.numpy())[1:]
 

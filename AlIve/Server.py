@@ -1610,6 +1610,8 @@ def train_queue(user_id:int, env_id:int, progress_info:TrainQueueProgressInfo):
                                                     SENTENCE_IDX_FIELD_NAME, WORD_FIELD_NAME, 
                                                     targets[0])
             
+            testfeatures, testtargets = data.get_test()
+
             progress_info.current_session_index = current_queue_index
             progress_info.current_session_model_name = model_name
             progress_info.current_session_dataset_name = dataset_name
@@ -1632,6 +1634,11 @@ def train_queue(user_id:int, env_id:int, progress_info:TrainQueueProgressInfo):
                     loaded_model.save_train_history_graph(history.history, ending_time, graph_path)
                 except:
                     print("Couldn't save graph...")
+                
+                try:
+                    print(loaded_model.evaluate(testfeatures, testtargets))
+                except:
+                    print("Couldn't evaluate...")
                 
                 delete_from_db(ALIVE_DB_TRAINING_SESSIONS_TABLE_NAME, 
                             [ENV_ID_FIELD_NAME, QUEUE_INDEX_FIELD_NAME], 

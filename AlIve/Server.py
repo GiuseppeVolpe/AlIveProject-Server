@@ -1228,7 +1228,7 @@ def append_example_to_dataset():
             if "Unnamed:" in str(column):
                 columns_to_drop.append(str(column))
         
-        dataframe.loc[len(dataframe)] = new_row
+        dataframe.loc[len(dataframe) + 1] = new_row
 
         dataframe.drop(columns=columns_to_drop, inplace=True)
         
